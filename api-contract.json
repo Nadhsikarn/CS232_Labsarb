@@ -1,0 +1,57 @@
+{
+    "upload_image": {
+        "request": {
+            "student_id": "string",
+            "lab_id": "string",
+            "image_url": "string"
+        },
+        "response": {
+            "status": "String",
+            "message": "string"
+        }
+    },
+    "rekognition_result": {
+        "description": "ผลจาก AI วิเคราะห์ภาพ",
+        "data": {
+            "student_id": "string",
+            "lab_id": "string",
+            "detected_text": "string",
+            "status": "pass | fail",
+            "missing_point": "string"
+        }
+    },
+    "get_result": {
+        "request": {
+            "student_id": "string",
+            "lab_id": "string"
+        },
+        "response": {
+            "student_id": "string",
+            "lab_id": "string",
+            "status": "pass | fail",
+            "image_url": "string",
+            "detected_text": "string"
+        }
+    },
+    "edit_lab": {
+        "request": {
+            "student_id": "string",
+            "lab_id": "string",
+            "lab_data": "string",
+            "updated_by": "string"
+        },
+        "response": {
+            "status": "success",
+            "message": "แก้ไขข้อมูลแล็บสำเร็จ"
+        }
+    },
+    "notification": {
+        "data": {
+            "line_user_id": "string",
+            "student_id": "string",
+            "lab_id": "string",
+            "status": "pass | fail",
+            "message": "string"
+        }
+    }
+}
