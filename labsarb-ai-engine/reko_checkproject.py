@@ -55,16 +55,6 @@ def lambda_handler(event, context):
 
         status = "pass" if score >= 85 else "fail"
         
-        table.put_item(Item={
-            'student_Id': s_id,
-            'lab_Id': l_id,
-            'status': status,
-            'score': str(round(score, 2)),
-            'student_name': student_name,
-            'image_url': image_url,
-            'missing_point': missing_point,
-            'detected_text': ", ".join(list(student_words)[:10])
-        })
 
         print(f"--- SUCCESS: ID {s_id} | Score: {score:.2f}% | Status: {status} ---")
         
