@@ -10,5 +10,9 @@ export const tableSchema = {
     AttributeDefinitions: [
         { AttributeName: "student_id", AttributeType: "S" },
         { AttributeName: "lab_id", AttributeType: "S" }
+    ],
+    KeySchema: [
+        { AttributeName: "student_id", KeyType: "HASH" }, // Partition Key
+        { AttributeName: "lab_id", KeyType: "RANGE" }     // Sort Key
     ]
 };
