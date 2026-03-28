@@ -115,4 +115,75 @@ def process_submission(bucket, student_path):
             "lab_id": lab_id
         }
 
-   
+    master_path = f"teacher-samples/{lab_id}/answer.png"
+    image_url = f"https://{bucket}.s3.amazonaws.com/{student_path}"
+
+    template_words, _ = extract_words(bucket, master_path)
+    student_words, student_lines = extract_words(bucket, student_path)
+
+    found_name = check_student_name(student_name, student_words, student_lines)
+
+    if not found_name:
+        save_result(
+            student_id=student_id,
+            lab_id=lab_id,
+            student_name=student_name,
+            status="rejected",
+            score=0.0,
+            missing_point="Identity mismatch",
+            image_path=student_path,
+            image_url=image_url
+        )
+        return {
+            "result": "rejected",
+            "student_id": student_id,
+            "lab_id": lab_id,
+            "reason": "Identity mismatch"
+        }
+
+    score, missing_words = calculate_score(template_words, student_words)
+    missing_point = ", ".join(missing_words[:5]) if missing_words else "-"
+    status = "pass" if score >= 85 else "fail"
+
+    save_result(
+        student_id=student_id,
+        lab_id=lab_id,
+        student_name=student_name,
+        status=status,
+        score=score,
+        missing_point=missing_point,
+        image_path=student_path,
+        image_url=image_url
+    )
+
+    return {
+        "result": status,
+        "student_id": student_id,
+        "lab_id": lab_id,
+        "score": score,
+        "missing_point": missing_point
+    }
+
+
+def lambda_handler(event, context):
+    try:
+        results = []
+
+        for record in event.get("Records", []):
+            bucket = record["s3"]["bucket"]["name"]
+            student_path = unquote_plus(record["s3"]["object"]["key"])
+
+            result = process_submission(bucket, student_path)
+            results.append(result)
+
+        return {
+            "statusCode": 200,
+            "body": json.dumps(results, default=str)
+        }
+
+    except Exception as e:
+        print("Error:", str(e))
+        return {
+            "statusCode": 500,
+            "body": json.dumps({"error": str(e)})
+        }
