@@ -1,5 +1,6 @@
 import boto3
 import json
+from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('LabsarbResults')
@@ -25,7 +26,7 @@ def lambda_handler(event, context):
         master_path = f"teacher-samples/{l_id}/answer.png"
         image_url = f"https://{bucket}.s3.amazonaws.com/{student_path}"
 
-        check_db = table.get_item(Key={'student_Id': s_id, 'lab_Id': l_id})
+        check_db = table.get_item(Key={'student_id': s_id, 'lab_id': l_id})
         if 'Item' in check_db:
             print(f">>> ALREADY EXISTS: Student {s_id} already submitted {l_id}.")
             return {'statusCode': 200, 'body': 'Already submitted'}
@@ -55,14 +56,23 @@ def lambda_handler(event, context):
 
         status = "pass" if score >= 85 else "fail"
         
+        table.put_item(
+            Item={
+                'student_id': s_id,
+                'lab_id': l_id,
+                'status': status,
+                'score': Decimal(str(round(score, 2)))
+            }
+        )
 
         print(f"--- SUCCESS: ID {s_id} | Score: {score:.2f}% | Status: {status} ---")
         
         return {
             'statusCode': 200,
-            'body': json.dumps({'result': status, 'score': score})
+            'body': json.dumps({'result': status, 'score': float(score)})
         }
 
     except Exception as e:
         print(f"Error: {str(e)}")
         return {'statusCode': 500, 'body': str(e)}
+        
