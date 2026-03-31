@@ -16,8 +16,11 @@ def lambda_handler(event, context):
         parts = file_name.split('_')
         
         if len(parts) < 3:
-            print(f">>> ERROR: Invalid filename format: {file_name}")
-            return {'statusCode': 400, 'body': 'Invalid File Name Format'}
+            print(f"Filename Format Incorrect")
+            return {
+                'statusCode': 400,
+                'body': json.dumps({'result': 'error', 'score': 0, 'reason': 'Invalid Filename Format'})
+            }
             
         s_id = parts[0]
         student_name = parts[1]
@@ -28,8 +31,11 @@ def lambda_handler(event, context):
 
         check_db = table.get_item(Key={'student_id': s_id, 'lab_id': l_id})
         if 'Item' in check_db:
-            print(f">>> ALREADY EXISTS: Student {s_id} already submitted {l_id}.")
-            return {'statusCode': 200, 'body': 'Already submitted'}
+            print(f"StudentId:{s_id} Had already submitted Assignment:{l_id}.")
+            return {
+                'statusCode': 200,
+                'body': json.dumps({'result': 'already_submitted', 'score': 0})
+            }
 
         template_res = reko.detect_text(Image={'S3Object': {'Bucket': bucket, 'Name': master_path}})
         template_words = set([item['DetectedText'].lower() for item in template_res['TextDetections'] if item['Type'] == 'WORD'])
@@ -37,7 +43,7 @@ def lambda_handler(event, context):
         student_res = reko.detect_text(Image={'S3Object': {'Bucket': bucket, 'Name': student_path}})
         student_words = set([item['DetectedText'] for item in student_res['TextDetections'] if item['Type'] == 'WORD'])
         #ยังต้องแก้ตรงที่ชื่อ ไม่ครบก็ผ่าน เช่น Nantapop แต่ Nantap ก็ถือว่าถูกต้อง
-        found_name = any(student_name in word for word in student_words)
+        found_name = any(student_name.lower() in word.lower() for word in student_words)
 
         if not found_name:
             print(f">>> REJECTED: Case/Name mismatch. StudentName '{student_name}' not found.")
@@ -65,7 +71,7 @@ def lambda_handler(event, context):
             }
         )
 
-        print(f"--- SUCCESS: ID {s_id} | Score: {score:.2f}% | Status: {status} ---")
+        print(f" ID:{s_id} pass | Score:{score:.2f}% | Status:{status} ")
         
         return {
             'statusCode': 200,
@@ -74,5 +80,6 @@ def lambda_handler(event, context):
 
     except Exception as e:
         print(f"Error: {str(e)}")
-        return {'statusCode': 500, 'body': str(e)}
-        
+        return {
+            'statusCode': 500, 
+            'body': json.dumps({'result': 'error', 'reason': str(e)})}
