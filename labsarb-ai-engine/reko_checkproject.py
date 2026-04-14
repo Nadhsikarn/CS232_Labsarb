@@ -16,7 +16,7 @@ def lambda_handler(event, context):
         parts = file_name.split('_')
         
         if len(parts) < 3:
-            print(f"Filename Format Incorrect")
+            print("Filename Format Incorrect")
             return {
                 'statusCode': 400,
                 'body': json.dumps({'result': 'error', 'score': 0, 'reason': 'Invalid Filename Format'})
@@ -26,7 +26,6 @@ def lambda_handler(event, context):
         student_name = parts[1]
         l_id = parts[2] 
         
-        master_path = f"teacher-samples/{l_id}/answer.png"
         image_url = f"https://{bucket}.s3.amazonaws.com/{student_path}"
 
         check_db = table.get_item(Key={'student_id': s_id, 'lab_id': l_id})
@@ -37,16 +36,32 @@ def lambda_handler(event, context):
                 'body': json.dumps({'result': 'already_submitted', 'score': 0})
             }
 
-        template_res = reko.detect_text(Image={'S3Object': {'Bucket': bucket, 'Name': master_path}})
-        template_words = set([item['DetectedText'].lower() for item in template_res['TextDetections'] if item['Type'] == 'WORD'])
+        template_table = dynamodb.Table('LabsarbTemplates')
+        template_item = template_table.get_item(Key={'lab_id': l_id})
 
-        student_res = reko.detect_text(Image={'S3Object': {'Bucket': bucket, 'Name': student_path}})
-        student_words = set([item['DetectedText'] for item in student_res['TextDetections'] if item['Type'] == 'WORD'])
-        #ยังต้องแก้ตรงที่ชื่อ ไม่ครบก็ผ่าน เช่น Nantapop แต่ Nantap ก็ถือว่าถูกต้อง
+        if 'Item' not in template_item:
+            print("No template found in DB")
+            return {
+                'statusCode': 400,
+                'body': json.dumps({'result': 'error', 'reason': 'Template not found'})
+            }
+
+        template_words = set(template_item['Item']['template_words'])
+
+        student_res = reko.detect_text(
+            Image={'S3Object': {'Bucket': bucket, 'Name': student_path}}
+        )
+
+        student_words = set([
+            item['DetectedText']
+            for item in student_res['TextDetections']
+            if item['Type'] == 'WORD'
+        ])
+
         found_name = any(student_name.lower() in word.lower() for word in student_words)
 
         if not found_name:
-            print(f">>> REJECTED: Case/Name mismatch. StudentName '{student_name}' not found.")
+            print(f">>> REJECTED: Name mismatch '{student_name}'")
             return {
                 'statusCode': 200, 
                 'body': json.dumps({'result': 'rejected', 'reason': 'Identity mismatch'})
@@ -54,12 +69,9 @@ def lambda_handler(event, context):
 
         student_words_lower = set([w.lower() for w in student_words])
         matches = template_words.intersection(student_words_lower)
+
         score = (len(matches) / len(template_words)) * 100 if template_words else 0
         
-        
-        missing_words = list(template_words - student_words_lower)
-        missing_point = ", ".join(missing_words[:5]) if missing_words else "-"
-
         status = "pass" if score >= 85 else "fail"
         
         table.put_item(
@@ -71,7 +83,7 @@ def lambda_handler(event, context):
             }
         )
 
-        print(f" ID:{s_id} pass | Score:{score:.2f}% | Status:{status} ")
+        print(f"ID:{s_id} | Score:{score:.2f}% | Status:{status}")
         
         return {
             'statusCode': 200,
@@ -82,4 +94,5 @@ def lambda_handler(event, context):
         print(f"Error: {str(e)}")
         return {
             'statusCode': 500, 
-            'body': json.dumps({'result': 'error', 'reason': str(e)})}
+            'body': json.dumps({'result': 'error', 'reason': str(e)})
+        }
