@@ -68,20 +68,30 @@ def lambda_handler(event, context):
             }
 
         student_words_lower = set([w.lower() for w in student_words])
+        
+        
         matches = template_words.intersection(student_words_lower)
+        missing = template_words.difference(student_words_lower)
+        extra = student_words_lower.difference(template_words)
+
+        print(f"--- Comparison Report for Student: {s_id} ---")
+        print(f" Matches ({len(matches)} words): {sorted(list(matches))}")
+        print(f" Missing from Student ({len(missing)} words): {sorted(list(missing))}")
+        print(f" Extra in Student ({len(extra)} words): {sorted(list(extra))}")
+        
 
         score = (len(matches) / len(template_words)) * 100 if template_words else 0
         
         status = "pass" if score >= 85 else "fail"
-        
-        table.put_item(
-            Item={
-                'student_id': s_id,
-                'lab_id': l_id,
-                'status': status,
-                'score': Decimal(str(round(score, 2)))
-            }
-        )
+        if status == "pass" :
+            table.put_item(
+                Item={
+                    'student_id': s_id,
+                    'lab_id': l_id,
+                    'status': status,
+                    'score': Decimal(str(round(score, 2)))
+                }
+            )
 
         print(f"ID:{s_id} | Score:{score:.2f}% | Status:{status}")
         
