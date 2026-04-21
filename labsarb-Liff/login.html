@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TU Login System</title>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
+        button { width: 100%; padding: 10px; background-color: #00b900; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        #status { margin-top: 20px; color: blue; }
+    </style>
+</head>
+<body>
+    <h2>ลงชื่อเข้าใช้ระบบ (TU)</h2>
+    <div id="login-form" style="display:none;">
+        <input type="text" id="username" placeholder="รหัสนักศึกษา">
+        <input type="password" id="password" placeholder="รหัสผ่าน">
+        <button onclick="submitLogin()">เข้าสู่ระบบ</button>
+    </div>
+    <p id="status">กำลังโหลด LIFF...</p>
+
+    <script>
+        const LiffId = '2009632805-9ICHMD82'; 
+        const ApiUrl = 'https://9f3oggp2oh.execute-api.us-east-1.amazonaws.com/v1';
+
+        async function main() {
+            try {
+                await liff.init({ liffId: LiffId });
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                } else {
+                    document.getElementById('login-form').style.display = 'block';
+                    document.getElementById('status').innerText = 'พร้อมเข้าสู่ระบบ';
+                }
+            } catch (err) {
+                document.getElementById('status').innerText = 'Init failed: ' + err;
+            }
+        }
+
+        async function submitLogin() {
+            const userProfile = await liff.getProfile();
+            const payload = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value,
+                lineUserId: userProfile.userId
+            };
+
+            document.getElementById('status').innerText = 'กำลังตรวจสอบกับ TU API...';
+
+            // ส่งข้อมูลไปหา Python Lambda
+            const response = await fetch(ApiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert('ลงทะเบียนสำเร็จ!');
+                liff.closeWindow(); // ปิดหน้าจอ LIFF ทันที
+            } else {
+                alert('เกิดข้อผิดพลาด: ' + result.message);
+                document.getElementById('status').innerText = 'กรุณาลองใหม่';
+            }
+        }
+
+        main();
+    </script>
+</body>
+</html>
