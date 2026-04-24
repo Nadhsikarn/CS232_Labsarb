@@ -52,13 +52,26 @@ def lambda_handler(event, context):
             Image={'S3Object': {'Bucket': bucket, 'Name': student_path}}
         )
 
+    
         student_words = set([
             item['DetectedText']
             for item in student_res['TextDetections']
             if item['Type'] == 'WORD'
         ])
 
-        found_name = any(student_name.lower() in word.lower() for word in student_words)
+
+        student_lines = [
+            item['DetectedText']
+            for item in student_res['TextDetections']
+            if item['Type'] == 'LINE'
+        ]
+
+
+        found_name = False
+        for line in student_lines:
+            if '=' in line and student_name.lower() in line.lower():
+                found_name = True
+                break
 
         if not found_name:
             print(f">>> REJECTED: Name mismatch '{student_name}'")
@@ -69,7 +82,6 @@ def lambda_handler(event, context):
 
         student_words_lower = set([w.lower() for w in student_words])
         
-        
         matches = template_words.intersection(student_words_lower)
         missing = template_words.difference(student_words_lower)
         extra = student_words_lower.difference(template_words)
@@ -78,12 +90,12 @@ def lambda_handler(event, context):
         print(f" Matches ({len(matches)} words): {sorted(list(matches))}")
         print(f" Missing from Student ({len(missing)} words): {sorted(list(missing))}")
         print(f" Extra in Student ({len(extra)} words): {sorted(list(extra))}")
-        
+        print(f"-------------------------------------------")
 
         score = (len(matches) / len(template_words)) * 100 if template_words else 0
         
         status = "pass" if score >= 85 else "fail"
-        if status == "pass" :
+        if status == "pass":
             table.put_item(
                 Item={
                     'student_id': s_id,
