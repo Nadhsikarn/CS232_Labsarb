@@ -660,11 +660,11 @@
         const div = document.createElement('div');
         div.className = 'task-item clickable';
         div.onclick = () => editTask(i);
-        
+
         let thumbnails = '';
         if (t.photos && t.photos.length > 0) {
-          thumbnails = `<div class="thumbs-stack">` + 
-            t.photos.map(p => `<img class="thumb" src="${p}" alt="example">`).join('') + 
+          thumbnails = `<div class="thumbs-stack">` +
+            t.photos.map(p => `<img class="thumb" src="${p}" alt="example">`).join('') +
             `</div>`;
         } else if (t.photo) { // Backwards compatibility
           thumbnails = `<img class="thumb" src="${t.photo}" alt="example">`;
