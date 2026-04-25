@@ -5,9 +5,9 @@
 }
 
 :root {
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  --primary-light: #e0e7ff;
+  --primary: #3A6192;
+  --primary-hover: #2d4c73;
+  --primary-light: #e8edf4;
   --bg: #f8fafc;
   --surface: #ffffff;
   --border: #e2e8f0;
@@ -144,16 +144,11 @@ input::placeholder, textarea::placeholder {
 }
 
 .sidebar-logo-icon {
-  width: 32px;
-  height: 32px;
-  background-color: var(--primary);
-  border-radius: 6px;
-  color: white;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  font-size: 16px;
 }
 
 .sidebar-logo-text h2 {
@@ -276,6 +271,7 @@ input::placeholder, textarea::placeholder {
   display: flex;
   align-items: center;
   gap: 20px;
+  margin-left: auto;
 }
 .quick-export {
   color: var(--primary);

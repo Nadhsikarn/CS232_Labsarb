@@ -11,30 +11,15 @@
 
 <body>
 
-  <!-- ============ SCREEN: LOGIN ============ -->
-  <div class="screen" id="screen-login">
-    <div class="login-card">
-      <div class="sidebar-logo-icon">LA</div>
-      <h2>ยินดีต้อนรับเข้าสู่ระบบจัดการ Labsarb</h2>
-      <p>กรุณาเข้าสู่ระบบด้วยบัญชีอาจารย์/ผู้ช่วยสอน</p>
-      <div class="form-group">
-        <label>ชื่อผู้ใช้งาน (Username)</label>
-        <input type="text" id="login-user" placeholder="ระบุชื่อผู้ใช้งาน">
-      </div>
-      <div class="form-group">
-        <label>รหัสผ่าน (Password)</label>
-        <input type="password" id="login-pass" placeholder="ระบุรหัสผ่าน">
-      </div>
-      <button class="btn-primary" id="btn-login" onclick="doLogin()">เข้าสู่ระบบ</button>
-      <p id="login-error" style="color:var(--danger); margin-top:12px; display:none; font-size:13px;"></p>
-    </div>
-  </div>
+  <!-- The login screen has been moved to login.html -->
 
   <div class="app-container" id="app-container" style="display:none;">
     <!-- ===== SIDEBAR ===== -->
     <div class="sidebar">
       <div class="sidebar-logo">
-        <div class="sidebar-logo-icon">LA</div>
+        <div class="sidebar-logo-icon">
+          <img src="logo.png" alt="Logo" style="width:100%; height:100%; object-fit:contain;">
+        </div>
         <div class="sidebar-logo-text">
           <h2>LabAdmin</h2>
           <span>Academic Management</span>
@@ -79,7 +64,7 @@
             <path d="M12 20h9"></path>
             <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
           </svg>
-          จัดการการทดลอง
+          จัดการการ Lab
         </a>
       </nav>
       <div class="sidebar-footer">
@@ -109,17 +94,8 @@
     <div class="main-area">
       <!-- TOPBAR -->
       <div class="topbar">
-        <div class="topbar-search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" placeholder="ค้นหาข้อมูล...">
-        </div>
         <div class="topbar-title">Labsard TA Manager</div>
         <div class="topbar-actions">
-          <span class="quick-export">ส่งออกข้อมูลด่วน</span>
           <div class="icon-action">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round">
@@ -157,7 +133,7 @@
           <div class="page-header-action">
             <div class="page-header" style="margin-bottom:0;">
               <h1>รายวิชาทั้งหมด</h1>
-              <p>จัดการและติดตามรายวิชาปฏิบัติการที่คุณดูแล</p>
+              <p>จัดการและติดตามรายวิชา</p>
             </div>
             <button class="btn-primary" onclick="goTo('create-course')">
               + สร้างรายวิชาใหม่
@@ -180,7 +156,6 @@
                 </svg> ย้อนกลับ</span>
             </div>
             <h1>สร้างรายวิชาใหม่ (Create Course)</h1>
-            <p>กำหนดรหัสวิชา ชื่อวิชา และเลือกสีสัญลักษณ์</p>
           </div>
 
           <div class="config-layout">
@@ -194,7 +169,7 @@
                 <input type="text" id="create-course-name" placeholder="เช่น Cloud Computing">
               </div>
               <div class="form-group">
-                <label>สีสัญลักษณ์โฟลเดอร์ (Folder Color)</label>
+                <label>สีโฟลเดอร์ (Folder Color)</label>
                 <div class="color-picker" id="course-color-picker">
                   <div class="color-option selected" style="background-color: #4f46e5;"
                     onclick="selectCourseColor(this, '#4f46e5', '#eef2ff')"></div>
@@ -229,7 +204,7 @@
               </div>
               <div class="page-header-small" id="dashboard-course-code">CS232</div>
               <h1 id="dashboard-course-name">ภาพรวมรายวิชา</h1>
-              <p>ติดตามความคืบหน้าการส่งงานของนักศึกษาในแต่ละการทดลอง (Lab) ที่เปิดอยู่</p>
+              <p>ติดตามความคืบหน้าการส่งงานของนักศึกษา</p>
             </div>
             <button class="btn-primary" onclick="goToCreateLabFromDashboard()">
               + สร้าง Lab ใหม่
@@ -254,7 +229,7 @@
               </span>
             </div>
             <h1 id="sub-list-title">รายการส่งงานทั้งหมด</h1>
-            <p>ตรวจสอบสถานะและรายละเอียดผลการตรวจของนักศึกษาแต่ละคน</p>
+            <p>ตรวจสอบสถานะและรายละเอียดผลการตรวจของนักศึกษาน</p>
           </div>
           <table class="data-table">
             <thead>
@@ -324,7 +299,6 @@
         <div class="screen" id="screen-create-lab">
           <div class="page-header">
             <h1>กำหนดการทดลองใหม่ (Configure New Lab)</h1>
-            <p>กำหนดพารามิเตอร์และอัปโหลดภาพเฉลยต้นแบบสำหรับการตรวจให้คะแนนอัตโนมัติ</p>
           </div>
 
           <div class="config-layout">
@@ -339,8 +313,7 @@
               </div>
               <div class="form-group">
                 <label>ชื่อการทดลอง (Lab Nomenclature)</label>
-                <input type="text" id="config-lab-name"
-                  placeholder="เช่น การทดลองที่ 4: โครงสร้างต้นไม้ทวิภาค (Binary Trees)">
+                <input type="text" id="config-lab-name" placeholder="เช่น Lab-4 Amazon S3">
               </div>
               <div class="form-group" style="display:flex;gap:16px;">
                 <div style="flex:1">
@@ -383,8 +356,11 @@
 
             <div class="config-upload">
               <!-- Upload Prompt Content -->
-              <div class="upload-prompt-content" id="upload-prompt" onclick="document.getElementById('config-file').click()" style="width:100%; height:100%; cursor:pointer;">
-                <input type="file" id="config-file" accept="image/png, image/jpeg" multiple onchange="handleFilesSelected(this.files)">
+              <div class="upload-prompt-content" id="upload-prompt"
+                onclick="document.getElementById('config-file').click()"
+                style="width:100%; height:100%; cursor:pointer;">
+                <input type="file" id="config-file" accept="image/png, image/jpeg" multiple
+                  onchange="handleFilesSelected(this.files)">
                 <div class="upload-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round">
@@ -394,9 +370,11 @@
                   </svg>
                 </div>
                 <h3>ภาพเฉลยต้นแบบ<br>Ground Truth Template</h3>
-                <p style="margin-top:8px; margin-bottom:16px;">ลากและวางภาพผลลัพธ์ต้นแบบที่ระบบ AWS จะใช้สำหรับตรวจให้คะแนนอัตโนมัติ หรือคลิกเพื่อค้นหาไฟล์</p>
+                <p style="margin-top:8px; margin-bottom:16px;">ลากและวางภาพผลลัพธ์ต้นแบบที่ระบบ AWS
+                  จะใช้สำหรับตรวจให้คะแนนอัตโนมัติ หรือคลิกเพื่อค้นหาไฟล์</p>
                 <button class="btn-outline" style="pointer-events:none;">เลือกไฟล์ (Select File)</button>
-                <div class="upload-note" style="margin-top:12px; font-size:12px; color:var(--text-light);">รองรับ: PNG, JPEG (ขนาดไม่เกิน 10MB)</div>
+                <div class="upload-note" style="margin-top:12px; font-size:12px; color:var(--text-light);">รองรับ: PNG,
+                  JPEG (ขนาดไม่เกิน 10MB)</div>
               </div>
 
               <!-- Preview Container -->
@@ -404,8 +382,10 @@
                 <div class="preview-grid" id="preview-grid">
                   <!-- Injected via JS -->
                 </div>
-                <button class="btn-add-more" onclick="document.getElementById('config-file-append').click()">+ เพิ่มรูปภาพ (Add More)</button>
-                <input type="file" id="config-file-append" accept="image/png, image/jpeg" multiple onchange="handleFilesSelected(this.files)" style="display:none;">
+                <button class="btn-add-more" onclick="document.getElementById('config-file-append').click()">+
+                  เพิ่มรูปภาพ (Add More)</button>
+                <input type="file" id="config-file-append" accept="image/png, image/jpeg" multiple
+                  onchange="handleFilesSelected(this.files)" style="display:none;">
               </div>
             </div>
           </div>
@@ -434,7 +414,16 @@
     // Store submissions and enrollments
     let submissionsData = [];
 
-    let currentScreen = 'login';
+    // Auth check on load
+    if (!localStorage.getItem('labsarb_admin')) {
+      window.location.href = 'login.html';
+    } else {
+      document.getElementById('app-container').style.display = 'flex';
+      updateCourseDropdown();
+      goTo('courses');
+    }
+
+    let currentScreen = 'courses';
     let labDataSummary = {
       'CS232': {
         'Lab 1: C Refresher': { pass: 42, fail: 5, pending: 13, desc: 'พื้นฐานการจัดการหน่วยความจำและพอยน์เตอร์' },
@@ -753,7 +742,7 @@
       if (cIdx !== -1) coursesList[cIdx].labCount += 1;
 
       alert('สร้างแลปใหม่เรียบร้อยแล้ว');
-      
+
       // Reset form
       document.getElementById('config-lab-name').value = '';
       document.getElementById('config-desc').value = '';
@@ -763,7 +752,7 @@
       document.getElementById('config-file-append').value = '';
       addedStudents = [];
       renderAddedStudents();
-      
+
       openCourseDashboard(courseCode);
     }
 
@@ -883,11 +872,11 @@
 
     function handleFilesSelected(files) {
       if (!files || files.length === 0) return;
-      
+
       for (let i = 0; i < files.length; i++) {
         uploadedGroundTruthFiles.push(files[i]);
       }
-      
+
       renderUploadPreviews();
     }
 
@@ -904,13 +893,13 @@
       const container = document.getElementById('upload-preview-container');
       const grid = document.getElementById('preview-grid');
       const prompt = document.getElementById('upload-prompt');
-      
+
       grid.innerHTML = '';
-      
+
       if (uploadedGroundTruthFiles.length > 0) {
         container.classList.add('has-images');
         prompt.style.display = 'none';
-        
+
         uploadedGroundTruthFiles.forEach((file, index) => {
           const url = URL.createObjectURL(file);
           const item = document.createElement('div');
@@ -932,11 +921,7 @@
       }
     }
 
-    // Ensure the first load works if already logged in
-    if (localStorage.getItem('labsarb_admin')) {
-      updateCourseDropdown();
-      goTo('courses');
-    }
+    // App initialization is handled at the top
   </script>
 </body>
 

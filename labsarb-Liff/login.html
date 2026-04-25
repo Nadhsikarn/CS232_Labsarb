@@ -1,72 +1,287 @@
 <!DOCTYPE html>
-<html> 
+<html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TU Login System</title>
-    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    <style>
-        body { font-family: sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
-        button { width: 100%; padding: 10px; background-color: #00b900; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        #status { margin-top: 20px; color: blue; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labsarb - เข้าสู่ระบบ (Login)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="portal-style.css">
+  <style>
+    /* Specific overrides for Login Page */
+    body {
+      background-color: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .login-wrapper {
+      background: var(--surface);
+      width: 100%;
+      max-width: 440px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 40px;
+      text-align: center;
+    }
+    
+    .login-logo {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 24px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .login-header h2 {
+      font-size: 24px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .login-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    /* Tabs */
+    .login-tabs {
+      display: flex;
+      background: #f1f5f9;
+      border-radius: var(--radius);
+      padding: 4px;
+      margin-bottom: 24px;
+    }
+    .login-tab {
+      flex: 1;
+      padding: 10px 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-radius: 6px;
+      transition: var(--transition);
+    }
+    .login-tab.active {
+      background: var(--surface);
+      color: var(--primary);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    /* Forms */
+    .login-form-group {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+    .login-form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .login-form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 14px;
+      transition: var(--transition);
+    }
+    .login-form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-login:hover {
+      background: var(--primary-hover);
+    }
+    .btn-login:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .form-section {
+      display: none;
+    }
+    .form-section.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .status-msg {
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
-    <h2>ลงชื่อเข้าใช้ระบบ (TU)</h2>
-    <div id="login-form" style="display:none;">
-        <input type="text" id="username" placeholder="รหัสนักศึกษา">
-        <input type="password" id="password" placeholder="รหัสผ่าน">
-        <button onclick="submitLogin()">เข้าสู่ระบบ</button>
+
+  <div class="login-wrapper">
+    <div class="login-logo">
+      <img src="logo.png" alt="Labsarb Logo">
     </div>
-    <p id="status">กำลังโหลด LIFF...</p>
+    <div class="login-header">
+      <h2>ยินดีต้อนรับเข้าสู่ Labsarb</h2>
+      <p>ระบบจัดการการส่งงานและตรวจให้คะแนน</p>
+    </div>
 
-    <script>
-        const LiffId = '2009868253-LU7ThXTu'; 
-        const ApiUrl = 'https://ya67mrcre1.execute-api.us-east-1.amazonaws.com/prod_tuapi/login';
+    <div class="login-tabs">
+      <div class="login-tab active" onclick="switchTab('student')" id="tab-student">นักศึกษา (Student)</div>
+      <div class="login-tab" onclick="switchTab('ta')" id="tab-ta">อาจารย์/ผู้ช่วยสอน (TA)</div>
+    </div>
 
-        async function main() {
-            try {
-                await liff.init({ liffId: LiffId });
-                if (!liff.isLoggedIn()) {
-                    liff.login();
-                } else {
-                    document.getElementById('login-form').style.display = 'block';
-                    document.getElementById('status').innerText = 'พร้อมเข้าสู่ระบบ';
-                }
-            } catch (err) {
-                document.getElementById('status').innerText = 'Init failed: ' + err;
-            }
+    <!-- Student Form (TU API) -->
+    <div id="form-student" class="form-section active">
+      <div class="login-form-group">
+        <label>รหัสนักศึกษา (TU Username)</label>
+        <input type="text" id="student-username" placeholder="รหัสนักศึกษา (เช่น 640968XXXX)">
+      </div>
+      <div class="login-form-group">
+        <label>รหัสผ่าน (TU Password)</label>
+        <input type="password" id="student-password" placeholder="รหัสผ่านระบบ TU">
+      </div>
+      <button class="btn-login" id="btn-student-login" onclick="submitStudentLogin()">เข้าสู่ระบบ</button>
+      <div class="status-msg" id="student-status" style="display:none;"></div>
+    </div>
+
+    <!-- TA Form (Mock Auth -> Dashboard) -->
+    <div id="form-ta" class="form-section">
+      <div class="login-form-group">
+        <label>ชื่อผู้ใช้งาน (Admin Username)</label>
+        <input type="text" id="ta-username" placeholder="ระบุชื่อผู้ใช้งาน">
+      </div>
+      <div class="login-form-group">
+        <label>รหัสผ่าน (Password)</label>
+        <input type="password" id="ta-password" placeholder="ระบุรหัสผ่าน">
+      </div>
+      <button class="btn-login" onclick="submitTALogin()">เข้าสู่ระบบจัดการ</button>
+      <div class="status-msg" id="ta-status" style="color:var(--danger); display:none;"></div>
+    </div>
+  </div>
+
+  <script>
+    // Tab Switching
+    function switchTab(tab) {
+      document.getElementById('tab-student').classList.remove('active');
+      document.getElementById('tab-ta').classList.remove('active');
+      document.getElementById('form-student').classList.remove('active');
+      document.getElementById('form-ta').classList.remove('active');
+
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('form-' + tab).classList.add('active');
+    }
+
+    // TA Login Logic
+    function submitTALogin() {
+      const user = document.getElementById('ta-username').value;
+      const pass = document.getElementById('ta-password').value;
+      const status = document.getElementById('ta-status');
+      
+      if (!user || !pass) {
+        status.textContent = 'กรุณากรอกข้อมูลให้ครบถ้วน';
+        status.style.display = 'block';
+        return;
+      }
+
+      // Mock Authentication
+      if (user === 'admin' && pass === 'password' || (user.length > 0 && pass.length > 0)) {
+        localStorage.setItem('labsarb_admin', 'true');
+        window.location.href = 'ta-portal.html';
+      } else {
+        status.textContent = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
+        status.style.display = 'block';
+      }
+    }
+
+    // Student Login Logic (TU API direct)
+    const ApiUrl = 'https://ya67mrcre1.execute-api.us-east-1.amazonaws.com/prod_tuapi/login';
+
+    async function submitStudentLogin() {
+      const btn = document.getElementById('btn-student-login');
+      const status = document.getElementById('student-status');
+      const user = document.getElementById('student-username').value;
+      const pass = document.getElementById('student-password').value;
+
+      if(!user || !pass) {
+        status.innerText = 'กรุณากรอกรหัสนักศึกษาและรหัสผ่านให้ครบ';
+        status.style.display = 'block';
+        status.style.color = 'var(--danger)';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = 'กำลังตรวจสอบ...';
+      status.innerText = 'กำลังตรวจสอบกับระบบมหาวิทยาลัย...';
+      status.style.display = 'block';
+      status.style.color = 'var(--text-muted)';
+
+      try {
+        const payload = {
+            username: user,
+            password: pass
+            // lineUserId is removed as requested
+        };
+
+        const response = await fetch(ApiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            status.innerText = 'ลงทะเบียนสำเร็จ! เข้าสู่ระบบแล้ว';
+            status.style.color = 'var(--primary)';
+            alert('ลงทะเบียนสำเร็จ!');
+            // Redirect to student portal if available
+        } else {
+            alert('เกิดข้อผิดพลาด: ' + result.message);
+            status.innerText = 'ข้อมูลไม่ถูกต้อง กรุณาลองใหม่';
+            status.style.color = 'var(--danger)';
         }
+      } catch (err) {
+        status.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์';
+        status.style.color = 'var(--danger)';
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'เข้าสู่ระบบ';
+      }
+    }
 
-        async function submitLogin() {
-            const userProfile = await liff.getProfile();
-            const payload = {
-                username: document.getElementById('username').value,
-                password: document.getElementById('password').value,
-                lineUserId: userProfile.userId
-            };
-
-            document.getElementById('status').innerText = 'กำลังตรวจสอบกับ TU API...';
-
-            // ส่งข้อมูลไปหา Python Lambda
-            const response = await fetch(ApiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            const result = await response.json();
-            if (response.ok) {
-                alert('ลงทะเบียนสำเร็จ!');
-                liff.closeWindow(); // ปิดหน้าจอ LIFF ทันที
-            } else {
-                alert('เกิดข้อผิดพลาด: ' + result.message);
-                document.getElementById('status').innerText = 'กรุณาลองใหม่';
-            }
-        }
-
-        main();
-    </script>
+    // Check if we are already logged in as TA and bypass
+    if (localStorage.getItem('labsarb_admin')) {
+      // window.location.href = 'ta-portal.html';
+    }
+  </script>
 </body>
 </html>
