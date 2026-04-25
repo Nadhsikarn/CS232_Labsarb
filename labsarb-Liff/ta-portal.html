@@ -4,834 +4,938 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Labsarb — TA Portal</title>
-  <meta name="description" content="Labsarb TA Portal - ระบบจัดการ Lab สำหรับอาจารย์">
+  <title>Labsarb TA Manager - Labsarb</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="portal-style.css">
 </head>
 
 <body>
 
-  <!-- ===== SIDEBAR ===== -->
-  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
-  <div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <button class="sidebar-close" onclick="closeSidebar()">‹</button>
-    </div>
-    <nav class="sidebar-nav" id="sidebar-nav">
-      <div class="sidebar-item active" onclick="closeSidebar();goTo('menu')">Home</div>
-    </nav>
-  </div>
-
-  <!-- ===== PROFILE POPUP ===== -->
-  <div class="profile-popup" id="profile-popup">
-    <div class="profile-img">😊</div>
-    <div class="profile-name" id="profile-name">ผศ.ดร. รินลดา ธุรพันธุ์</div>
-    <div class="profile-dept">ภาควิชาวิทยาการคอมพิวเตอร์</div>
-    <button class="btn-logout" onclick="doLogout()">Logout</button>
-  </div>
-
-  <!-- ============ SCREEN 1: LOGIN ============ -->
-  <div class="screen active" id="screen-login">
-    <div class="login-wrapper">
-      <div class="login-box">
-        <div class="login-icon">
-          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="15" y="12" width="70" height="50" rx="5" stroke="#3d4f6f" stroke-width="3" fill="#f0f4ff" />
-            <rect x="22" y="19" width="56" height="36" rx="2" fill="#e8edf5" />
-            <line x1="35" y1="62" x2="65" y2="62" stroke="#3d4f6f" stroke-width="3" />
-            <line x1="50" y1="62" x2="50" y2="72" stroke="#3d4f6f" stroke-width="3" />
-            <rect x="30" y="72" width="40" height="4" rx="2" fill="#3d4f6f" />
-            <circle cx="42" cy="33" r="3" fill="#3d4f6f" />
-            <circle cx="58" cy="33" r="3" fill="#3d4f6f" />
-            <path d="M40 42 Q50 50 60 42" stroke="#3d4f6f" stroke-width="2.5" fill="none" stroke-linecap="round" />
-            <path d="M10 22 L6 18" stroke="#3d4f6f" stroke-width="2" stroke-linecap="round" />
-            <path d="M10 18 L6 22" stroke="#3d4f6f" stroke-width="2" stroke-linecap="round" />
-            <circle cx="90" cy="20" r="4" stroke="#3d4f6f" stroke-width="2" fill="none" />
-            <path d="M88 20 Q90 23 92 20" stroke="#3d4f6f" stroke-width="1.5" fill="none" />
-          </svg>
-        </div>
-        <h2>ยินดีต้อนรับเข้าสู่ LABSARB</h2>
-        <div class="form-group"><input type="text" id="login-user" placeholder="Username"></div>
-        <div class="form-group"><input type="password" id="login-pass" placeholder="Password"></div>
-        <button class="btn-primary" id="btn-login" onclick="doLogin()">Login</button>
-        <p class="login-error" id="login-error"></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============ SCREEN 2: MAIN MENU ============ -->
-  <div class="screen" id="screen-menu">
-    <div class="header">
-      <div class="header-left">
-        <button class="btn-hamburger" onclick="openSidebar()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
-        </button>
-      </div>
-      <div class="header-right">
-        <div class="header-user" onclick="toggleProfile()">
-          <span class="header-username" id="header-username">ผศ.ดร. รินลดา ธุรพันธุ์</span>
-          <div class="header-avatar">😊</div>
-        </div>
-      </div>
-    </div>
-    <div class="menu-wrapper">
-      <div class="menu-cards" id="menu-cards">
-        <div class="menu-card" id="card-dashboard" onclick="goTo('dash-select')">
-          <h3>Dashboard</h3>
-        </div>
-        <div class="menu-card" id="card-editor" onclick="goTo('editor-courses')">
-          <h3>Lab Editor</h3>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============ SCREEN 3: DASHBOARD > SELECT LAB ============ -->
-  <div class="screen" id="screen-dash-select">
-    <div class="header">
-      <div class="header-left">
-        <button class="btn-hamburger" onclick="openSidebar()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
-        </button>
-      </div>
-      <div class="header-right">
-        <div class="header-user" onclick="toggleProfile()">
-          <span class="header-username">ผศ.ดร. รินลดา ธุรพันธุ์</span>
-          <div class="header-avatar">😊</div>
-        </div>
-      </div>
-    </div>
-    <div class="sub-header">
-      <button class="btn-back" onclick="goTo('menu')">‹</button>
-      <span>Dashboard</span>
-    </div>
-    <div class="content">
-      <h3>เลือก Lab ที่ต้องการดู</h3>
-      <div class="lab-grid" id="dash-lab-grid">
-        <div class="loading">
-          <div class="spinner"></div>
-          <p>กำลังโหลด...</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============ SCREEN 4: DASHBOARD > SHOW ============ -->
-  <div class="screen" id="screen-dash-show">
-    <div class="header">
-      <div class="header-left">
-        <button class="btn-hamburger" onclick="openSidebar()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
-        </button>
-      </div>
-      <div class="header-right">
-        <div class="header-user" onclick="toggleProfile()">
-          <span class="header-username">ผศ.ดร. รินลดา ธุรพันธุ์</span>
-          <div class="header-avatar">😊</div>
-        </div>
-      </div>
-    </div>
-    <div class="sub-header">
-      <button class="btn-back" id="dash-show-back-btn" onclick="goTo('dash-select')">‹</button>
-      <span id="dash-show-title">Dashboard — LAB</span>
-    </div>
-    <div class="content">
-      <div class="stats-row" id="dash-stats"></div>
-      <div id="dash-student-list" class="student-list"></div>
-    </div>
-  </div>
-
-  <!-- ============ SCREEN 5: DASHBOARD > VIEW DETAIL ============ -->
-  <div class="screen" id="screen-dash-detail">
-    <div class="header">
-      <div class="header-left">
-        <button class="btn-hamburger" onclick="openSidebar()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
-        </button>
-      </div>
-      <div class="header-right">
-        <div class="header-user" onclick="toggleProfile()">
-          <span class="header-username">ผศ.ดร. รินลดา ธุรพันธุ์</span>
-          <div class="header-avatar">😊</div>
-        </div>
-      </div>
-    </div>
-    <div class="sub-header">
-      <button class="btn-back" onclick="goTo('dash-show')">‹</button>
-      <span id="detail-bread">View Detail</span>
-    </div>
-    <div class="content">
-      <div class="detail-card" id="detail-content"></div>
-    </div>
-  </div>
-
-  <!-- ============ SCREEN 6: LAB EDITOR > SELECT COURSE ============ -->
-  <div class="screen" id="screen-editor-courses">
-    <div class="header">
-      <div class="header-left">
-        <button class="btn-hamburger" onclick="openSidebar()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
-        </button>
-      </div>
-      <div class="header-right">
-        <div class="header-user" onclick="toggleProfile()">
-          <span class="header-username">ผศ.ดร. รินลดา ธุรพันธุ์</span>
-          <div class="header-avatar">😊</div>
-        </div>
-      </div>
-    </div>
-    <div class="sub-header">
-      <button class="btn-back" onclick="goTo('menu')">‹</button>
-      <span>Lab Editor — เลือกรายวิชา</span>
-    </div>
-    <div class="content">
-      <div class="course-grid" id="course-grid"></div>
-    </div>
-  </div>
-
-  <!-- ============ SCREEN 7: LAB EDITOR > SELECT LAB IN COURSE ============ -->
-  <div class="screen" id="screen-editor-labs">
-    <div class="header">
-      <div class="header-left">
-        <button class="btn-hamburger" onclick="openSidebar()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
-        </button>
-      </div>
-      <div class="header-right">
-        <div class="header-user" onclick="toggleProfile()">
-          <span class="header-username">ผศ.ดร. รินลดา ธุรพันธุ์</span>
-          <div class="header-avatar">😊</div>
-        </div>
-      </div>
-    </div>
-    <div class="sub-header">
-      <button class="btn-back" onclick="goTo('editor-courses')">‹</button>
-      <span id="editor-labs-title">วิชา: -</span>
-    </div>
-    <div class="content">
-      <h3>เลือก Lab ในวิชานี้</h3>
-      <div class="lab-grid" id="editor-lab-grid"></div>
-    </div>
-  </div>
-
-  <!-- ============ SCREEN 8: LAB EDITOR > ADD TASK ============ -->
-  <div class="screen" id="screen-editor-task">
-    <div class="header">
-      <div class="header-left">
-        <button class="btn-hamburger" onclick="openSidebar()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
-        </button>
-      </div>
-      <div class="header-right">
-        <div class="header-user" onclick="toggleProfile()">
-          <span class="header-username">ผศ.ดร. รินลดา ธุรพันธุ์</span>
-          <div class="header-avatar">😊</div>
-        </div>
-      </div>
-    </div>
-    <div class="sub-header">
-      <button class="btn-back" onclick="goTo('editor-labs')">‹</button>
-      <span id="editor-task-title">Lab Editor — Tasks</span>
-    </div>
-    <div class="content">
-      <div class="form-group" style="margin-bottom: 24px;">
-        <label class="form-label">กำหนดส่ง Lab (ภาพรวม)</label>
-        <input type="datetime-local" id="lab-deadline" class="form-control">
-      </div>
-      <div class="task-form" id="task-form-box">
-        <h4 id="task-form-title">เพิ่ม Task ใหม่</h4>
-        <input type="hidden" id="edit-task-index" value="-1">
-        <div class="form-group"><input type="text" id="task-name" placeholder="ชื่อ Task เช่น Hello World"></div>
-        <div class="form-group"><textarea id="task-desc" placeholder="คำอธิบาย Task"></textarea></div>
-        <div class="photo-upload" id="photo-drop">
-          <input type="file" accept="image/*" id="photo-input" onchange="previewPhoto(this)" multiple>
-          <div class="icon"></div>
-          <p>คลิกเพื่ออัปโหลดรูปภาพคำตอบ</p>
-        </div>
-        <div id="photos-preview-grid" class="photos-preview-grid"></div>
-        <div class="btn-row">
-          <button class="btn-success" id="btn-add-task" onclick="saveTask()">+ Add Task</button>
-          <button class="btn-secondary" id="btn-cancel-edit" style="display:none"
-            onclick="cancelEditTask()">ยกเลิกการแก้ไข</button>
-        </div>
-      </div>
-      <h3>Tasks ที่เพิ่มแล้ว</h3>
-      <div class="task-list" id="task-list">
-        <div class="empty-state">
-          <div class="icon"></div>
-          <p>ยังไม่มี Task — เพิ่ม Task ด้านบน</p>
-        </div>
-      </div>
-      <div class="btn-row" style="justify-content:flex-end;margin-top:24px">
-        <button class="btn-finish" onclick="finishEditor()"> ยืนยัน</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============ MODAL: ADD COURSE ============ -->
-  <div class="modal-overlay" id="modal-add-course">
-    <div class="modal">
-      <h3>สร้างรายวิชาใหม่</h3>
-      <div class="form-group"><input type="text" id="course-name" placeholder="ชื่อวิชา เช่น Cloud Computing"></div>
+  <!-- ============ SCREEN: LOGIN ============ -->
+  <div class="screen" id="screen-login">
+    <div class="login-card">
+      <div class="sidebar-logo-icon">LA</div>
+      <h2>ยินดีต้อนรับเข้าสู่ระบบจัดการ Labsarb</h2>
+      <p>กรุณาเข้าสู่ระบบด้วยบัญชีอาจารย์/ผู้ช่วยสอน</p>
       <div class="form-group">
-        <label class="form-label">เลือกสีประจำวิชา</label>
-        <div class="color-picker">
-          <div class="color-opt" style="background:#3d4f6f" onclick="selColor(this,'#3d4f6f')"></div>
-          <div class="color-opt" style="background:#27ae60" onclick="selColor(this,'#27ae60')"></div>
-          <div class="color-opt" style="background:#e67e22" onclick="selColor(this,'#e67e22')"></div>
-          <div class="color-opt" style="background:#9b59b6" onclick="selColor(this,'#9b59b6')"></div>
-          <div class="color-opt" style="background:#e74c3c" onclick="selColor(this,'#e74c3c')"></div>
-          <div class="color-opt" style="background:#2980b9" onclick="selColor(this,'#2980b9')"></div>
-        </div>
-        <input type="hidden" id="course-color" value="#3d4f6f">
+        <label>ชื่อผู้ใช้งาน (Username)</label>
+        <input type="text" id="login-user" placeholder="ระบุชื่อผู้ใช้งาน">
       </div>
-      <div class="btn-row">
-        <button class="btn-secondary" onclick="closeModal('course')">ยกเลิก</button>
-        <button class="btn-primary" style="width:auto;padding:10px 24px" onclick="createCourse()">สร้างวิชา</button>
+      <div class="form-group">
+        <label>รหัสผ่าน (Password)</label>
+        <input type="password" id="login-pass" placeholder="ระบุรหัสผ่าน">
       </div>
+      <button class="btn-primary" id="btn-login" onclick="doLogin()">เข้าสู่ระบบ</button>
+      <p id="login-error" style="color:var(--danger); margin-top:12px; display:none; font-size:13px;"></p>
     </div>
   </div>
 
-  <!-- ============ MODAL: ADD LAB ============ -->
-  <div class="modal-overlay" id="modal-add-lab">
-    <div class="modal">
-      <h3>สร้าง Lab ใหม่</h3>
-      <p id="modal-lab-course-name" style="font-size:0.85rem;color:var(--text-light);margin-bottom:12px"></p>
-      <div class="form-group"><input type="text" id="new-lab-id" placeholder="รหัส Lab เช่น LAB_03"></div>
-      <div class="form-group"><input type="text" id="new-lab-name" placeholder="ชื่อ Lab เช่น Java Basics"></div>
-      <div class="btn-row">
-        <button class="btn-secondary" onclick="closeModal('lab')">ยกเลิก</button>
-        <button class="btn-primary" style="width:auto;padding:10px 24px" onclick="createLab()">สร้าง</button>
+  <div class="app-container" id="app-container" style="display:none;">
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">LA</div>
+        <div class="sidebar-logo-text">
+          <h2>LabAdmin</h2>
+          <span>Academic Management</span>
+        </div>
+      </div>
+      <div class="sidebar-action">
+        <button class="btn-primary" onclick="goTo('create-lab')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          สร้าง LAB ใหม่
+        </button>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-item active" id="nav-courses" onclick="goTo('courses')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          รายวิชาทั้งหมด
+        </a>
+        <a class="nav-item" id="nav-submissions" onclick="goTo('submissions')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          การส่งงาน
+        </a>
+        <a class="nav-item" id="nav-create" onclick="goTo('create-lab')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          จัดการการทดลอง
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+            </path>
+          </svg>
+          การตั้งค่า
+        </a>
+        <a class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          ช่วยเหลือ
+        </a>
+      </div>
+    </div>
+
+    <!-- ===== MAIN AREA ===== -->
+    <div class="main-area">
+      <!-- TOPBAR -->
+      <div class="topbar">
+        <div class="topbar-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" placeholder="ค้นหาข้อมูล...">
+        </div>
+        <div class="topbar-title">Labsard TA Manager</div>
+        <div class="topbar-actions">
+          <span class="quick-export">ส่งออกข้อมูลด่วน</span>
+          <div class="icon-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+          </div>
+          <div class="profile-circle" onclick="toggleProfileDropdown()" title="โปรไฟล์">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" style="width:16px;height:16px;">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <!-- Profile Dropdown -->
+          <div class="profile-dropdown" id="profile-dropdown">
+            <div class="profile-header">
+              <div class="profile-avatar">TA</div>
+              <div class="profile-info">
+                <h4 id="dropdown-username">ผู้ใช้งาน</h4>
+                <p>Teacher Assistant</p>
+              </div>
+            </div>
+            <button class="btn-outline" onclick="doLogout()"
+              style="width:100%; justify-content:center;">ออกจากระบบ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENT SCROLL AREA -->
+      <div class="content-scroll">
+
+        <!-- ============ SCREEN: COURSES ============ -->
+        <div class="screen active" id="screen-courses">
+          <div class="page-header-action">
+            <div class="page-header" style="margin-bottom:0;">
+              <h1>รายวิชาทั้งหมด</h1>
+              <p>จัดการและติดตามรายวิชาปฏิบัติการที่คุณดูแล</p>
+            </div>
+            <button class="btn-primary" onclick="goTo('create-course')">
+              + สร้างรายวิชาใหม่
+            </button>
+          </div>
+
+          <div class="courses-grid" id="courses-grid">
+            <!-- Course Cards -->
+          </div>
+        </div>
+
+        <!-- ============ SCREEN: CREATE COURSE ============ -->
+        <div class="screen" id="screen-create-course">
+          <div class="page-header">
+            <div class="breadcrumb">
+              <span class="icon-action" onclick="goTo('courses')"><svg viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg> ย้อนกลับ</span>
+            </div>
+            <h1>สร้างรายวิชาใหม่ (Create Course)</h1>
+            <p>กำหนดรหัสวิชา ชื่อวิชา และเลือกสีสัญลักษณ์</p>
+          </div>
+
+          <div class="config-layout">
+            <div class="config-form" style="max-width:600px;">
+              <div class="form-group">
+                <label>รหัสวิชา (Course Code)</label>
+                <input type="text" id="create-course-code" placeholder="เช่น CS232">
+              </div>
+              <div class="form-group">
+                <label>ชื่อวิชา (Course Name)</label>
+                <input type="text" id="create-course-name" placeholder="เช่น Cloud Computing">
+              </div>
+              <div class="form-group">
+                <label>สีสัญลักษณ์โฟลเดอร์ (Folder Color)</label>
+                <div class="color-picker" id="course-color-picker">
+                  <div class="color-option selected" style="background-color: #4f46e5;"
+                    onclick="selectCourseColor(this, '#4f46e5', '#eef2ff')"></div>
+                  <div class="color-option" style="background-color: #ef4444;"
+                    onclick="selectCourseColor(this, '#ef4444', '#fee2e2')"></div>
+                  <div class="color-option" style="background-color: #10b981;"
+                    onclick="selectCourseColor(this, '#10b981', '#d1fae5')"></div>
+                  <div class="color-option" style="background-color: #f59e0b;"
+                    onclick="selectCourseColor(this, '#f59e0b', '#fef3c7')"></div>
+                  <div class="color-option" style="background-color: #8b5cf6;"
+                    onclick="selectCourseColor(this, '#8b5cf6', '#ede9fe')"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-ghost" onclick="goTo('courses')">ยกเลิก</button>
+            <button class="btn-primary" onclick="initCourse()">บันทึกรายวิชา</button>
+          </div>
+        </div>
+
+        <!-- ============ SCREEN: DASHBOARD ============ -->
+        <div class="screen" id="screen-dashboard">
+          <div class="page-header-action">
+            <div class="page-header" style="margin-bottom:0;">
+              <div class="breadcrumb">
+                <span class="icon-action" onclick="goTo('courses')"><svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                  </svg><span>รายวิชาทั้งหมด</span></span>
+              </div>
+              <div class="page-header-small" id="dashboard-course-code">CS232</div>
+              <h1 id="dashboard-course-name">ภาพรวมรายวิชา</h1>
+              <p>ติดตามความคืบหน้าการส่งงานของนักศึกษาในแต่ละการทดลอง (Lab) ที่เปิดอยู่</p>
+            </div>
+            <button class="btn-primary" onclick="goToCreateLabFromDashboard()">
+              + สร้าง Lab ใหม่
+            </button>
+          </div>
+          <div class="dashboard-grid" id="dashboard-grid">
+            <!-- Lab Cards will be injected here -->
+          </div>
+          <p class="dashboard-note">ข้อมูลถูกอัปเดตอัตโนมัติจากการตรวจให้คะแนน</p>
+        </div>
+
+        <!-- ============ SCREEN: SUBMISSIONS LIST ============ -->
+        <div class="screen" id="screen-submissions">
+          <div class="page-header">
+            <div class="breadcrumb">
+              <span class="icon-action" onclick="goTo('dashboard')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>ย้อนกลับไปหน้าแดชบอร์ด</span>
+              </span>
+            </div>
+            <h1 id="sub-list-title">รายการส่งงานทั้งหมด</h1>
+            <p>ตรวจสอบสถานะและรายละเอียดผลการตรวจของนักศึกษาแต่ละคน</p>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>รหัสนักศึกษา</th>
+                <th>รหัสการทดลอง (Lab)</th>
+                <th>สถานะ</th>
+                <th>คะแนน</th>
+                <th>ข้อความที่ระบบตรวจพบ</th>
+              </tr>
+            </thead>
+            <tbody id="submissions-tbody">
+              <!-- Submission Rows -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ============ SCREEN: SUBMISSION DETAIL ============ -->
+        <div class="screen" id="screen-submission-detail">
+          <div class="page-header">
+            <div class="breadcrumb">
+              <span class="icon-action" onclick="goTo('submissions')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>กลับหน้ารายการส่งงาน</span>
+              </span>
+              <span style="margin:0 4px">/</span> <span id="bread-course">CS232</span> <span
+                style="margin:0 4px">/</span> <span class="active">รายละเอียดการส่งงาน</span>
+            </div>
+            <h1 id="detail-lab-name">Lab: Cellular Mitosis Analysis</h1>
+            <p id="detail-student-name">ส่งโดยนักศึกษารหัส: -</p>
+          </div>
+          <div class="submission-detail">
+            <div class="submission-image">
+              <img id="detail-img" src="" alt="ภาพผลงานที่ส่ง">
+            </div>
+            <div class="submission-context">
+              <h3>บริบทการวิเคราะห์</h3>
+              <div class="context-row">
+                <span class="context-label">เวลาที่ส่ง</span>
+                <span class="context-value">24 ต.ค. 2023 เวลา 14:32</span>
+              </div>
+              <div class="context-row">
+                <span class="context-label">รูปแบบไฟล์</span>
+                <span class="context-value">JPEG Image, 4.2 MB</span>
+              </div>
+              <div class="system-check" id="detail-system-check">
+                <div class="check-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                </div>
+                <div class="check-content">
+                  <h4 id="detail-status-title">ตรวจสอบระบบ: ผ่าน</h4>
+                  <p id="detail-status-desc">ความเหมือน: 92% - ตรงกับฐานข้อมูลตัวอย่างที่กำหนด</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ SCREEN: CONFIGURE NEW LAB ============ -->
+        <div class="screen" id="screen-create-lab">
+          <div class="page-header">
+            <h1>กำหนดการทดลองใหม่ (Configure New Lab)</h1>
+            <p>กำหนดพารามิเตอร์และอัปโหลดภาพเฉลยต้นแบบสำหรับการตรวจให้คะแนนอัตโนมัติ</p>
+          </div>
+
+          <div class="config-layout">
+            <div class="config-form">
+              <div class="form-group">
+                <label>รายวิชาเป้าหมาย (Target Course)</label>
+                <select id="config-course">
+                  <option value="">เลือกรายวิชา...</option>
+                  <option value="CS232">CS232 Cloud Computing</option>
+                  <option value="CS231">CS231 Data Structures</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>ชื่อการทดลอง (Lab Nomenclature)</label>
+                <input type="text" id="config-lab-name"
+                  placeholder="เช่น การทดลองที่ 4: โครงสร้างต้นไม้ทวิภาค (Binary Trees)">
+              </div>
+              <div class="form-group" style="display:flex;gap:16px;">
+                <div style="flex:1">
+                  <label>กำหนดส่ง (Submission Deadline)</label>
+                  <input type="date" id="config-deadline-date">
+                </div>
+                <div style="flex:1">
+                  <label>เวลา (Time)</label>
+                  <input type="time" id="config-deadline-time">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>เกณฑ์การประเมินและคำอธิบาย (Evaluation Parameters & Description)</label>
+                <textarea id="config-desc"
+                  placeholder="ระบุบริบทหรือเกณฑ์การให้คะแนนเฉพาะสำหรับการทดลองนี้..."></textarea>
+              </div>
+              <div class="form-group">
+                <label>เพิ่มนักศึกษา (Add Student)</label>
+                <div style="display:flex;gap:8px;">
+                  <input type="text" id="add-student-id" placeholder="รหัสนักศึกษา 10 หลัก (เช่น 640968XXXX)"
+                    maxlength="10">
+                  <button class="btn-outline" onclick="verifyAndAddStudent()">ตรวจสอบและเพิ่ม</button>
+                </div>
+                <p id="add-student-msg" style="font-size:12px; margin-top:4px;"></p>
+                <div class="student-accordion">
+                  <div class="accordion-header" onclick="toggleStudentList()">
+                    <span>รายชื่อนักศึกษาที่เพิ่มแล้ว (<span id="added-students-count">0</span>)</span>
+                    <svg id="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round"
+                      style="width:16px;height:16px;transition:transform 0.2s;">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                  <div class="accordion-content" id="added-students-list">
+                    <div class="empty-list" id="empty-student-list">ยังไม่มีนักศึกษาในรายการ</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="config-upload">
+              <!-- Upload Prompt Content -->
+              <div class="upload-prompt-content" id="upload-prompt" onclick="document.getElementById('config-file').click()" style="width:100%; height:100%; cursor:pointer;">
+                <input type="file" id="config-file" accept="image/png, image/jpeg" multiple onchange="handleFilesSelected(this.files)">
+                <div class="upload-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                </div>
+                <h3>ภาพเฉลยต้นแบบ<br>Ground Truth Template</h3>
+                <p style="margin-top:8px; margin-bottom:16px;">ลากและวางภาพผลลัพธ์ต้นแบบที่ระบบ AWS จะใช้สำหรับตรวจให้คะแนนอัตโนมัติ หรือคลิกเพื่อค้นหาไฟล์</p>
+                <button class="btn-outline" style="pointer-events:none;">เลือกไฟล์ (Select File)</button>
+                <div class="upload-note" style="margin-top:12px; font-size:12px; color:var(--text-light);">รองรับ: PNG, JPEG (ขนาดไม่เกิน 10MB)</div>
+              </div>
+
+              <!-- Preview Container -->
+              <div class="upload-preview-container" id="upload-preview-container">
+                <div class="preview-grid" id="preview-grid">
+                  <!-- Injected via JS -->
+                </div>
+                <button class="btn-add-more" onclick="document.getElementById('config-file-append').click()">+ เพิ่มรูปภาพ (Add More)</button>
+                <input type="file" id="config-file-append" accept="image/png, image/jpeg" multiple onchange="handleFilesSelected(this.files)" style="display:none;">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-ghost" onclick="goTo('dashboard')">Cancle</button>
+            <button class="btn-primary" onclick="initLab()">Create Lab</button>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 
   <script>
-    const API_URL = 'https://9f3oggp2oh.execute-api.us-east-1.amazonaws.com/v1';
-    let allData = [];
-    let currentLabId = '';
-    let currentCourseId = '';
-    let currentStudent = null;
-    let editorCourses = JSON.parse(localStorage.getItem('labsarb_courses')) || [
-      { id: 'cs232', name: 'CS232 Cloud Computing', color: '#3d4f6f', labs: ['LAB_01', 'LAB_02'] }
+    let coursesList = [
+      { code: 'CS232', name: 'Cloud Computing', color: '#4f46e5', colorLight: '#eef2ff', labCount: 2, studentsCount: 60 },
+      { code: 'CS231', name: 'Data Structures', color: '#10b981', colorLight: '#d1fae5', labCount: 0, studentsCount: 45 }
     ];
-    let editorTasks = JSON.parse(localStorage.getItem('labsarb_tasks')) || {};
-    let currentTaskPhotos = [];
 
-    // ===== SIDEBAR & PROFILE =====
-    function openSidebar() {
-      document.getElementById('sidebar').classList.add('open');
-      document.getElementById('sidebar-overlay').classList.add('show');
-    }
-    function closeSidebar() {
-      document.getElementById('sidebar').classList.remove('open');
-      document.getElementById('sidebar-overlay').classList.remove('show');
-    }
-    function toggleProfile() {
-      const popup = document.getElementById('profile-popup');
-      popup.classList.toggle('show');
-    }
-    // Close profile popup when clicking outside
-    document.addEventListener('click', function (e) {
-      const popup = document.getElementById('profile-popup');
-      const userBtn = e.target.closest('.header-user');
-      if (!userBtn && popup.classList.contains('show')) {
-        popup.classList.remove('show');
+    let currentCourseCode = '';
+    let currentLabName = '';
+    let selectedCourseColor = '#4f46e5';
+    let selectedCourseColorLight = '#eef2ff';
+
+    // Store submissions and enrollments
+    let submissionsData = [];
+
+    let currentScreen = 'login';
+    let labDataSummary = {
+      'CS232': {
+        'Lab 1: C Refresher': { pass: 42, fail: 5, pending: 13, desc: 'พื้นฐานการจัดการหน่วยความจำและพอยน์เตอร์' },
+        'Lab 2: Simple Shell': { pass: 28, fail: 14, pending: 18, desc: 'การสร้างโปรเซส, การรันคำสั่ง และการจัดการซิกแนล' }
+      },
+      'CS231': {}
+    };
+
+    // Check Login State
+    window.onload = () => {
+      const storedUser = localStorage.getItem('labsarb_admin');
+      if (storedUser) {
+        document.getElementById('screen-login').classList.remove('active');
+        document.getElementById('app-container').style.display = 'flex';
+        document.getElementById('dropdown-username').textContent = storedUser;
+        updateCourseDropdown();
+        goTo('courses');
+      } else {
+        document.getElementById('screen-login').classList.add('active');
       }
-    });
+    };
 
-    function updateSidebarNav() {
-      const nav = document.getElementById('sidebar-nav');
-      let items = '<div class="sidebar-item" onclick="closeSidebar();goTo(\'menu\')">Home</div>';
-      if (currentLabId) {
-        items += `<div class="sidebar-item active">${currentLabId}</div>`;
-      }
-      nav.innerHTML = items;
-    }
-
-    // ===== NAVIGATION =====
-    function goTo(screen) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      const el = document.getElementById('screen-' + screen);
-      if (el) el.classList.add('active');
-      // Close profile popup on navigate
-      document.getElementById('profile-popup').classList.remove('show');
-      if (screen === 'dash-select') loadDashboardLabs();
-      if (screen === 'editor-courses') loadEditorCourses();
-    }
-
-    // ===== LOGIN =====
     function doLogin() {
       const u = document.getElementById('login-user').value.trim();
       const p = document.getElementById('login-pass').value.trim();
-      if (!u || !p) { showLoginError('กรุณากรอก Username และ Password'); return }
-      document.getElementById('btn-login').disabled = true;
-      document.getElementById('btn-login').textContent = 'กำลังเข้าสู่ระบบ...';
-      setTimeout(() => {
-        localStorage.setItem('labsarb_user', u);
-        document.getElementById('btn-login').disabled = false;
-        document.getElementById('btn-login').textContent = 'Login';
-        // Update username display
-        document.querySelectorAll('.header-username').forEach(el => el.textContent = u);
-        document.getElementById('profile-name').textContent = u;
-        goTo('menu');
-      }, 600);
-    }
-    function showLoginError(msg) {
-      const el = document.getElementById('login-error');
-      el.textContent = msg; el.style.display = 'block';
-      setTimeout(() => el.style.display = 'none', 3000);
-    }
-    function doLogout() {
-      localStorage.removeItem('labsarb_user');
-      document.getElementById('profile-popup').classList.remove('show');
-      goTo('login');
-    }
-
-    // ===== FETCH DATA =====
-    async function fetchAllData() {
-      try {
-        const r = await fetch(API_URL);
-        const json = await r.json();
-        allData = json.data || [];
-        return allData;
-      } catch (e) { console.error('Fetch error:', e); allData = []; return []; }
-    }
-
-    // ===== DASHBOARD: SELECT LAB =====
-    async function loadDashboardLabs() {
-      const grid = document.getElementById('dash-lab-grid');
-      grid.innerHTML = '<div class="loading"><div class="spinner"></div><p>กำลังโหลด...</p></div>';
-      await fetchAllData();
-      const labs = {};
-      allData.forEach(d => {
-        if (!labs[d.lab_id]) labs[d.lab_id] = { total: 0, pass: 0, fail: 0 };
-        labs[d.lab_id].total++;
-        if (d.status === 'pass') labs[d.lab_id].pass++;
-        else if (d.status === 'fail') labs[d.lab_id].fail++;
-      });
-      if (Object.keys(labs).length === 0) {
-        grid.innerHTML = '<div class="empty-state"><div class="icon"></div><p>ยังไม่มีข้อมูล Lab</p></div>';
+      if (!u || !p) {
+        const err = document.getElementById('login-error');
+        err.textContent = 'กรุณาระบุชื่อผู้ใช้งานและรหัสผ่าน';
+        err.style.display = 'block';
         return;
       }
+      localStorage.setItem('labsarb_admin', u);
+      document.getElementById('screen-login').classList.remove('active');
+      document.getElementById('app-container').style.display = 'flex';
+      document.getElementById('dropdown-username').textContent = u;
+      updateCourseDropdown();
+      goTo('courses');
+    }
+
+    function doLogout() {
+      localStorage.removeItem('labsarb_admin');
+      document.getElementById('app-container').style.display = 'none';
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen-login').classList.add('active');
+      document.getElementById('login-user').value = '';
+      document.getElementById('login-pass').value = '';
+      document.getElementById('profile-dropdown').classList.remove('active');
+    }
+
+    function toggleProfileDropdown() {
+      const dropdown = document.getElementById('profile-dropdown');
+      dropdown.classList.toggle('active');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('profile-dropdown');
+      const circle = document.querySelector('.profile-circle');
+      if (dropdown && dropdown.classList.contains('active') && !dropdown.contains(e.target) && !circle.contains(e.target)) {
+        dropdown.classList.remove('active');
+      }
+    });
+
+    function goTo(screen) {
+      // Update nav active state
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      const navId = `nav-${screen.replace('-detail', '').replace('create-course', 'courses')}`;
+      if (document.getElementById(navId)) {
+        document.getElementById(navId).classList.add('active');
+      }
+      if (screen === 'dashboard') {
+        document.getElementById('nav-courses').classList.add('active');
+      }
+
+      // Switch screen
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(`screen-${screen}`).classList.add('active');
+
+      if (screen === 'courses') loadCourses();
+      if (screen === 'dashboard') loadDashboard();
+      if (screen === 'submissions') loadSubmissions();
+    }
+
+    function selectCourseColor(el, color, lightColor) {
+      document.querySelectorAll('.color-option').forEach(e => e.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedCourseColor = color;
+      selectedCourseColorLight = lightColor;
+    }
+
+    function initCourse() {
+      const code = document.getElementById('create-course-code').value.trim();
+      const name = document.getElementById('create-course-name').value.trim();
+      if (!code || !name) {
+        alert("กรุณากรอกรหัสวิชาและชื่อวิชาให้ครบ");
+        return;
+      }
+      coursesList.push({ code, name, color: selectedCourseColor, colorLight: selectedCourseColorLight, labCount: 0, studentsCount: 0 });
+      labDataSummary[code] = {};
+      updateCourseDropdown();
+      document.getElementById('create-course-code').value = '';
+      document.getElementById('create-course-name').value = '';
+      goTo('courses');
+    }
+
+    function updateCourseDropdown() {
+      const select = document.getElementById('config-course');
+      select.innerHTML = '<option value="">เลือกรายวิชา...</option>';
+      coursesList.forEach(c => {
+        select.innerHTML += `<option value="${c.code}">${c.code} ${c.name}</option>`;
+      });
+    }
+
+    function openCourseDashboard(courseCode) {
+      currentCourseCode = courseCode;
+      const course = coursesList.find(c => c.code === courseCode);
+      if (course) {
+        document.getElementById('dashboard-course-code').textContent = course.code;
+        document.getElementById('dashboard-course-name').textContent = course.name;
+      }
+      goTo('dashboard');
+    }
+
+    function goToCreateLabFromDashboard() {
+      // Pre-select the current course in the dropdown
+      const select = document.getElementById('config-course');
+      if (currentCourseCode) {
+        select.value = currentCourseCode;
+      }
+      goTo('create-lab');
+    }
+
+    function deleteCourse(code, event) {
+      event.stopPropagation();
+      if (confirm(`คุณต้องการลบรายวิชา ${code} และการทดลองทั้งหมดในรายวิชานี้ใช่หรือไม่?`)) {
+        coursesList = coursesList.filter(c => c.code !== code);
+        delete labDataSummary[code];
+        // optional: clear mockData for this course
+        updateCourseDropdown();
+        loadCourses();
+      }
+    }
+
+    function deleteLab(labName, event) {
+      event.stopPropagation();
+      if (confirm(`คุณต้องการลบการทดลอง ${labName} ใช่หรือไม่?`)) {
+        delete labDataSummary[currentCourseCode][labName];
+        const cIdx = coursesList.findIndex(c => c.code === currentCourseCode);
+        if (cIdx !== -1) coursesList[cIdx].labCount -= 1;
+        loadDashboard();
+      }
+    }
+
+    function loadCourses() {
+      const grid = document.getElementById('courses-grid');
       grid.innerHTML = '';
-      Object.entries(labs).forEach(([id, info]) => {
+
+      coursesList.forEach(c => {
         const card = document.createElement('div');
-        card.className = 'lab-card';
-        card.onclick = () => openDashboard(id, 'dash-select');
-        card.innerHTML = `<h4>${id}</h4><p>${info.total} submissions · ✅ ${info.pass} · ❌ ${info.fail}</p>`;
-        grid.appendChild(card);
-      });
-    }
-
-    // ===== DASHBOARD: SHOW =====
-    function openDashboard(labId, from = 'dash-select') {
-      currentLabId = labId;
-      document.getElementById('dash-show-title').textContent = labId;
-
-      // Update back button destination
-      const backBtn = document.getElementById('dash-show-back-btn');
-      if (backBtn) backBtn.setAttribute('onclick', `goTo('${from}')`);
-
-      updateSidebarNav();
-      const items = allData.filter(d => d.lab_id === labId);
-      const pass = items.filter(d => d.status === 'pass').length;
-      const fail = items.filter(d => d.status === 'fail').length;
-      const pending = items.length - pass - fail;
-      document.getElementById('dash-stats').innerHTML = `
-    <div class="stat-card total"><div class="num">${items.length}</div><div class="label">Total</div></div>
-    <div class="stat-card pass"><div class="num">${pass}</div><div class="label">Pass</div></div>
-    <div class="stat-card fail"><div class="num">${fail}</div><div class="label">Fail</div></div>
-    <div class="stat-card pending"><div class="num">${pending}</div><div class="label">Pending</div></div>`;
-
-      // Build student list (matching the design style)
-      const listEl = document.getElementById('dash-student-list');
-      listEl.innerHTML = '';
-      items.forEach(d => {
-        const row = document.createElement('div');
-        row.className = 'student-row';
-        row.onclick = () => viewDetail(d);
-        const statusClass = d.status === 'pass' ? 'pass' : '';
-        row.innerHTML = `
-      <div class="student-info">
-        <span class="student-name">${d.student_id}</span>
-        <span class="student-id">${d.lab_id}</span>
-      </div>
-      <div class="student-actions">
-        <div class="status-circle ${statusClass}"></div>
-        <span class="student-arrow">›</span>
-      </div>`;
-        listEl.appendChild(row);
-      });
-      goTo('dash-show');
-    }
-
-    // ===== DASHBOARD: DETAIL =====
-    function viewDetail(d) {
-      currentStudent = d;
-      document.getElementById('detail-bread').textContent = d.lab_id + ' / ' + d.student_id;
-      const c = document.getElementById('detail-content');
-      let imgHtml = d.image_url ? `<img class="detail-img" src="${d.image_url}" alt="submission">` : 'ไม่มีรูป';
-      c.innerHTML = `
-    <div class="detail-row"><div class="detail-label">Student ID</div><div class="detail-value">${d.student_id}</div></div>
-    <div class="detail-row"><div class="detail-label">Lab</div><div class="detail-value">${d.lab_id}</div></div>
-    <div class="detail-row"><div class="detail-label">Status</div><div class="detail-value">${d.status || 'pending'}</div></div>
-    <div class="detail-row"><div class="detail-label">Score</div><div class="detail-value">${d.score !== undefined ? d.score : '-'}</div></div>
-    <div class="detail-row"><div class="detail-label">Detected Text</div><div class="detail-value">${d.detected_text || '-'}</div></div>
-    <div class="detail-row"><div class="detail-label">Missing Point</div><div class="detail-value">${d.missing_point || '-'}</div></div>
-    <div class="detail-row"><div class="detail-label">Image</div><div class="detail-value">${imgHtml}</div></div>`;
-      goTo('dash-detail');
-    }
-
-    // ===== LAB EDITOR: COURSES =====
-    function loadEditorCourses() {
-      const grid = document.getElementById('course-grid');
-      grid.innerHTML = '';
-      editorCourses.forEach(c => {
-        const div = document.createElement('div');
-        div.className = 'course-card';
-        div.style.borderTop = `6px solid ${c.color}`;
-        div.onclick = () => openCourse(c.id);
-        div.innerHTML = `<h3>${c.name}</h3><p>${c.labs.length} Labs</p>`;
-        grid.appendChild(div);
-      });
-      // Add button
-      const add = document.createElement('div');
-      add.className = 'course-card add-new';
-      add.onclick = () => document.getElementById('modal-add-course').classList.add('show');
-      add.innerHTML = '<span class="plus">+</span><p>สร้างวิชาใหม่</p>';
-      grid.appendChild(add);
-    }
-
-    function selColor(el, color) {
-      document.querySelectorAll('.color-opt').forEach(opt => opt.classList.remove('active'));
-      el.classList.add('active');
-      document.getElementById('course-color').value = color;
-    }
-
-    function createCourse() {
-      const name = document.getElementById('course-name').value.trim();
-      const color = document.getElementById('course-color').value;
-      if (!name) return;
-      const id = 'course_' + Date.now();
-      editorCourses.push({ id, name, color, labs: [] });
-      saveEditorData();
-      closeModal('course');
-      loadEditorCourses();
-    }
-
-    function openCourse(courseId) {
-      currentCourseId = courseId;
-      const course = editorCourses.find(c => c.id === courseId);
-      document.getElementById('editor-labs-title').textContent = 'วิชา: ' + course.name;
-      loadEditorLabs();
-      goTo('editor-labs');
-    }
-
-    // ===== LAB EDITOR: SELECT LAB =====
-    async function loadEditorLabs() {
-      const grid = document.getElementById('editor-lab-grid');
-      grid.innerHTML = '';
-      const course = editorCourses.find(c => c.id === currentCourseId);
-      if (!course) return;
-
-      course.labs.forEach((id, idx) => {
-        const card = document.createElement('div');
-        card.className = 'lab-card';
-        card.style.display = 'flex';
-        card.style.justifyContent = 'space-between';
-        card.style.alignItems = 'center';
-        // คลิกที่กล่องไปหน้า Dashboard (มาจากหน้ารายวิชา ให้กลับไปหน้า editor-labs)
-        card.onclick = () => openDashboard(id, 'editor-labs');
+        card.className = 'course-card';
+        card.style.setProperty('--folder-color', c.color);
+        card.style.setProperty('--folder-color-light', c.colorLight);
+        card.onclick = () => openCourseDashboard(c.code);
 
         card.innerHTML = `
-          <div>
-            <h4>${id}</h4>
+          <button class="btn-delete-card" onclick="deleteCourse('${c.code}', event)" title="ลบรายวิชา">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;">
+              <polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+          </button>
+          <div class="folder-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+            </svg>
           </div>
-          <div style="display:flex; align-items:center; gap:20px;">
-            <span class="edit-link" onclick="event.stopPropagation(); openTaskEditor('${id}')">edit</span>
-            <button class="btn-remove" style="color:rgba(255,255,255,0.6); display:flex;" onclick="event.stopPropagation(); removeLab(${idx})">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-            </button>
+          <h3>${c.code}</h3>
+          <p>${c.name}</p>
+          <div class="course-meta">
+            <span>${c.labCount} การทดลอง</span>
+            <span>นักศึกษา ${c.studentsCount} คน</span>
           </div>
         `;
         grid.appendChild(card);
       });
-      // Add new card
-      const addCard = document.createElement('div');
-      addCard.className = 'lab-card add-new';
-      addCard.onclick = () => {
-        document.getElementById('modal-lab-course-name').textContent = 'วิชา: ' + course.name;
-        document.getElementById('modal-add-lab').classList.add('show');
-      };
-      addCard.innerHTML = '<span class="plus">+</span><p>Add Lab</p>';
-      grid.appendChild(addCard);
     }
 
-    function removeLab(index) {
-      if (confirm('ยืนยันการลบ Lab นี้? ข้อมูล Task ภายในจะหายไปด้วย')) {
-        const course = editorCourses.find(c => c.id === currentCourseId);
-        const labId = course.labs[index];
-        course.labs.splice(index, 1);
-        delete editorTasks[labId];
-        saveEditorData();
-        loadEditorLabs();
-      }
+    function loadDashboard() {
+      const grid = document.getElementById('dashboard-grid');
+      grid.innerHTML = '';
+
+      const courseLabs = labDataSummary[currentCourseCode] || {};
+
+      Object.entries(courseLabs).forEach(([labName, stats]) => {
+        const total = stats.pass + stats.fail + stats.pending;
+        const passPct = (stats.pass / total) * 100;
+        const failPct = (stats.fail / total) * 100;
+
+        const card = document.createElement('div');
+        card.className = 'lab-card';
+        card.onclick = () => {
+          document.getElementById('sub-list-title').textContent = labName;
+          currentLabName = labName;
+          goTo('submissions');
+        };
+
+        card.innerHTML = `
+      <button class="btn-delete-card" onclick="deleteLab('${labName}', event)" title="ลบการทดลอง">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;">
+          <polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        </svg>
+      </button>
+      <h3>${labName}</h3>
+      <p>${stats.desc}</p>
+      <div class="lab-stats">
+        <div class="stat-item"><span class="stat-num pass">${stats.pass}</span><span class="stat-label">ผ่าน</span></div>
+        <div class="stat-item"><span class="stat-num fail">${stats.fail < 10 ? '0' + stats.fail : stats.fail}</span><span class="stat-label">ไม่ผ่าน</span></div>
+        <div class="stat-item"><span class="stat-num pending">${stats.pending}</span><span class="stat-label">ยังไม่ส่ง</span></div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-pass" style="width: ${passPct}%"></div>
+        <div class="progress-fail" style="width: ${failPct}%"></div>
+        <div class="progress-pending" style="width: ${100 - passPct - failPct}%"></div>
+      </div>
+    `;
+        grid.appendChild(card);
+      });
     }
 
-    function closeModal(type) {
-      if (type === 'course') document.getElementById('modal-add-course').classList.remove('show');
-      if (type === 'lab') document.getElementById('modal-add-lab').classList.remove('show');
-    }
+    function loadSubmissions() {
+      const tbody = document.getElementById('submissions-tbody');
+      tbody.innerHTML = '';
 
-    function createLab() {
-      const id = document.getElementById('new-lab-id').value.trim();
-      if (!id) { alert('กรุณากรอกรหัส Lab'); return }
-      const course = editorCourses.find(c => c.id === currentCourseId);
-      if (course) {
-        course.labs.push(id);
-        if (!editorTasks[id]) editorTasks[id] = [];
-        saveEditorData();
-      }
-      closeModal('lab');
-      document.getElementById('new-lab-id').value = '';
-      document.getElementById('new-lab-name').value = '';
-      openTaskEditor(id);
-    }
-
-    // ===== LAB EDITOR: TASK =====
-    function openTaskEditor(labId) {
-      currentLabId = labId;
-      document.getElementById('editor-task-title').textContent = 'Lab Editor — ' + labId;
-      updateSidebarNav();
-
-      // Load overall lab deadline if exists
-      const config = allData.find(d => d.lab_id === labId && d.student_id === 'TASK_CONFIG');
-      if (config && config.deadline) {
-        document.getElementById('lab-deadline').value = config.deadline;
-      } else {
-        document.getElementById('lab-deadline').value = '';
+      // Filter by course and lab
+      let filteredData = submissionsData.filter(d => d.course === currentCourseCode);
+      if (currentLabName) {
+        filteredData = filteredData.filter(d => d.lab_id === currentLabName);
       }
 
-      if (!editorTasks[labId]) editorTasks[labId] = [];
-      cancelEditTask(); // Reset form
-      renderTasks();
-      goTo('editor-task');
-    }
-
-    function renderTasks() {
-      const list = document.getElementById('task-list');
-      const tasks = editorTasks[currentLabId] || [];
-      if (tasks.length === 0) {
-        list.innerHTML = '<div class="empty-state"><div class="icon"></div><p>ยังไม่มี Task — เพิ่ม Task ด้านบน</p></div>';
+      if (filteredData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px;">ยังไม่มีข้อมูลนักศึกษา/การส่งงานในระบบ</td></tr>`;
         return;
       }
-      list.innerHTML = '';
-      tasks.forEach((t, i) => {
-        const div = document.createElement('div');
-        div.className = 'task-item clickable';
-        div.onclick = () => editTask(i);
 
-        let thumbnails = '';
-        if (t.photos && t.photos.length > 0) {
-          thumbnails = `<div class="thumbs-stack">` +
-            t.photos.map(p => `<img class="thumb" src="${p}" alt="example">`).join('') +
-            `</div>`;
-        } else if (t.photo) { // Backwards compatibility
-          thumbnails = `<img class="thumb" src="${t.photo}" alt="example">`;
-        }
+      filteredData.forEach((d, i) => {
+        const tr = document.createElement('tr');
+        tr.onclick = () => viewDetail(d);
 
-        div.innerHTML = `<div class="info"><h4>${t.name}</h4><p>${t.desc}</p></div>
-      <div style="display:flex;align-items:center;gap:10px">${thumbnails}
-      <button class="btn-remove" onclick="event.stopPropagation(); removeTask(${i})">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-      </button></div>`;
-        list.appendChild(div);
+        let statusHtml = '';
+        if (d.status === 'pass') statusHtml = `<span class="status-badge pass">ผ่านเกณฑ์</span>`;
+        else if (d.status === 'fail') statusHtml = `<span class="status-badge fail">ปรับปรุง</span>`;
+        else statusHtml = `<span class="status-badge pending">รอตรวจ</span>`;
+
+        tr.innerHTML = `
+      <td style="font-weight:500;">${d.student_id}</td>
+      <td>${d.lab_id}</td>
+      <td>${statusHtml}</td>
+      <td>${d.score !== undefined ? d.score : '-'} / 10</td>
+      <td style="color:var(--text-muted);font-size:12px;">${d.detected_text || d.missing_point || '-'}</td>
+    `;
+        tbody.appendChild(tr);
       });
     }
 
-    async function previewPhoto(input) {
-      if (input.files) {
-        for (const file of Array.from(input.files)) {
-          const dataURL = await new Promise(res => {
-            const reader = new FileReader();
-            reader.onload = e => res(e.target.result);
-            reader.readAsDataURL(file);
-          });
-          // Compress before adding
-          const compressed = await compressImage(dataURL);
-          currentTaskPhotos.push(compressed);
-        }
-        renderPhotoGrid();
-        input.value = '';
-      }
-    }
+    function viewDetail(data) {
+      document.getElementById('detail-lab-name').textContent = data.lab_id;
+      document.getElementById('detail-student-name').textContent = `ส่งโดยนักศึกษารหัส: ${data.student_id}`;
+      document.getElementById('detail-img').src = data.image_url;
 
-    async function compressImage(dataURL, maxWidth = 1200, quality = 0.7) {
-      return new Promise((resolve) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          let width = img.width;
-          let height = img.height;
-          if (width > maxWidth) {
-            height = (maxWidth / width) * height;
-            width = maxWidth;
-          }
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL('image/jpeg', quality));
-        };
-        img.src = dataURL;
-      });
-    }
+      const checkBox = document.getElementById('detail-system-check');
+      const title = document.getElementById('detail-status-title');
+      const desc = document.getElementById('detail-status-desc');
 
-    function renderPhotoGrid() {
-      const grid = document.getElementById('photos-preview-grid');
-      grid.innerHTML = '';
-      currentTaskPhotos.forEach((src, idx) => {
-        const box = document.createElement('div');
-        box.className = 'preview-box';
-        box.innerHTML = `
-          <div class="preview-header">
-            <span>Photo ${idx + 1}</span>
-            <button class="btn-remove-photo" onclick="removePhoto(${idx})">×</button>
-          </div>
-          <img src="${src}" class="photo-preview">
-        `;
-        grid.appendChild(box);
-      });
-    }
-
-    function removePhoto(idx) {
-      currentTaskPhotos.splice(idx, 1);
-      renderPhotoGrid();
-    }
-
-    function editTask(index) {
-      const tasks = editorTasks[currentLabId];
-      const t = tasks[index];
-      document.getElementById('task-name').value = t.name;
-      document.getElementById('task-desc').value = t.desc;
-      document.getElementById('edit-task-index').value = index;
-
-      currentTaskPhotos = t.photos ? [...t.photos] : (t.photo ? [t.photo] : []);
-      renderPhotoGrid();
-
-      document.getElementById('task-form-title').textContent = 'แก้ไข Task';
-      document.getElementById('btn-add-task').textContent = '✅ บันทึกการแก้ไข';
-      document.getElementById('btn-cancel-edit').style.display = 'inline-block';
-      document.getElementById('task-form-box').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function cancelEditTask() {
-      document.getElementById('task-name').value = '';
-      document.getElementById('task-desc').value = '';
-      document.getElementById('edit-task-index').value = '-1';
-      currentTaskPhotos = [];
-      renderPhotoGrid();
-      document.getElementById('photo-input').value = '';
-      document.getElementById('task-form-title').textContent = 'เพิ่ม Task ใหม่';
-      document.getElementById('btn-add-task').textContent = '+ Add Task';
-      document.getElementById('btn-cancel-edit').style.display = 'none';
-    }
-
-    function saveTask() {
-      const name = document.getElementById('task-name').value.trim();
-      const desc = document.getElementById('task-desc').value.trim();
-      const index = parseInt(document.getElementById('edit-task-index').value);
-
-      if (!name) { alert('กรุณากรอกชื่อ Task'); return }
-
-      if (index === -1) {
-        // Add new
-        editorTasks[currentLabId].push({ name, desc, photos: [...currentTaskPhotos] });
+      if (data.status === 'pass') {
+        checkBox.className = 'system-check';
+        checkBox.querySelector('.check-icon').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+        title.textContent = 'ตรวจสอบระบบ: ผ่าน';
+        desc.textContent = `ข้อความที่อ่านได้: ${data.detected_text} - ตรงกับเกณฑ์ที่กำหนด`;
       } else {
-        // Update existing
-        editorTasks[currentLabId][index] = { name, desc, photos: [...currentTaskPhotos] };
+        checkBox.className = 'system-check fail';
+        checkBox.querySelector('.check-icon').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
+        title.textContent = 'ตรวจสอบระบบ: ไม่ผ่านเกณฑ์';
+        desc.textContent = `จุดที่ขาดหาย: ${data.missing_point}`;
       }
 
-      saveEditorData();
-      cancelEditTask();
-      renderTasks();
+      goTo('submission-detail');
     }
 
-    function removeTask(i) {
-      if (confirm('ยืนยันการลบ Task นี้?')) {
-        editorTasks[currentLabId].splice(i, 1);
-        saveEditorData();
-        renderTasks();
+    function initLab() {
+      const courseCode = document.getElementById('config-course').value;
+      const name = document.getElementById('config-lab-name').value;
+      if (!courseCode || !name) {
+        alert('กรุณาเลือกรายวิชาและตั้งชื่อการทดลอง');
+        return;
       }
+      if (!labDataSummary[courseCode]) {
+        labDataSummary[courseCode] = {};
+      }
+      labDataSummary[courseCode][name] = { pass: 0, fail: 0, pending: addedStudents.length, desc: document.getElementById('config-desc').value || 'ไม่มีคำอธิบาย' };
+
+      // Generate initial submissions (pending) for added students
+      addedStudents.forEach(s => {
+        submissionsData.push({
+          student_id: s.id,
+          student_name: s.name,
+          course: courseCode,
+          lab_id: name,
+          status: 'pending',
+          score: 0,
+          detected_text: '-',
+          image_url: 'https://via.placeholder.com/800x600.png?text=Pending+Submission'
+        });
+      });
+
+      // Update lab count in courseList
+      const cIdx = coursesList.findIndex(c => c.code === courseCode);
+      if (cIdx !== -1) coursesList[cIdx].labCount += 1;
+
+      alert('สร้างแลปใหม่เรียบร้อยแล้ว');
+      
+      // Reset form
+      document.getElementById('config-lab-name').value = '';
+      document.getElementById('config-desc').value = '';
+      uploadedGroundTruthFiles = [];
+      renderUploadPreviews();
+      document.getElementById('config-file').value = '';
+      document.getElementById('config-file-append').value = '';
+      addedStudents = [];
+      renderAddedStudents();
+      
+      openCourseDashboard(courseCode);
     }
 
-    function saveEditorData() {
-      localStorage.setItem('labsarb_courses', JSON.stringify(editorCourses));
-      localStorage.setItem('labsarb_tasks', JSON.stringify(editorTasks));
-    }
+    // Add Student Logic
+    let addedStudents = [];
 
-    async function finishEditor() {
+    async function verifyAndAddStudent() {
+      const studentIdInput = document.getElementById('add-student-id');
+      const msgLabel = document.getElementById('add-student-msg');
+      const studentId = studentIdInput.value.trim();
+
+      if (!studentId || studentId.length !== 10) {
+        msgLabel.style.color = 'var(--danger)';
+        msgLabel.textContent = 'กรุณากรอกรหัสนักศึกษา 10 หลักให้ครบถ้วน';
+        return;
+      }
+
+      if (addedStudents.some(s => s.id === studentId)) {
+        msgLabel.style.color = 'var(--warning)';
+        msgLabel.textContent = 'นักศึกษารหัสนี้อยู่ในรายการแล้ว';
+        return;
+      }
+
+      msgLabel.style.color = 'var(--text-light)';
+      msgLabel.textContent = 'กำลังตรวจสอบข้อมูล...';
+
       try {
-        const tasks = editorTasks[currentLabId] || [];
-        const labDeadline = document.getElementById('lab-deadline').value;
-        await fetch(API_URL + '/edit-lab', {
+        // You can replace this URL with the real TU API Gateway URL
+        const apiUrl = 'https://o5p2o3a8o1.execute-api.us-east-1.amazonaws.com/prod/auth';
+
+        const response = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            student_id: 'TASK_CONFIG',
-            lab_id: currentLabId,
-            lab_data: JSON.stringify(tasks),
-            deadline: labDeadline,
-            updated_by: localStorage.getItem('labsarb_user') || 'teacher',
-            status: 'active',
-            score: tasks.length
-          })
+          body: JSON.stringify({ action: 'check_student', student_id: studentId })
         });
-        alert('บันทึก Lab ' + currentLabId + ' สำเร็จ!');
-        loadEditorLabs();
-        goTo('editor-labs');
-      } catch (e) {
-        console.error('Save error:', e);
-        alert('เกิดข้อผิดพลาดในการบันทึก');
+
+        let data;
+        try {
+          data = await response.json();
+        } catch (e) {
+          throw new Error('ไม่สามารถเชื่อมต่อ API ได้ (CORS หรือ URL ไม่ถูกต้อง)');
+        }
+
+        if (data.success && data.data) {
+          const studentName = data.data.displayname_th || data.data.tu_displayname_th || 'ไม่ระบุชื่อ';
+          addStudentToList(studentId, studentName);
+          msgLabel.style.color = 'var(--success)';
+          msgLabel.textContent = `เพิ่มนักศึกษา: ${studentName} สำเร็จ`;
+          studentIdInput.value = '';
+        } else {
+          msgLabel.style.color = 'var(--danger)';
+          msgLabel.textContent = 'ไม่พบข้อมูล / ' + (data.message || 'เกิดข้อผิดพลาด');
+        }
+      } catch (error) {
+        // Fallback for demo: if API fails due to CORS/URL, simulate success to show UI functionality
+        const mockName = 'นักศึกษาทดสอบ ระบบ Labsarb';
+        addStudentToList(studentId, mockName);
+        msgLabel.style.color = 'var(--success)';
+        msgLabel.textContent = `(จำลอง) เพิ่มนักศึกษา: ${mockName} สำเร็จ (API Error: ${error.message})`;
+        studentIdInput.value = '';
       }
     }
 
-    // Auto-login check
-    if (localStorage.getItem('labsarb_user')) {
-      const user = localStorage.getItem('labsarb_user');
-      document.querySelectorAll('.header-username').forEach(el => el.textContent = user);
-      document.getElementById('profile-name').textContent = user;
-      goTo('menu');
+    function addStudentToList(id, name) {
+      addedStudents.push({ id, name });
+      renderAddedStudents();
+
+      const content = document.getElementById('added-students-list');
+      const icon = document.getElementById('accordion-icon');
+      if (!content.classList.contains('open')) {
+        content.classList.add('open');
+        icon.style.transform = 'rotate(180deg)';
+      }
+    }
+
+    function removeStudentFromList(id) {
+      addedStudents = addedStudents.filter(s => s.id !== id);
+      renderAddedStudents();
+    }
+
+    function renderAddedStudents() {
+      const list = document.getElementById('added-students-list');
+      const countLabel = document.getElementById('added-students-count');
+
+      countLabel.textContent = addedStudents.length;
+
+      if (addedStudents.length === 0) {
+        list.innerHTML = '<div class="empty-list" id="empty-student-list">ยังไม่มีนักศึกษาในรายการ</div>';
+        return;
+      }
+
+      list.innerHTML = '';
+      addedStudents.forEach(s => {
+        const item = document.createElement('div');
+        item.className = 'added-student-item';
+        item.innerHTML = `
+          <div><strong>${s.id}</strong> - ${s.name}</div>
+          <div class="remove-student" onclick="removeStudentFromList('${s.id}')">×</div>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function toggleStudentList() {
+      const content = document.getElementById('added-students-list');
+      const icon = document.getElementById('accordion-icon');
+      content.classList.toggle('open');
+      if (content.classList.contains('open')) {
+        icon.style.transform = 'rotate(180deg)';
+      } else {
+        icon.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // Upload Preview Logic
+    let uploadedGroundTruthFiles = [];
+
+    function handleFilesSelected(files) {
+      if (!files || files.length === 0) return;
+      
+      for (let i = 0; i < files.length; i++) {
+        uploadedGroundTruthFiles.push(files[i]);
+      }
+      
+      renderUploadPreviews();
+    }
+
+    function removePreviewImage(index, event) {
+      event.stopPropagation();
+      uploadedGroundTruthFiles.splice(index, 1);
+      renderUploadPreviews();
+      // Need to reset the file inputs so user can re-select the same file if needed
+      document.getElementById('config-file').value = '';
+      document.getElementById('config-file-append').value = '';
+    }
+
+    function renderUploadPreviews() {
+      const container = document.getElementById('upload-preview-container');
+      const grid = document.getElementById('preview-grid');
+      const prompt = document.getElementById('upload-prompt');
+      
+      grid.innerHTML = '';
+      
+      if (uploadedGroundTruthFiles.length > 0) {
+        container.classList.add('has-images');
+        prompt.style.display = 'none';
+        
+        uploadedGroundTruthFiles.forEach((file, index) => {
+          const url = URL.createObjectURL(file);
+          const item = document.createElement('div');
+          item.className = 'preview-item';
+          item.innerHTML = `
+            <img src="${url}" alt="preview" onload="URL.revokeObjectURL(this.src)">
+            <button class="btn-remove-preview" onclick="removePreviewImage(${index}, event)" title="ลบรูปภาพ">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          `;
+          grid.appendChild(item);
+        });
+      } else {
+        container.classList.remove('has-images');
+        prompt.style.display = 'flex';
+      }
+    }
+
+    // Ensure the first load works if already logged in
+    if (localStorage.getItem('labsarb_admin')) {
+      updateCourseDropdown();
+      goTo('courses');
     }
   </script>
 </body>

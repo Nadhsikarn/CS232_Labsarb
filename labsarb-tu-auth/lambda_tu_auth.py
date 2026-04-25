@@ -25,6 +25,18 @@ def verify_tu_account(username, password):
     response = http.request('POST', url, body=body, headers=headers)
     return json.loads(response.data.decode('utf-8'))
 
+def check_student_exists(student_id):
+    http = urllib3.PoolManager()
+    url = f"https://restapi.tu.ac.th/api/v2/profile/std/info/?id={student_id}"
+    
+    headers = {
+        "Content-Type": "application/json",
+        "Application-Key": APPLICATION_KEY
+    }
+    
+    response = http.request('GET', url, headers=headers)
+    return json.loads(response.data.decode('utf-8'))
+
 def lambda_handler(event, context):
     headers = {
         "Access-Control-Allow-Origin": "*",
@@ -37,6 +49,31 @@ def lambda_handler(event, context):
 
     try:
         body = json.loads(event.get('body', '{}'))
+        action = body.get('action', 'verify') # default to verify for backward compatibility
+        
+        if action == 'check_student':
+            student_id = body.get('student_id')
+            if not student_id:
+                return {
+                    'statusCode': 400,
+                    'headers': headers,
+                    'body': json.dumps({'message': 'กรุณาระบุรหัสนักศึกษา', 'success': False})
+                }
+            
+            result = check_student_exists(student_id)
+            if result.get('status') == True:
+                return {
+                    'statusCode': 200,
+                    'headers': headers,
+                    'body': json.dumps({'message': 'พบข้อมูลนักศึกษา', 'success': True, 'data': result})
+                }
+            else:
+                return {
+                    'statusCode': 404,
+                    'headers': headers,
+                    'body': json.dumps({'message': 'ไม่พบข้อมูลนักศึกษาในระบบ', 'success': False})
+                }
+
         username = body.get('username')
         password = body.get('password')
         line_user_id = body.get('lineUserId')
