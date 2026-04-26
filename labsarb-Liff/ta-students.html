@@ -105,6 +105,16 @@
           <span>Academic Management</span>
         </div>
       </div>
+      <div class="sidebar-action">
+        <button class="btn-primary" onclick="window.location.href='ta-create-lab.html'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          สร้าง LAB ใหม่
+        </button>
+      </div>
       <nav class="sidebar-nav">
         <a class="nav-item" href="ta-dashboard.html">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -290,7 +300,7 @@
 
       try {
         // --- ส่วนที่ต้องแก้: ใส่ URL ของ API Gateway ของคุณที่นี่ ---
-        const apiUrl = 'https://o5p2o3a8o1.execute-api.us-east-1.amazonaws.com/prod/auth';
+        const apiUrl = 'https://ya67mrcre1.execute-api.us-east-1.amazonaws.com/prod_tuapi/login';
 
         const response = await fetch(apiUrl, {
           method: 'POST',
