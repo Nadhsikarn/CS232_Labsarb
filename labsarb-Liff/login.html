@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +19,7 @@
       padding: 20px;
       font-family: 'Inter', sans-serif;
     }
-    
+
     .login-wrapper {
       background: var(--surface);
       width: 100%;
@@ -28,7 +29,7 @@
       padding: 40px;
       text-align: center;
     }
-    
+
     .login-logo {
       width: 100px;
       height: 100px;
@@ -37,6 +38,7 @@
       align-items: center;
       justify-content: center;
     }
+
     .login-logo img {
       width: 100%;
       height: 100%;
@@ -48,6 +50,7 @@
       color: var(--text);
       margin-bottom: 8px;
     }
+
     .login-header p {
       font-size: 14px;
       color: var(--text-muted);
@@ -62,6 +65,7 @@
       padding: 4px;
       margin-bottom: 24px;
     }
+
     .login-tab {
       flex: 1;
       padding: 10px 0;
@@ -72,10 +76,11 @@
       border-radius: 6px;
       transition: var(--transition);
     }
+
     .login-tab.active {
       background: var(--surface);
       color: var(--primary);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
     /* Forms */
@@ -83,6 +88,7 @@
       text-align: left;
       margin-bottom: 20px;
     }
+
     .login-form-group label {
       display: block;
       font-size: 13px;
@@ -90,6 +96,7 @@
       color: var(--text);
       margin-bottom: 8px;
     }
+
     .login-form-group input {
       width: 100%;
       padding: 12px 16px;
@@ -98,6 +105,7 @@
       font-size: 14px;
       transition: var(--transition);
     }
+
     .login-form-group input:focus {
       outline: none;
       border-color: var(--primary);
@@ -116,9 +124,11 @@
       cursor: pointer;
       transition: var(--transition);
     }
+
     .btn-login:hover {
       background: var(--primary-hover);
     }
+
     .btn-login:disabled {
       background: #94a3b8;
       cursor: not-allowed;
@@ -127,6 +137,7 @@
     .form-section {
       display: none;
     }
+
     .form-section.active {
       display: block;
       animation: fadeIn 0.3s ease;
@@ -139,11 +150,19 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
+
 <body>
 
   <div class="login-wrapper">
@@ -206,7 +225,7 @@
       const user = document.getElementById('ta-username').value;
       const pass = document.getElementById('ta-password').value;
       const status = document.getElementById('ta-status');
-      
+
       if (!user || !pass) {
         status.textContent = 'กรุณากรอกข้อมูลให้ครบถ้วน';
         status.style.display = 'block';
@@ -216,7 +235,7 @@
       // Mock Authentication
       if (user === 'admin' && pass === 'password' || (user.length > 0 && pass.length > 0)) {
         localStorage.setItem('labsarb_admin', 'true');
-        window.location.href = 'ta-portal.html';
+        window.location.href = 'ta-dashboard.html';
       } else {
         status.textContent = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
         status.style.display = 'block';
@@ -232,7 +251,7 @@
       const user = document.getElementById('student-username').value;
       const pass = document.getElementById('student-password').value;
 
-      if(!user || !pass) {
+      if (!user || !pass) {
         status.innerText = 'กรุณากรอกรหัสนักศึกษาและรหัสผ่านให้ครบ';
         status.style.display = 'block';
         status.style.color = 'var(--danger)';
@@ -247,27 +266,30 @@
 
       try {
         const payload = {
-            username: user,
-            password: pass
-            // lineUserId is removed as requested
+          username: user,
+          password: pass
+          // lineUserId is removed as requested
         };
 
         const response = await fetch(ApiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
         });
 
         const result = await response.json();
         if (response.ok) {
-            status.innerText = 'ลงทะเบียนสำเร็จ! เข้าสู่ระบบแล้ว';
-            status.style.color = 'var(--primary)';
-            alert('ลงทะเบียนสำเร็จ!');
-            // Redirect to student portal if available
+          status.innerText = 'ลงทะเบียนสำเร็จ! เข้าสู่ระบบแล้ว';
+          status.style.color = 'var(--primary)';
+          localStorage.setItem('labsarb_student', user);
+          if (result.data) {
+            localStorage.setItem('labsarb_student_info', JSON.stringify(result.data));
+          }
+          window.location.href = 'student-dashboard.html';
         } else {
-            alert('เกิดข้อผิดพลาด: ' + result.message);
-            status.innerText = 'ข้อมูลไม่ถูกต้อง กรุณาลองใหม่';
-            status.style.color = 'var(--danger)';
+          alert('เกิดข้อผิดพลาด: ' + result.message);
+          status.innerText = 'ข้อมูลไม่ถูกต้อง กรุณาลองใหม่';
+          status.style.color = 'var(--danger)';
         }
       } catch (err) {
         status.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์';
@@ -280,8 +302,9 @@
 
     // Check if we are already logged in as TA and bypass
     if (localStorage.getItem('labsarb_admin')) {
-      // window.location.href = 'ta-portal.html';
+      // window.location.href = 'ta-dashboard.html';
     }
   </script>
 </body>
+
 </html>

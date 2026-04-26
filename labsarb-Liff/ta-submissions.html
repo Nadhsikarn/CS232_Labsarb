@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labsarb TA - Submissions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="portal-style.css">
+</head>
+
+<body>
+  <div class="app-container" id="app-container">
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">LA</div>
+        <div class="sidebar-logo-text">
+          <h2>LabAdmin</h2>
+          <span>Academic Management</span>
+        </div>
+      </div>
+      <div class="sidebar-action">
+        <button class="btn-primary" onclick="window.location.href='ta-create-lab.html'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          สร้าง LAB ใหม่
+        </button>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-item" href="ta-dashboard.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          ภาพรวม (Dashboard)
+        </a>
+        <a class="nav-item active" href="ta-submissions.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          การส่งงาน
+        </a>
+        <a class="nav-item" href="ta-students.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          รายชื่อนักศึกษา
+        </a>
+        <a class="nav-item" href="https://courses.cs.tu.ac.th/" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          ไปยังเว็ปไซต์รายวิชา
+        </a>
+      </nav>
+
+    </div>
+
+    <!-- ===== MAIN AREA ===== -->
+    <div class="main-area">
+      <!-- TOPBAR -->
+      <div class="topbar">
+        <div class="topbar-title">Labsard TA Manager</div>
+        <div class="topbar-actions">
+          <div class="profile-circle" onclick="toggleProfileDropdown()" title="โปรไฟล์">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" style="width:16px;height:16px;">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <!-- Profile Dropdown -->
+          <div class="profile-dropdown" id="profile-dropdown">
+            <div class="profile-header">
+              <div class="profile-avatar">TA</div>
+              <div class="profile-info">
+                <h4 id="dropdown-username">ผู้ใช้งาน</h4>
+                <p>Teacher Assistant</p>
+              </div>
+            </div>
+            <button class="btn-outline" onclick="doLogout()"
+              style="width:100%; justify-content:center;">ออกจากระบบ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENT SCROLL AREA -->
+      <div class="content-scroll">
+        <!-- ============ SCREEN: SUBMISSIONS LIST ============ -->
+        <div class="screen active">
+          <div class="page-header">
+            <div class="breadcrumb">
+              <span class="icon-action" onclick="window.location.href='ta-dashboard.html'">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>ย้อนกลับไปหน้าแดชบอร์ด</span>
+              </span>
+            </div>
+            <h1 id="sub-list-title">รายการส่งงานทั้งหมด</h1>
+            <p>ตรวจสอบสถานะและรายละเอียดผลการตรวจของนักศึกษาแต่ละคน</p>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>รหัสนักศึกษา</th>
+                <th>รหัสการทดลอง (Lab)</th>
+                <th>สถานะ</th>
+                <th>คะแนน</th>
+                <th>ข้อความที่ระบบตรวจพบ</th>
+              </tr>
+            </thead>
+            <tbody id="submissions-tbody">
+              <!-- Submission Rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="ta-portal.js"></script>
+  <script>
+    checkLogin();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentLabName = urlParams.get('lab');
+
+    if (currentLabName) {
+      document.getElementById('sub-list-title').textContent = currentLabName;
+    }
+
+    function loadSubmissions() {
+      const tbody = document.getElementById('submissions-tbody');
+      tbody.innerHTML = '';
+
+      let filteredData = getSubmissions();
+
+      if (currentLabName) {
+        filteredData = filteredData.filter(d => d.lab_id === currentLabName);
+      }
+
+      if (filteredData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px;">ยังไม่มีข้อมูลนักศึกษา/การส่งงานในระบบ</td></tr>`;
+        return;
+      }
+
+      filteredData.forEach((d, i) => {
+        const tr = document.createElement('tr');
+        tr.onclick = () => {
+          window.location.href = `ta-submission-detail.html?lab=${encodeURIComponent(d.lab_id)}&student=${encodeURIComponent(d.student_id)}`;
+        };
+
+        let statusHtml = '';
+        if (d.status === 'pass') statusHtml = `<span class="status-badge pass">ผ่านเกณฑ์</span>`;
+        else if (d.status === 'fail') statusHtml = `<span class="status-badge fail">ปรับปรุง</span>`;
+        else statusHtml = `<span class="status-badge pending">รอตรวจ</span>`;
+
+        tr.innerHTML = `
+          <td style="font-weight:500;">${d.student_id}</td>
+          <td>${d.lab_id}</td>
+          <td>${statusHtml}</td>
+          <td>${d.score !== undefined ? d.score : '-'} / 10</td>
+          <td style="color:var(--text-muted);font-size:12px;">${d.detected_text || d.missing_point || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.onload = loadSubmissions;
+  </script>
+</body>
+
+</html>

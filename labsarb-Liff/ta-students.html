@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labsarb TA - จัดการนักศึกษา</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="portal-style.css">
+  <style>
+    /* Use common layout from other ta-* files */
+    .card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .btn-submit {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 16px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+
+    .data-table td {
+      padding: 16px;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 14px;
+      color: #1e293b;
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #ef4444;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-container" id="app-container">
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">LA</div>
+        <div class="sidebar-logo-text">
+          <h2>LabAdmin</h2>
+          <span>Academic Management</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-item" href="ta-dashboard.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          ภาพรวม (Dashboard)
+        </a>
+        <a class="nav-item" href="ta-submissions.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          การส่งงาน
+        </a>
+        <a class="nav-item active" href="ta-students.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          รายชื่อนักศึกษา
+        </a>
+        <a class="nav-item" href="https://courses.cs.tu.ac.th/" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          ไปยังเว็ปไซต์รายวิชา
+        </a>
+      </nav>
+    </div>
+
+    <!-- ===== MAIN AREA ===== -->
+    <div class="main-area">
+      <div class="topbar">
+        <div class="topbar-title">Labsard TA Manager</div>
+        <div class="topbar-actions">
+          <div class="profile-circle" onclick="toggleProfileDropdown()" title="โปรไฟล์">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" style="width:16px;height:16px;">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <!-- Profile Dropdown -->
+          <div class="profile-dropdown" id="profile-dropdown">
+            <div class="profile-header">
+              <div class="profile-avatar">TA</div>
+              <div class="profile-info">
+                <h4 id="dropdown-username">ผู้ใช้งาน</h4>
+                <p>Teacher Assistant</p>
+              </div>
+            </div>
+            <button class="btn-outline" onclick="doLogout()"
+              style="width:100%; justify-content:center;">ออกจากระบบ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENT SCROLL AREA -->
+      <div class="content-scroll">
+        <div class="screen active">
+          <div class="page-header">
+            <h1 id="dashboard-course-name">รายชื่อนักศึกษา (CS232)</h1>
+            <p>จัดการรายชื่อนักศึกษาในรายวิชา รายชื่อเหล่านี้จะถูกดึงไปใช้สร้างสถานะส่งงานอัตโนมัติเมื่อสร้าง Lab ใหม่
+            </p>
+          </div>
+
+          <!-- Add Student Form -->
+          <div class="card">
+            <h3>เพิ่มนักศึกษาด้วยตนเอง</h3>
+            <p style="color:#64748b; font-size:13px; margin-bottom:16px;">กรอกรหัสนักศึกษา 10 หลัก
+              เพื่อดึงชื่อและอีเมลจากระบบโดยอัตโนมัติ</p>
+            <div style="display:flex; gap:16px; align-items:flex-end; max-width: 500px;">
+              <div class="form-group" style="flex:1; margin-bottom:0;">
+                <label>รหัสนักศึกษา (10 หลัก)</label>
+                <input type="text" id="add-student-id" class="form-control" placeholder="เช่น 640968XXXX"
+                  maxlength="10">
+              </div>
+              <div>
+                <button class="btn-submit" id="btn-add-student" onclick="addStudent()">ตรวจสอบและเพิ่ม</button>
+              </div>
+            </div>
+            <p id="add-student-status" style="font-size:12px; margin-top:10px; display:none;"></p>
+          </div>
+
+          <!-- Student List -->
+          <div class="card" style="padding:0; overflow:hidden;">
+            <div
+              style="padding:20px 24px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
+              <h3 style="margin:0;">รายชื่อในระบบ (<span id="student-count">0</span>)</h3>
+              <button class="btn-danger" onclick="clearAllStudents()">ลบทั้งหมด</button>
+            </div>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>รหัสนักศึกษา</th>
+                    <th>ชื่อ-นามสกุล</th>
+                    <th>อีเมล</th>
+                    <th style="text-align:right;">จัดการ</th>
+                  </tr>
+                </thead>
+                <tbody id="student-table-body">
+                  <!-- JS Injection -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="ta-portal.js"></script>
+  <script>
+    checkLogin();
+
+    function loadStudents() {
+      const students = getEnrolledStudents();
+      const tbody = document.getElementById('student-table-body');
+
+      document.getElementById('student-count').textContent = students.length;
+      tbody.innerHTML = '';
+
+      if (students.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b; padding:32px;">ยังไม่มีรายชื่อนักศึกษาในระบบ</td></tr>`;
+        return;
+      }
+
+      students.forEach((s, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight:500;">${s.id}</td>
+          <td>${s.name}</td>
+          <td style="color:#64748b;">${s.email || '-'}</td>
+          <td style="text-align:right;">
+            <button class="btn-danger" onclick="removeStudent(${index})">ลบ</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function addStudent() {
+      const idInput = document.getElementById('add-student-id');
+      const btn = document.getElementById('btn-add-student');
+      const statusMsg = document.getElementById('add-student-status');
+
+      const studentId = idInput.value.trim();
+
+      if (studentId.length !== 10) {
+        alert('กรุณากรอกรหัสนักศึกษาให้ครบ 10 หลัก');
+        return;
+      }
+
+      const students = getEnrolledStudents();
+      if (students.find(s => s.id === studentId)) {
+        alert('รหัสนักศึกษานี้อยู่ในรายชื่อแล้ว');
+        return;
+      }
+
+      // Start Loading
+      btn.disabled = true;
+      btn.textContent = 'กำลังตรวจสอบ...';
+      statusMsg.style.display = 'block';
+      statusMsg.style.color = '#64748b';
+      statusMsg.textContent = '🔄 กำลังดึงข้อมูลจากระบบมหาวิทยาลัย...';
+
+      try {
+        // --- ส่วนที่ต้องแก้: ใส่ URL ของ API Gateway ของคุณที่นี่ ---
+        const apiUrl = 'https://o5p2o3a8o1.execute-api.us-east-1.amazonaws.com/prod/auth';
+
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'check_student', student_id: studentId })
+        });
+
+        const result = await response.json();
+
+        if (result.success && result.data) {
+          const studentData = result.data;
+          const newStudent = {
+            id: studentId,
+            name: studentData.name || studentData.displayname_th || 'ไม่ทราบชื่อ',
+            email: studentData.email || (studentId + '@dome.tu.ac.th')
+          };
+
+          students.push(newStudent);
+          saveEnrolledStudents(students);
+
+          statusMsg.style.color = '#059669';
+          statusMsg.textContent = `✅ เพิ่มคุณ ${newStudent.name} สำเร็จ!`;
+          idInput.value = '';
+          loadStudents();
+
+          setTimeout(() => { statusMsg.style.display = 'none'; }, 3000);
+        } else {
+          statusMsg.style.color = '#dc2626';
+          statusMsg.textContent = '❌ ไม่พบข้อมูลนักศึกษาคนนี้ กรุณาตรวจสอบรหัสอีกครั้ง';
+        }
+      } catch (err) {
+        console.error(err);
+        statusMsg.style.color = '#dc2626';
+        statusMsg.textContent = '⚠️ เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'ตรวจสอบและเพิ่ม';
+      }
+    }
+
+    function removeStudent(index) {
+      if (confirm('ยืนยันการลบนักศึกษารายนี้ออกจากรายวิชา?')) {
+        const students = getEnrolledStudents();
+        students.splice(index, 1);
+        saveEnrolledStudents(students);
+        loadStudents();
+      }
+    }
+
+    function clearAllStudents() {
+      if (confirm('คุณต้องการลบรายชื่อนักศึกษา "ทั้งหมด" ออกจากระบบหรือไม่?')) {
+        saveEnrolledStudents([]);
+        loadStudents();
+      }
+    }
+
+    window.onload = loadStudents;
+  </script>
+</body>
+
+</html>
