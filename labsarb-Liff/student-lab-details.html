@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labsarb - รายละเอียดผลงาน</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="portal-style.css">
+  <style>
+    :root {
+      --primary-student: #3A6192;
+      --primary-student-light: #e8edf4;
+    }
+    body { background-color: #fbfbfc; }
+    
+    .sidebar { background-color: #f8f9fa; border-right: none; width: 240px; }
+    .sidebar-logo { padding: 32px 24px; display: flex; align-items: center; gap: 12px; }
+    .sidebar-logo-text { display: flex; flex-direction: column; }
+    .sidebar-logo h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.5px; margin: 0;}
+    .sidebar-logo span { font-size: 11px; color: #64748b; font-weight: 500; letter-spacing: 0; text-transform: none; }
+    .sidebar-nav { padding: 0 16px; gap: 8px; }
+    .nav-item { padding: 12px 16px; border-radius: 8px; font-size: 14px; color: #64748b; text-decoration: none; display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+    .nav-item svg { width: 18px; height: 18px; }
+    .nav-item.active { background-color: #ffffff; color: var(--primary-student); box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02); }
+    .main-area { background-color: #ffffff; border-radius: 24px 0 0 24px; box-shadow: -5px 0 20px rgba(0, 0, 0, 0.02); margin-left: 0; }
+    
+    /* Top user menu */
+    .top-user { position: absolute; top: 30px; right: 60px; z-index: 50; }
+    .profile-trigger { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 6px 12px; border-radius: 20px; transition: background 0.2s; }
+    .profile-trigger:hover { background: #f1f5f9; }
+    .avatar-circle { width: 32px; height: 32px; border-radius: 50%; background: var(--primary-student-light); color: var(--primary-student); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; }
+    .avatar-circle.large { width: 56px; height: 56px; font-size: 20px; margin: 0 auto 12px auto; }
+    #trigger-student-name { font-size: 14px; font-weight: 500; color: #1a1a1a; }
+    .profile-card { position: absolute; top: 50px; right: 0; width: 280px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); z-index: 100; display: none; }
+    .profile-card.active { display: block; }
+    .profile-card-header { padding: 24px 20px 16px 20px; text-align: center; border-bottom: 1px solid #f1f5f9; }
+    .profile-card-name { font-size: 16px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+    .profile-card-id { font-size: 13px; color: #64748b; }
+    .profile-card-body { padding: 16px 20px; }
+    .info-row { margin-bottom: 12px; }
+    .info-label { display: block; font-size: 11px; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; }
+    .info-value { font-size: 13px; color: #334155; font-weight: 500; }
+    .profile-card-footer { padding: 16px 20px; background: #f8fafc; border-top: 1px solid #f1f5f9; }
+    .btn-logout-full { width: 100%; padding: 10px; background: #fee2e2; color: #ef4444; border: none; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; }
+
+    /* Lab Details Specifics */
+    .nav-back { font-size: 13px; color: #64748b; display: flex; align-items: center; gap: 8px; cursor: pointer; text-decoration: none; margin-bottom: 20px; }
+    .nav-back:hover { color: #1a1a1a; }
+    .page-title { font-size: 32px; font-weight: 300; color: #1a1a1a; margin-bottom: 16px; }
+    .lab-meta { font-size: 14px; color: #64748b; margin-bottom: 32px; }
+    
+    .badge { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; }
+    .badge.submitted { background: #eef2ff; color: #4f46e5; }
+    .badge.pending { background: #f1f5f9; color: #64748b; }
+    .badge.passed { background: #dcfce7; color: #16a34a; }
+    .badge.failed { background: #fef2f2; color: #ef4444; }
+
+    .feedback-box { background: #f8faff; border-radius: 8px; padding: 24px; margin-bottom: 32px; }
+    .feedback-box.fail { background: #fef2f2; }
+    .feedback-box h4 { font-size: 11px; font-weight: 600; color: var(--primary-student); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; margin-top:0;}
+    .feedback-box.fail h4 { color: #ef4444; }
+    .feedback-box p { font-size: 14px; color: #334155; line-height: 1.6; margin:0;}
+
+    .artifacts-section h3 { font-size: 18px; font-weight: 400; margin-bottom: 16px; margin-top:0;}
+    .artifact-img { max-width: 400px; width: 100%; border-radius: 8px; border: 1px solid #edf2f7; }
+  </style>
+</head>
+<body>
+  <div class="app-container" id="app-container">
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <img src="logo.png" alt="Labsarb Logo" style="height: 40px; width: auto; object-fit: contain;">
+        <div class="sidebar-logo-text">
+          <h2 style="margin:0;">Labsarb</h2>
+          <span>Student Portal</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-item active" href="student-dashboard.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          ส่งงาน (CS232)
+        </a>
+        <a class="nav-item" href="student-history.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          สถานะภาพรวม
+        </a>
+        <a class="nav-item" href="https://courses.cs.tu.ac.th" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          เว็บไซต์รายวิชา
+        </a>
+      </nav>
+    </div>
+
+    <!-- ===== MAIN AREA ===== -->
+    <div class="main-area">
+      <div class="top-user" id="profile-container">
+        <div class="profile-trigger" onclick="toggleProfileCard()">
+          <div class="avatar-circle">นศ</div>
+          <span id="trigger-student-name">กำลังโหลด...</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
+        <div class="profile-card" id="profile-card">
+          <div class="profile-card-header">
+            <div class="avatar-circle large">นศ</div>
+            <div class="profile-card-name" id="card-student-name">ชื่อ นามสกุล</div>
+            <div class="profile-card-id" id="card-student-id">รหัสนักศึกษา: -</div>
+          </div>
+          <div class="profile-card-body">
+            <div class="info-row"><span class="info-label">อีเมล</span><span class="info-value" id="card-student-email">-</span></div>
+            <div class="info-row"><span class="info-label">คณะ/สาขา</span><span class="info-value" id="card-student-faculty">-</span></div>
+          </div>
+          <div class="profile-card-footer">
+            <button class="btn-logout-full" onclick="doStudentLogout()">ออกจากระบบ</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-scroll">
+        <div class="screen active">
+          <a class="nav-back" href="student-dashboard.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            กลับไปหน้ารายการการทดลอง
+          </a>
+          
+          <div style="display:flex; align-items:center; gap:16px; margin-bottom:8px;">
+            <h1 class="page-title" style="margin:0;" id="lab-detail-title">Lab: -</h1>
+            <span class="badge" id="lab-detail-status">-</span>
+          </div>
+          <p class="lab-meta">ส่งเมื่อเร็วๆ นี้ (ประเมินโดยระบบ Labsarb)</p>
+
+          <div class="feedback-box" id="feedback-box">
+            <h4 id="feedback-title">ข้อเสนอแนะ/ผลการตรวจ</h4>
+            <p id="lab-detail-feedback">กำลังโหลดข้อมูล...</p>
+          </div>
+
+          <div class="artifacts-section">
+            <h3>ผลงานที่ส่ง</h3>
+            <img id="lab-detail-image" src="" alt="Artifact" class="artifact-img">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="student-portal.js"></script>
+  <script>
+    checkStudentLogin();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const labId = urlParams.get('lab');
+
+    function loadDetail() {
+      if (!labId) {
+        document.getElementById('lab-detail-title').textContent = 'ไม่พบรหัส Lab';
+        return;
+      }
+      
+      document.getElementById('lab-detail-title').textContent = labId;
+
+      const studentId = localStorage.getItem('labsarb_student');
+      const subs = getSubmissions();
+      const mySub = subs.find(s => s.lab_id === labId && s.student_id === studentId);
+
+      const statusBadge = document.getElementById('lab-detail-status');
+      const feedbackP = document.getElementById('lab-detail-feedback');
+      const feedbackBox = document.getElementById('feedback-box');
+      const img = document.getElementById('lab-detail-image');
+
+      if (!mySub) {
+        statusBadge.textContent = 'ไม่พบข้อมูลการส่งงาน';
+        statusBadge.className = 'badge pending';
+        feedbackP.textContent = '-';
+        return;
+      }
+
+      img.src = mySub.image_url || 'https://via.placeholder.com/800x600.png?text=No+Image';
+
+      if (mySub.status === 'pass') {
+        statusBadge.textContent = 'ผ่านเกณฑ์';
+        statusBadge.className = 'badge passed';
+        feedbackBox.className = 'feedback-box';
+        feedbackP.textContent = `เยี่ยมมาก! ระบบอ่านข้อความได้ว่า: "${mySub.detected_text}" ซึ่งตรงกับเฉลยต้นแบบ`;
+      } else if (mySub.status === 'fail') {
+        statusBadge.textContent = 'ต้องปรับปรุง';
+        statusBadge.className = 'badge failed';
+        feedbackBox.className = 'feedback-box fail';
+        feedbackP.textContent = `ระบบตรวจสอบพบข้อผิดพลาด/จุดที่ขาดหายไป: ${mySub.missing_point}`;
+      } else {
+        statusBadge.textContent = 'รอการตรวจ';
+        statusBadge.className = 'badge submitted';
+        feedbackBox.className = 'feedback-box';
+        feedbackP.textContent = `ผลงานของคุณถูกส่งเข้าระบบแล้ว รอการประมวลผลหรือรอให้ผู้สอนทำการตรวจให้คะแนน`;
+      }
+    }
+
+    window.onload = loadDetail;
+  </script>
+</body>
+</html>
