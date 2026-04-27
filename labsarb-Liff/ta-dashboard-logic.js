@@ -1,80 +1,75 @@
 /* ta-dashboard-logic.js */
 
-// ตรวจสอบสถานะการเข้าสู่ระบบ
-if (typeof checkLogin === 'function') {
-  checkLogin();
-}
-
-const API_URL = "https://efmsyxbc9j.execute-api.us-east-1.amazonaws.com";
-
-/**
- * ดึงข้อมูลผลการส่งงานทั้งหมดและแสดงผลบน Dashboard
- */
-async function loadDashboard() {
-  const grid = document.getElementById('dashboard-grid');
-  if (!grid) return;
-  
-  grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px;">กำลังโหลดข้อมูล...</div>';
-
-  try {
-    const res = await fetch(API_URL + "/submissions");
-    if (!res.ok) {
-      throw new Error("API error");
-    }
-    
-    const json = await res.json();
-    const data = json.data || [];
-
-    const labs = {};
-
-    // จัดกลุ่มข้อมูลตาม lab_id และนับสถานะ
-    data.forEach(item => {
-      const lab = item.lab_id;
-
-      if (!labs[lab]) {
-        labs[lab] = {
-          pass: 0,
-          fail: 0,
-          pending: 0,
-          desc: item.lab_name || "ไม่มีคำอธิบาย"
-        };
-      }
-
-      if (item.status === 'pass') labs[lab].pass++;
-      else if (item.status === 'fail') labs[lab].fail++;
-      else labs[lab].pending++;
-    });
-
-    grid.innerHTML = ''; // ล้าง Loader
-
-    if (Object.keys(labs).length === 0) {
-        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px;">ไม่พบข้อมูลการทดลอง</div>';
+window.onload = async () => {
+    const storedUser = localStorage.getItem('labsarb_admin');
+    if (!storedUser) {
+        window.location.href = 'login.html';
         return;
     }
+    const userEl = document.getElementById('dropdown-username');
+    if (userEl) userEl.textContent = storedUser;
 
-    // สร้างการ์ดแสดงผลสำหรับแต่ละ Lab
-    Object.entries(labs).forEach(([labName, stats]) => {
-      const card = document.createElement('div');
-      card.className = 'lab-card';
+    await loadDashboard();
+};
 
-      card.innerHTML = `
-        <h3>${labName}</h3>
-        <p>${stats.desc}</p>
-        <div class="lab-stats">
-          <div>ผ่าน: ${stats.pass}</div>
-          <div>ไม่ผ่าน: ${stats.fail}</div>
-          <div>รอดำเนินการ: ${stats.pending}</div>
-        </div>
-      `;
+async function loadDashboard() {
+    const grid = document.getElementById('dashboard-grid');
+    if (!grid) return;
 
-      grid.appendChild(card);
-    });
+    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px;">กำลังโหลดข้อมูล...</div>';
 
-  } catch (err) {
-    console.error("Dashboard Load Error:", err);
-    grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #ef4444;">เกิดข้อผิดพลาดในการดึงข้อมูล กรุณาลองใหม่อีกครั้ง</div>`;
-  }
+    try {
+        const [labsRes, subsRes] = await Promise.all([
+            fetch(API_URL + "/labs"),
+            fetch(API_URL + "/submissions")
+        ]);
+
+        const labs = await labsRes.json();
+        const submissions = await subsRes.json();
+
+        // สร้าง stats จาก labs ที่อาจารย์สร้างไว้
+        const stats = {};
+        labs.forEach(lab => {
+            stats[lab.lab_id] = {
+                pass: 0, fail: 0, pending: 0,
+                desc: lab.lab_data || ''
+            };
+        });
+
+        // นับ submission ของแต่ละ lab
+        submissions.forEach(sub => {
+            if (!stats[sub.lab_id]) return;
+            if (sub.status === 'pass') stats[sub.lab_id].pass++;
+            else if (sub.status === 'fail') stats[sub.lab_id].fail++;
+            else stats[sub.lab_id].pending++;
+        });
+
+        grid.innerHTML = '';
+
+        if (Object.keys(stats).length === 0) {
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px;">ยังไม่มีการทดลอง กด "สร้าง LAB ใหม่" เพื่อเริ่มต้น</div>';
+            return;
+        }
+
+        Object.entries(stats).forEach(([labId, s]) => {
+            const card = document.createElement('div');
+            card.className = 'lab-card';
+            card.style.cursor = 'pointer';
+            card.onclick = () => window.location.href = `ta-submissions.html?lab=${encodeURIComponent(labId)}`;
+            card.innerHTML = `
+                <h3>${labId}</h3>
+                <p>${s.desc || 'ไม่มีคำอธิบาย'}</p>
+                <div class="lab-stats">
+                    <div>ผ่าน: ${s.pass}</div>
+                    <div>ไม่ผ่าน: ${s.fail}</div>
+                    <div>รอดำเนินการ: ${s.pending}</div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+    } catch (err) {
+        console.error("Dashboard Load Error:", err);
+        grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #ef4444;">เกิดข้อผิดพลาดในการดึงข้อมูล</div>`;
+    }
 }
-
-// เรียกใช้งานเมื่อโหลดหน้าเว็บสำเร็จ
-window.onload = loadDashboard;

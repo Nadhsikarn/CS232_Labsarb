@@ -95,9 +95,20 @@
                 <span class="badge" id="lab-detail-status">กำลังโหลด...</span>
               </div>
               <div class="detail-body">
+                <div id="lab-desc-section" style="display:none; margin-bottom:20px; padding:14px 16px; background:#f8faff; border-radius:8px;">
+                  <label style="font-size:11px; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:6px;">คำอธิบาย / เกณฑ์การประเมิน</label>
+                  <p id="lab-detail-desc" style="font-size:14px; color:#334155; line-height:1.6; margin:0;"></p>
+                </div>
+                <div id="lab-score-section" style="display:none; margin-bottom:20px;">
+                  <label style="font-size:11px; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:4px;">คะแนนที่ได้</label>
+                  <p id="lab-detail-score" style="font-size:28px; font-weight:700; color:#0ea5e9; margin:0;"></p>
+                </div>
                 <div class="feedback-box">
                   <label>ข้อเสนอแนะจากระบบ/อาจารย์</label>
                   <p id="lab-detail-feedback">ไม่มีข้อเสนอแนะ</p>
+                </div>
+                <div style="margin-top:20px;">
+                  <a id="btn-submit-lab" href="#" style="display:none; padding:10px 24px; background:#0ea5e9; color:#fff; border-radius:8px; text-decoration:none; font-weight:600; font-size:14px;">ส่งงาน</a>
                 </div>
               </div>
             </div>
@@ -105,7 +116,8 @@
             <div class="detail-side-card">
               <label class="info-label" style="margin-bottom:12px; display:block;">หลักฐานการส่งงาน (Screenshot)</label>
               <div class="image-preview-container">
-                <img id="lab-detail-image" src="" alt="Lab Screenshot">
+                <img id="lab-detail-image" alt="หลักฐานการส่งงาน" style="display:none;">
+                <div id="lab-detail-no-image" style="padding:48px 24px; text-align:center; color:#94a3b8; font-size:13px;">ยังไม่มีหลักฐานการส่งงาน</div>
               </div>
             </div>
           </div>

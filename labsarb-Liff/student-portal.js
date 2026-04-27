@@ -90,7 +90,6 @@ function saveSubmissions(subs) {
 
 document.addEventListener("DOMContentLoaded", () => {
   checkStudentLogin();
-  fetchLabResults();
 });
 
 const API_URL = "https://efmsyxbc9j.execute-api.us-east-1.amazonaws.com";

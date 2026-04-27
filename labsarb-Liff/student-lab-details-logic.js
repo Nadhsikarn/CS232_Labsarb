@@ -2,69 +2,103 @@
  * Script สำหรับหน้ารายละเอียดผลงาน (Lab Details)
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     if (typeof checkStudentLogin === 'function') {
         checkStudentLogin();
     }
-    loadDetail();
+    await loadDetail();
 });
 
 async function loadDetail() {
     const urlParams = new URLSearchParams(window.location.search);
     const labId = urlParams.get('lab');
-    
+
     if (!labId) {
         alert("ไม่พบรหัสการทดลอง");
         return;
     }
 
-    document.getElementById('lab-detail-title').textContent = `Lab: ${labId}`;
+    const titleEl = document.getElementById('lab-detail-title');
+    if (titleEl) titleEl.textContent = `Lab: ${labId}`;
+
     const studentId = localStorage.getItem('labsarb_student');
 
     try {
-        const res = await fetch(API_URL + "/submissions?student_id=" + studentId + "&lab_id=" + labId);
-        
-        if (!res.ok) throw new Error("API error");
+        const [labsRes, subRes] = await Promise.all([
+            fetch(API_URL + "/labs"),
+            fetch(API_URL + "/submissions?student_id=" + studentId + "&lab_id=" + encodeURIComponent(labId))
+        ]);
 
-        const data = await res.json();
-        // ค้นหาข้อมูลที่ตรงกับ labId (API อาจส่งมาเป็น Array)
-        const mySub = data.find(d => d.lab_id === labId);
+        const labs = await labsRes.json();
+        const subs = await subRes.json();
+
+        const labTemplate = Array.isArray(labs) ? labs.find(l => l.lab_id === labId) : null;
+        const mySub = Array.isArray(subs) ? subs.find(s => s.lab_id === labId) : null;
+
+        // Show lab description from template
+        const descSection = document.getElementById('lab-desc-section');
+        const descEl = document.getElementById('lab-detail-desc');
+        if (labTemplate?.lab_description && descSection && descEl) {
+            descEl.textContent = labTemplate.lab_description;
+            descSection.style.display = 'block';
+        }
 
         const statusBadge = document.getElementById('lab-detail-status');
         const feedbackP = document.getElementById('lab-detail-feedback');
         const imgDisplay = document.getElementById('lab-detail-image');
+        const noImageEl = document.getElementById('lab-detail-no-image');
+        const scoreSection = document.getElementById('lab-score-section');
+        const scoreEl = document.getElementById('lab-detail-score');
+        const submitBtn = document.getElementById('btn-submit-lab');
 
         if (!mySub) {
-            statusBadge.textContent = 'ไม่พบข้อมูลการส่ง';
-            statusBadge.className = 'badge';
-            feedbackP.textContent = "คุณยังไม่ได้ส่งงานชิ้นนี้ หรือข้อมูลกำลังถูกปรับปรุง";
+            if (statusBadge) { statusBadge.textContent = 'ยังไม่ส่งงาน'; statusBadge.className = 'badge'; }
+            if (feedbackP) feedbackP.textContent = "คุณยังไม่ได้ส่งงานชิ้นนี้";
+            if (submitBtn) {
+                submitBtn.href = `student-upload-lab.html?lab=${encodeURIComponent(labId)}`;
+                submitBtn.textContent = 'ส่งงาน';
+                submitBtn.style.display = 'inline-block';
+            }
             return;
         }
 
-        // แสดงรูปภาพ (ถ้ามี)
+        // Show submission image or placeholder
         if (mySub.image_url) {
-            imgDisplay.src = mySub.image_url;
-        } else {
-            imgDisplay.alt = "ไม่มีรูปภาพหลักฐาน";
+            if (imgDisplay) { imgDisplay.src = mySub.image_url; imgDisplay.style.display = 'block'; }
+            if (noImageEl) noImageEl.style.display = 'none';
         }
 
-        // แสดงสถานะ
+        // Show score
+        if (mySub.score != null && scoreSection && scoreEl) {
+            scoreEl.textContent = mySub.score + ' คะแนน';
+            scoreSection.style.display = 'block';
+        }
+
+        // Show status, feedback, and action button
         if (mySub.status === 'pass') {
-            statusBadge.textContent = 'ผ่านการประเมิน';
-            statusBadge.className = 'badge pass';
-            feedbackP.textContent = mySub.feedback || "ยินดีด้วย! งานของคุณผ่านการตรวจสอบเรียบร้อยแล้ว";
+            if (statusBadge) { statusBadge.textContent = 'ผ่านการประเมิน'; statusBadge.className = 'badge pass'; }
+            if (feedbackP) feedbackP.textContent = mySub.feedback || "ยินดีด้วย! งานของคุณผ่านการตรวจสอบเรียบร้อยแล้ว";
         } else if (mySub.status === 'fail') {
-            statusBadge.textContent = 'ไม่ผ่าน / ต้องแก้ไข';
-            statusBadge.className = 'badge fail';
-            feedbackP.textContent = mySub.feedback || "งานของคุณยังไม่ผ่านเกณฑ์ กรุณาตรวจสอบข้อผิดพลาดและส่งใหม่อีกครั้ง";
+            if (statusBadge) { statusBadge.textContent = 'ไม่ผ่าน / ต้องแก้ไข'; statusBadge.className = 'badge fail'; }
+            if (feedbackP) feedbackP.textContent = mySub.feedback || "งานของคุณยังไม่ผ่านเกณฑ์ กรุณาตรวจสอบข้อผิดพลาดและส่งใหม่อีกครั้ง";
+            if (submitBtn) {
+                submitBtn.href = `student-upload-lab.html?lab=${encodeURIComponent(labId)}`;
+                submitBtn.textContent = 'ส่งงานใหม่';
+                submitBtn.style.display = 'inline-block';
+            }
         } else {
-            statusBadge.textContent = 'รอการตรวจ';
-            statusBadge.className = 'badge';
-            feedbackP.textContent = "งานของคุณถูกส่งเข้าสู่ระบบแล้ว กรุณารออาจารย์หรือระบบอัตโนมัติทำการประเมิน";
+            if (statusBadge) { statusBadge.textContent = 'รอการตรวจ'; statusBadge.className = 'badge'; }
+            if (feedbackP) feedbackP.textContent = mySub.feedback || "งานของคุณถูกส่งเข้าสู่ระบบแล้ว กรุณารออาจารย์หรือระบบอัตโนมัติทำการประเมิน";
+            if (submitBtn) {
+                submitBtn.href = `student-upload-lab.html?lab=${encodeURIComponent(labId)}`;
+                submitBtn.textContent = 'ส่งงานใหม่';
+                submitBtn.style.display = 'inline-block';
+            }
         }
 
     } catch (error) {
         console.error("Error loading detail:", error);
-        document.getElementById('lab-detail-feedback').textContent = "เกิดข้อผิดพลาดในการโหลดข้อมูล กรุณาลองใหม่อีกครั้ง";
+        const feedbackP = document.getElementById('lab-detail-feedback');
+        if (feedbackP) feedbackP.textContent = "เกิดข้อผิดพลาดในการโหลดข้อมูล กรุณาลองใหม่อีกครั้ง";
     }
 }

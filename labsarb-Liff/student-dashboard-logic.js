@@ -2,28 +2,37 @@
  * Script สำหรับหน้า Student Dashboard
  */
 
-// ตรวจสอบการ Login ทันทีเมื่อโหลดไฟล์
-if (typeof checkStudentLogin === 'function') {
-    checkStudentLogin();
-}
+document.addEventListener('DOMContentLoaded', () => {
+    loadLabs();
+});
 
 async function loadLabs() {
     const list = document.getElementById('labs-container');
     const studentId = localStorage.getItem('labsarb_student');
+    if (!list || !studentId) return;
 
-    if (!studentId) return;
+    list.innerHTML = '<div style="text-align:center; padding:32px; color:#64748b;">กำลังโหลด...</div>';
 
     try {
-        const res = await fetch(API_URL + "/submissions?student_id=" + studentId);
-        const submissions = await res.json();
+        const [labsRes, subsRes] = await Promise.all([
+            fetch(API_URL + "/labs"),
+            fetch(API_URL + "/submissions?student_id=" + studentId)
+        ]);
 
-        // สมมติว่า getLabs() ถูกประกาศไว้ใน student-portal.js
-        const allLabs = typeof getLabs === 'function' ? getLabs() : {}; 
+        const labs = await labsRes.json();
+        const submissions = await subsRes.json();
 
         list.innerHTML = '';
 
-        Object.keys(allLabs).forEach(labId => {
-            const mySub = submissions.find(s => s.lab_id === labId);
+        if (!Array.isArray(labs) || labs.length === 0) {
+            list.innerHTML = '<div style="text-align:center; padding:32px; color:#64748b;">ยังไม่มีการทดลองที่เปิดอยู่</div>';
+            return;
+        }
+
+        labs.forEach(lab => {
+            const mySub = Array.isArray(submissions)
+                ? submissions.find(s => s.lab_id === lab.lab_id)
+                : null;
 
             let statusText = 'ยังไม่ส่งงาน';
             let statusClass = 'pending';
@@ -39,37 +48,32 @@ async function loadLabs() {
                 statusClass = 'submitted';
             }
 
+            const deadlineText = lab.deadline
+                ? new Date(lab.deadline).toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'short' })
+                : '';
+
+            const scoreText = mySub?.score != null ? `คะแนน: ${mySub.score}` : '';
+
             const div = document.createElement('div');
             div.className = 'lab-item';
+            div.style.cursor = 'pointer';
+            div.onclick = () => window.location.href = `student-lab-details.html?lab=${encodeURIComponent(lab.lab_id)}`;
+
             div.innerHTML = `
                 <div class="lab-item-left">
                     <div class="lab-item-title">
-                        <h3>${labId}</h3>
+                        <h3>${lab.lab_id}</h3>
                         <span class="badge ${statusClass}">${statusText}</span>
                     </div>
+                    ${deadlineText ? `<p style="font-size:12px; color:#64748b; margin-top:4px;">กำหนดส่ง: ${deadlineText}</p>` : ''}
+                    ${scoreText ? `<p style="font-size:12px; color:#059669; margin-top:2px;">${scoreText}</p>` : ''}
                 </div>
-                <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;"/>
             `;
             list.appendChild(div);
         });
-    } catch (error) {
-        console.error("Error loading labs:", error);
+
+    } catch (err) {
+        console.error("Error loading labs:", err);
+        list.innerHTML = '<div style="text-align:center; padding:32px; color:#ef4444;">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
     }
 }
-
-function acceptInvitation() {
-    const studentId = localStorage.getItem('labsarb_student');
-    const allStudents = JSON.parse(localStorage.getItem('labsarb_students') || '[]');
-    const myIndex = allStudents.findIndex(s => s.id === studentId);
-
-    if (myIndex !== -1) {
-        allStudents[myIndex].status = 'accepted';
-        localStorage.setItem('labsarb_students', JSON.stringify(allStudents));
-        loadLabs(); // โหลดข้อมูลใหม่
-    }
-}
-
-// เรียกใช้งานเมื่อหน้าเว็บพร้อม
-document.addEventListener('DOMContentLoaded', () => {
-    loadLabs();
-});

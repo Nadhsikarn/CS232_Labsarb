@@ -1,11 +1,10 @@
 // ==========================================================================
 // [FOR: DATABASE ARCHITECT] - หน้าที่ของคุณ:
-// 1. สร้างตาราง DynamoDB ชื่อ 'LabsarbResults'
-// 2. กำหนด Partition Key เป็น 'student_id' และ Sort Key เป็น 'lab_id'
-// 3. ตรวจสอบให้แน่ใจว่า Field ตรงกับ JSON "get_result"
+// 1. จัดการโครงสร้างตารางทั้งหมดในระบบ Labsarb
 // ==========================================================================
 
-export const tableSchema = {
+// 1. ตารางเก็บผลการตรวจงาน (สำหรับนักศึกษา)
+export const resultsTableSchema = {
     TableName: "LabsarbResults",
     AttributeDefinitions: [
         { AttributeName: "student_id", AttributeType: "S" },
@@ -14,5 +13,16 @@ export const tableSchema = {
     KeySchema: [
         { AttributeName: "student_id", KeyType: "HASH" }, // Partition Key
         { AttributeName: "lab_id", KeyType: "RANGE" }     // Sort Key
+    ]
+};
+
+// 2. ตารางเก็บเฉลยต้นแบบ (สำหรับอาจารย์) - 🆕 เพิ่มส่วนนี้
+export const templatesTableSchema = {
+    TableName: "LabsarbTemplates",
+    AttributeDefinitions: [
+        { AttributeName: "lab_id", AttributeType: "S" }
+    ],
+    KeySchema: [
+        { AttributeName: "lab_id", KeyType: "HASH" }      // Partition Key อย่างเดียวตามรูป DB ของคุณ
     ]
 };

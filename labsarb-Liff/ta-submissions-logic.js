@@ -6,7 +6,7 @@ if (typeof checkLogin === 'function') {
 }
 
 const urlParams = new URLSearchParams(window.location.search);
-const currentLabName = urlParams.get('lab');
+currentLabName = urlParams.get('lab'); // ใช้ตัวแปร let จาก ta-portal.js
 
 // เปลี่ยนชื่อหัวข้อตาม Lab ที่ส่งมา
 if (currentLabName && document.getElementById('sub-list-title')) {
@@ -81,5 +81,14 @@ async function loadSubmissions() {
   }
 }
 
-// เรียกใช้งานเมื่อโหลดหน้าเว็บสำเร็จ
-window.onload = loadSubmissions;
+window.onload = async () => {
+    const storedUser = localStorage.getItem('labsarb_admin');
+    if (!storedUser) {
+        window.location.href = 'login.html';
+        return;
+    }
+    const userEl = document.getElementById('dropdown-username');
+    if (userEl) userEl.textContent = storedUser;
+
+    await loadSubmissions();
+};

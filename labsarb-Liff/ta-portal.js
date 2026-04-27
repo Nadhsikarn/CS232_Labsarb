@@ -169,28 +169,55 @@ async function loadSubmissions() {
 }
 
 
-// ================= CREATE LAB (ใช้ API แล้ว) =================
 async function initLab() {
   const name = document.getElementById('config-lab-name').value.trim();
   const desc = document.getElementById('config-desc').value.trim();
+  const file = uploadedGroundTruthFiles[0];
 
   if (!name) {
     alert('กรุณาตั้งชื่อ Lab');
     return;
   }
 
+  if (!file) {
+    alert('กรุณาอัปโหลดรูปเฉลย');
+    return;
+  }
+
   try {
+    // Step 1: ขอ upload URL สำหรับ template อาจารย์
+    const resUrl = await fetch(API_URL + "/upload-url", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        lab_id: name,
+        file_type: file.type,
+        is_template: true
+      })
+    });
+
+    const { uploadUrl, fileUrl } = await resUrl.json();
+
+    // Step 2: upload ไป S3
+    await fetch(uploadUrl, {
+      method: "PUT",
+      body: file,
+      headers: { "Content-Type": file.type }
+    });
+
+    // Step 3: บันทึก lab ลง LabsarbTemplates
+    const deadline = document.getElementById('config-deadline-date')?.value || '';
+    const time = document.getElementById('config-deadline-time')?.value || '';
+
     const res = await fetch(API_URL + "/edit-lab", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        student_id: "CONFIG",
+        student_id: "TEMPLATE_DATA",
         lab_id: name,
-        lab_name: name,
         lab_data: desc,
-        status: "config"
+        image_url: fileUrl,
+        deadline: deadline && time ? `${deadline}T${time}:00` : deadline
       })
     });
 
@@ -198,11 +225,11 @@ async function initLab() {
     console.log(data);
 
     alert("สร้าง Lab สำเร็จ!");
-    goTo('dashboard');
+    window.location.href = 'ta-dashboard.html';
 
   } catch (err) {
     console.error(err);
-    alert("เกิด error");
+    alert("เกิด error: " + err.message);
   }
 }
 

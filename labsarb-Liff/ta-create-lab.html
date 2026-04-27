@@ -135,7 +135,7 @@
               <div class="upload-prompt-content" id="upload-prompt"
                 onclick="document.getElementById('config-file').click()"
                 style="width:100%; height:100%; cursor:pointer;">
-                <input type="file" id="config-file" accept="image/png, image/jpeg" multiple onchange="handleFilesSelected(this.files)" style="display:none;">
+                <input type="file" id="config-file" accept="image/png, image/jpeg" onchange="handleFileSelect(event)" style="display:none;">
                 <div class="upload-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round">
@@ -147,14 +147,10 @@
                 <h3>ภาพเฉลยต้นแบบ<br>Ground Truth Template</h3>
                 <p style="margin-top:8px; margin-bottom:16px;">ลากและวางภาพผลลัพธ์ต้นแบบที่ระบบ AWS จะใช้สำหรับตรวจให้คะแนนอัตโนมัติ หรือคลิกเพื่อค้นหาไฟล์</p>
                 <button class="btn-outline" style="pointer-events:none;">เลือกไฟล์ (Select File)</button>
-                <div class="upload-note" style="margin-top:12px; font-size:12px; color:var(--text-light);">รองรับ: PNG, JPEG (ขนาดไม่เกิน 10MB)</div>
+                <div style="margin-top:12px; font-size:12px; color:var(--text-light);">รองรับ: PNG, JPEG (ขนาดไม่เกิน 10MB)</div>
               </div>
 
-              <div class="upload-preview-container" id="upload-preview-container">
-                <div class="preview-grid" id="preview-grid"></div>
-                <button class="btn-add-more" onclick="document.getElementById('config-file-append').click()">+ เพิ่มรูปภาพ (Add More)</button>
-                <input type="file" id="config-file-append" accept="image/png, image/jpeg" multiple onchange="handleFilesSelected(this.files)" style="display:none;">
-              </div>
+              <img id="image-preview">
             </div>
           </div>
 

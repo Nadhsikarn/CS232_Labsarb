@@ -122,3 +122,21 @@
   padding-top: 24px;
   border-top: 1px solid var(--border-color);
 }
+
+#image-preview {
+  display: none;
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+/* ใช้ class เดียวควบคุม UI */
+.config-upload.has-preview .upload-prompt-content {
+  display: none !important;
+}
+
+.config-upload.has-preview #image-preview {
+  display: block;
+}
