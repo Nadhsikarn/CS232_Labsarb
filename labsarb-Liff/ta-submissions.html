@@ -6,12 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Labsarb TA - Submissions</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="portal-style.css">
+  
+  <link rel="stylesheet" href="ta-submissions-style.css">
 </head>
 
 <body>
   <div class="app-container" id="app-container">
-    <!-- ===== SIDEBAR ===== -->
     <div class="sidebar">
       <div class="sidebar-logo">
         <div class="sidebar-logo-icon">LA</div>
@@ -73,14 +75,11 @@
           ไปยังเว็ปไซต์รายวิชา
         </a>
       </nav>
-
     </div>
 
-    <!-- ===== MAIN AREA ===== -->
     <div class="main-area">
-      <!-- TOPBAR -->
       <div class="topbar">
-        <div class="topbar-title">Labsard TA Manager</div>
+        <div class="topbar-title">Labsarb TA Manager</div>
         <div class="topbar-actions">
           <div class="profile-circle" onclick="toggleProfileDropdown()" title="โปรไฟล์">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -89,7 +88,6 @@
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
           </div>
-          <!-- Profile Dropdown -->
           <div class="profile-dropdown" id="profile-dropdown">
             <div class="profile-header">
               <div class="profile-avatar">TA</div>
@@ -104,9 +102,7 @@
         </div>
       </div>
 
-      <!-- CONTENT SCROLL AREA -->
       <div class="content-scroll">
-        <!-- ============ SCREEN: SUBMISSIONS LIST ============ -->
         <div class="screen active">
           <div class="page-header">
             <div class="breadcrumb">
@@ -132,8 +128,7 @@
               </tr>
             </thead>
             <tbody id="submissions-tbody">
-              <!-- Submission Rows -->
-            </tbody>
+              </tbody>
           </table>
         </div>
       </div>
@@ -141,68 +136,7 @@
   </div>
 
   <script src="ta-portal.js"></script>
-  <script>
-    checkLogin();
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const currentLabName = urlParams.get('lab');
-
-    if (currentLabName) {
-      document.getElementById('sub-list-title').textContent = currentLabName;
-    }
-
-    async function loadSubmissions() {
-      const tbody = document.getElementById('submissions-tbody');
-      tbody.innerHTML = '';
-
-      try {
-        let url = API_URL + "/submissions";
-
-        if (currentLabName) {
-          url += "?lab_id=" + currentLabName;
-        }
-
-        const res = await fetch(url);
-        if (!res.ok) {
-          throw new Error("API error");
-        }
-        const data = await res.json();
-
-        if (data.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5">ไม่มีข้อมูล</td></tr>`;
-          return;
-        }
-
-        data.forEach(d => {
-          const tr = document.createElement('tr');
-
-          let statusText = 'รอ';
-          if (d.status === 'pass') statusText = 'ผ่าน';
-          if (d.status === 'fail') statusText = 'ไม่ผ่าน';
-
-          tr.onclick = () => {
-            window.location.href =
-              `ta-submission-detail.html?lab=${d.lab_id}&student=${d.student_id}`;
-          };
-
-          tr.innerHTML = `
-            <td>${d.student_id}</td>
-            <td>${d.lab_id}</td>
-            <td>${statusText}</td>
-            <td>${d.score ?? '-'}</td>
-            <td>${d.detected_text || '-'}</td>
-          `;
-
-          tbody.appendChild(tr);
-        });
-
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    window.onload = loadSubmissions;
-  </script>
+  <script src="ta-submissions-logic.js"></script>
 </body>
 
 </html>

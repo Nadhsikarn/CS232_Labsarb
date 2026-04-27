@@ -5,13 +5,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Labsarb TA - Submission Detail</title>
+  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="portal-style.css">
+  
+  <link rel="stylesheet" href="ta-submission-detail-style.css">
 </head>
 
 <body>
   <div class="app-container" id="app-container">
-    <!-- ===== SIDEBAR ===== -->
     <div class="sidebar">
       <div class="sidebar-logo">
         <div class="sidebar-logo-icon">LA</div>
@@ -73,14 +76,11 @@
           ไปยังเว็ปไซต์รายวิชา
         </a>
       </nav>
-
     </div>
 
-    <!-- ===== MAIN AREA ===== -->
     <div class="main-area">
-      <!-- TOPBAR -->
       <div class="topbar">
-        <div class="topbar-title">Labsard TA Manager</div>
+        <div class="topbar-title">Labsarb TA Manager</div>
         <div class="topbar-actions">
           <div class="profile-circle" onclick="toggleProfileDropdown()" title="โปรไฟล์">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -89,7 +89,6 @@
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
           </div>
-          <!-- Profile Dropdown -->
           <div class="profile-dropdown" id="profile-dropdown">
             <div class="profile-header">
               <div class="profile-avatar">TA</div>
@@ -104,9 +103,7 @@
         </div>
       </div>
 
-      <!-- CONTENT SCROLL AREA -->
       <div class="content-scroll">
-        <!-- ============ SCREEN: SUBMISSION DETAIL ============ -->
         <div class="screen active">
           <div class="page-header">
             <div class="breadcrumb">
@@ -123,6 +120,7 @@
             <h1 id="detail-lab-name">Lab: -</h1>
             <p id="detail-student-name">ส่งโดยนักศึกษารหัส: -</p>
           </div>
+          
           <div class="submission-detail" id="submission-detail-container" style="display:none;">
             <div class="submission-image">
               <img id="detail-img" src="" alt="ภาพผลงานที่ส่ง">
@@ -152,6 +150,7 @@
               </div>
             </div>
           </div>
+          
           <div id="error-msg" style="text-align:center; padding: 40px; color:var(--text-muted); display:none;">
             ไม่พบข้อมูลการส่งงาน
           </div>
@@ -161,43 +160,6 @@
   </div>
 
   <script src="ta-portal.js"></script>
-  <script>
-    checkLogin();
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const labId = urlParams.get('lab');
-    const studentId = urlParams.get('student');
-
-    document.getElementById('btn-back').onclick = () => {
-      window.location.href = `ta-submissions.html?lab=${encodeURIComponent(labId)}`;
-    };
-
-    async function loadDetail() {
-      if (!labId || !studentId) return;
-
-      try {
-        const res = await fetch(API_URL + "/submissions");
-        const data = await res.json();
-
-        const item = data.find(
-          d => d.lab_id === labId && d.student_id === studentId
-        );
-
-        if (!item) {
-          document.getElementById('error-msg').style.display = 'block';
-          return;
-        }
-
-        document.getElementById('submission-detail-container').style.display = 'flex';
-        document.getElementById('detail-img').src = item.image_url;
-
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    window.onload = loadDetail;
-  </script>
+  <script src="ta-submission-detail-logic.js"></script>
 </body>
-
 </html>

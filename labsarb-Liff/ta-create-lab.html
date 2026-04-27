@@ -7,11 +7,11 @@
   <title>Labsarb TA - Create Lab</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="portal-style.css">
+  <link rel="stylesheet" href="ta-create-lab-style.css">
 </head>
 
 <body>
   <div class="app-container" id="app-container">
-    <!-- ===== SIDEBAR ===== -->
     <div class="sidebar">
       <div class="sidebar-logo">
         <div class="sidebar-logo-icon">LA</div>
@@ -73,15 +73,11 @@
           ไปยังเว็ปไซต์รายวิชา
         </a>
       </nav>
-      <!-- ... footer ... -->
-
     </div>
 
-    <!-- ===== MAIN AREA ===== -->
     <div class="main-area">
-      <!-- TOPBAR -->
       <div class="topbar">
-        <div class="topbar-title">Labsard TA Manager</div>
+        <div class="topbar-title">Labsarb TA Manager</div>
         <div class="topbar-actions">
           <div class="profile-circle" onclick="toggleProfileDropdown()" title="โปรไฟล์">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -90,7 +86,6 @@
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
           </div>
-          <!-- Profile Dropdown -->
           <div class="profile-dropdown" id="profile-dropdown">
             <div class="profile-header">
               <div class="profile-avatar">TA</div>
@@ -105,9 +100,7 @@
         </div>
       </div>
 
-      <!-- CONTENT SCROLL AREA -->
       <div class="content-scroll">
-        <!-- ============ SCREEN: CONFIGURE NEW LAB ============ -->
         <div class="screen active">
           <div class="page-header">
             <h1>กำหนดการทดลองใหม่ (Configure New Lab)</h1>
@@ -136,22 +129,13 @@
                 <textarea id="config-desc"
                   placeholder="ระบุบริบทหรือเกณฑ์การให้คะแนนเฉพาะสำหรับการทดลองนี้..."></textarea>
               </div>
-
             </div>
 
             <div class="config-upload">
-              <!-- Upload Prompt Content -->
               <div class="upload-prompt-content" id="upload-prompt"
                 onclick="document.getElementById('config-file').click()"
                 style="width:100%; height:100%; cursor:pointer;">
-                <input 
-                  type="file" 
-                  id="config-file" 
-                  accept="image/png, image/jpeg" 
-                  multiple
-                  onchange="handleFilesSelected(this.files)"
-                  style="display:none;"
-                >
+                <input type="file" id="config-file" accept="image/png, image/jpeg" multiple onchange="handleFilesSelected(this.files)" style="display:none;">
                 <div class="upload-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round">
@@ -161,22 +145,15 @@
                   </svg>
                 </div>
                 <h3>ภาพเฉลยต้นแบบ<br>Ground Truth Template</h3>
-                <p style="margin-top:8px; margin-bottom:16px;">ลากและวางภาพผลลัพธ์ต้นแบบที่ระบบ AWS
-                  จะใช้สำหรับตรวจให้คะแนนอัตโนมัติ หรือคลิกเพื่อค้นหาไฟล์</p>
+                <p style="margin-top:8px; margin-bottom:16px;">ลากและวางภาพผลลัพธ์ต้นแบบที่ระบบ AWS จะใช้สำหรับตรวจให้คะแนนอัตโนมัติ หรือคลิกเพื่อค้นหาไฟล์</p>
                 <button class="btn-outline" style="pointer-events:none;">เลือกไฟล์ (Select File)</button>
-                <div class="upload-note" style="margin-top:12px; font-size:12px; color:var(--text-light);">รองรับ: PNG,
-                  JPEG (ขนาดไม่เกิน 10MB)</div>
+                <div class="upload-note" style="margin-top:12px; font-size:12px; color:var(--text-light);">รองรับ: PNG, JPEG (ขนาดไม่เกิน 10MB)</div>
               </div>
 
-              <!-- Preview Container -->
               <div class="upload-preview-container" id="upload-preview-container">
-                <div class="preview-grid" id="preview-grid">
-                  <!-- Injected via JS -->
-                </div>
-                <button class="btn-add-more" onclick="document.getElementById('config-file-append').click()">+
-                  เพิ่มรูปภาพ (Add More)</button>
-                <input type="file" id="config-file-append" accept="image/png, image/jpeg" multiple
-                  onchange="handleFilesSelected(this.files)" style="display:none;">
+                <div class="preview-grid" id="preview-grid"></div>
+                <button class="btn-add-more" onclick="document.getElementById('config-file-append').click()">+ เพิ่มรูปภาพ (Add More)</button>
+                <input type="file" id="config-file-append" accept="image/png, image/jpeg" multiple onchange="handleFilesSelected(this.files)" style="display:none;">
               </div>
             </div>
           </div>
@@ -191,111 +168,6 @@
   </div>
 
   <script src="ta-portal.js"></script>
-  <script>
-    checkLogin();
-
-    let uploadedGroundTruthFiles = [];
-
-    function handleFilesSelected(files) {
-      if (!files || files.length === 0) return;
-      for (let i = 0; i < files.length; i++) {
-        uploadedGroundTruthFiles.push(files[i]);
-      }
-      renderUploadPreviews();
-    }
-
-    function removePreviewImage(index, event) {
-      event.stopPropagation();
-      uploadedGroundTruthFiles.splice(index, 1);
-      renderUploadPreviews();
-      document.getElementById('config-file').value = '';
-      document.getElementById('config-file-append').value = '';
-    }
-
-    function renderUploadPreviews() {
-      const container = document.getElementById('upload-preview-container');
-      const grid = document.getElementById('preview-grid');
-      const prompt = document.getElementById('upload-prompt');
-      grid.innerHTML = '';
-
-      if (uploadedGroundTruthFiles.length > 0) {
-        container.classList.add('has-images');
-        prompt.style.display = 'none';
-
-        uploadedGroundTruthFiles.forEach((file, index) => {
-          const url = URL.createObjectURL(file);
-          const item = document.createElement('div');
-          item.className = 'preview-item';
-          item.innerHTML = `
-            <img src="${url}" alt="preview" onload="URL.revokeObjectURL(this.src)">
-            <button class="btn-remove-preview" onclick="removePreviewImage(${index}, event)" title="ลบรูปภาพ">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          `;
-          grid.appendChild(item);
-        });
-      } else {
-        container.classList.remove('has-images');
-        prompt.style.display = 'flex';
-      }
-    }
-    const API_URL = "https://efmsyxbc9j.execute-api.us-east-1.amazonaws.com";
-
-    async function initLab() {
-        const name = document.getElementById('config-lab-name').value.trim();
-        const desc = document.getElementById('config-desc').value.trim();
-        const deadlineDate = document.getElementById('config-deadline-date').value;
-        const deadlineTime = document.getElementById('config-deadline-time').value;
-
-        if (!name) {
-            alert('กรุณาตั้งชื่อ Lab');
-            return;
-        }
-
-        if (uploadedGroundTruthFiles.length === 0) {
-            alert('กรุณาอัพโหลดภาพเฉลยอย่างน้อย 1 ภาพ');
-            return;
-        }
-
-        try {
-            // ใช้ FormData เพื่อส่งทั้งข้อความและไฟล์
-            const formData = new FormData();
-            formData.append("student_id", "CONFIG");
-            formData.append("lab_id", name);
-            formData.append("lab_name", name);
-            formData.append("lab_data", desc);
-            formData.append("deadline", `${deadlineDate} ${deadlineTime}`);
-            formData.append("status", "config");
-
-            // เพิ่มไฟล์ทั้งหมดเข้าไปใน FormData
-            uploadedGroundTruthFiles.forEach((file, index) => {
-                formData.append(`file_${index}`, file);
-            });
-
-            const res = await fetch(API_URL + "/edit-lab", {
-                method: "POST",
-                // หมายเหตุ: ห้ามใส่ headers Content-Type เมื่อใช้ FormData 
-                // Browser จะจัดการ boundary ให้เอง
-                body: formData 
-            });
-
-            if (res.ok) {
-                alert("สร้าง Lab และอัพโหลดรูปภาพสำเร็จ!");
-                window.location.href = 'ta-dashboard.html';
-            } else {
-                const errorData = await res.json();
-                alert("เกิดข้อผิดพลาด: " + (errorData.message || "ไม่สามารถอัพโหลดได้"));
-            }
-
-        } catch (err) {
-            console.error(err);
-            alert("เชื่อมต่อ API ไม่สำเร็จ");
-        }
-    }
-      </script>
+  <script src="ta-create-lab-logic.js"></script>
 </body>
-
 </html>

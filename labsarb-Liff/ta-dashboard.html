@@ -6,12 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Labsarb TA - Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="portal-style.css">
+  <link rel="stylesheet" href="ta-dashboard-style.css">
 </head>
 
 <body>
   <div class="app-container" id="app-container">
-    <!-- ===== SIDEBAR ===== -->
     <div class="sidebar">
       <div class="sidebar-logo">
         <div class="sidebar-logo-icon">LA</div>
@@ -73,14 +74,11 @@
           ไปยังเว็ปไซต์รายวิชา
         </a>
       </nav>
-
     </div>
 
-    <!-- ===== MAIN AREA ===== -->
     <div class="main-area">
-      <!-- TOPBAR -->
       <div class="topbar">
-        <div class="topbar-title">Labsard TA Manager</div>
+        <div class="topbar-title">Labsarb TA Manager</div>
         <div class="topbar-actions">
           <div class="profile-circle" onclick="toggleProfileDropdown()" title="โปรไฟล์">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -89,7 +87,6 @@
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
           </div>
-          <!-- Profile Dropdown -->
           <div class="profile-dropdown" id="profile-dropdown">
             <div class="profile-header">
               <div class="profile-avatar">TA</div>
@@ -104,9 +101,7 @@
         </div>
       </div>
 
-      <!-- CONTENT SCROLL AREA -->
       <div class="content-scroll">
-        <!-- SCREEN: DASHBOARD -->
         <div class="screen active">
           <div class="page-header-action">
             <div class="page-header" style="margin-bottom:0;">
@@ -116,8 +111,7 @@
             </div>
           </div>
           <div class="dashboard-grid" id="dashboard-grid">
-            <!-- Lab Cards will be injected here -->
-          </div>
+            </div>
           <p class="dashboard-note">ข้อมูลถูกอัปเดตอัตโนมัติจากการตรวจให้คะแนน</p>
         </div>
       </div>
@@ -125,87 +119,6 @@
   </div>
 
   <script src="ta-portal.js"></script>
-  <script>
-    checkLogin();
-
-    const API_URL = "https://efmsyxbc9j.execute-api.us-east-1.amazonaws.com";
-
-    async function loadDashboard() {
-      const grid = document.getElementById('dashboard-grid');
-      grid.innerHTML = '';
-
-      try {
-        const res = await fetch(API_URL + "/submissions")
-        if (!res.ok) {
-          throw new Error("API error");
-        }
-        const json = await res.json();
-        const data = json.data || [];
-
-        const labs = {};
-
-        data.forEach(item => {
-          const lab = item.lab_id;
-
-          if (!labs[lab]) {
-            labs[lab] = {
-              pass: 0,
-              fail: 0,
-              pending: 0,
-              desc: item.lab_name || "ไม่มีคำอธิบาย"
-            };
-          }
-
-          if (item.status === 'pass') labs[lab].pass++;
-          else if (item.status === 'fail') labs[lab].fail++;
-          else labs[lab].pending++;
-        });
-
-        Object.entries(labs).forEach(([labName, stats]) => {
-          const total = stats.pass + stats.fail + stats.pending;
-          const passPct = total === 0 ? 0 : (stats.pass / total) * 100;
-          const failPct = total === 0 ? 0 : (stats.fail / total) * 100;
-
-          const card = document.createElement('div');
-          card.className = 'lab-card';
-
-          card.innerHTML = `
-            <h3>${labName}</h3>
-            <p>${stats.desc}</p>
-            <div class="lab-stats">
-              <div>ผ่าน: ${stats.pass}</div>
-              <div>ไม่ผ่าน: ${stats.fail}</div>
-              <div>ยังไม่ส่ง: ${stats.pending}</div>
-            </div>
-          `;
-
-          grid.appendChild(card);
-        });
-
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    /*
-    function deleteLab(labName, event) {
-      event.stopPropagation();
-      if (confirm(`คุณต้องการลบการทดลอง ${labName} ใช่หรือไม่?`)) {
-        const labs = getLabs();
-        delete labs[labName];
-        saveLabs(labs);
-
-        let subs = getSubmissions();
-        subs = subs.filter(s => s.lab_id !== labName);
-        saveSubmissions(subs);
-
-        loadDashboard();
-      }
-    }
-    */
-
-    window.onload = loadDashboard;
-  </script>
+  <script src="ta-dashboard-logic.js"></script>
 </body>
-
 </html>
