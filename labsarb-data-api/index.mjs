@@ -104,7 +104,7 @@ export const handler = async (event) => {
 
             let key;
             if (is_template) {
-                key = `teacher_template/${lab_id}/template_answer.png`;
+                key = `teacher_template/${lab_id}/template/answer.png`;
             } else {
                 // ใช้ชื่อไฟล์เดิม (sanitized) เพื่อให้ path ใน S3 ตรงกับที่เก็บใน DB
                 const safeName = file_name
