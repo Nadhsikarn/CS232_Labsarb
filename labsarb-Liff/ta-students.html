@@ -320,10 +320,11 @@
         if (result.success && result.data) {
           const studentData = result.data;
           // --- แก้ตั้งแต่ตรงนี้ โดย ไบโอม ---
+          const info = studentData.data || studentData; // ดึงข้อมูลจาก nested object ถ้ามี
           const newStudent = {
             id: studentId,
-            name: studentData.name || studentData.displayname_th || 'ไม่ทราบชื่อ',
-            email: studentData.email || (studentId + '@dome.tu.ac.th'),
+            name: info.name || info.displayname_th || 'ไม่ทราบชื่อ',
+            email: info.email || (studentId + '@dome.tu.ac.th'),
             status: 'pending' // กำหนดสถานะเป็น pending ตอนแรกเพิ่ม
           };
           // --- ถึงตรงนี้ โดย ไบโอม ---

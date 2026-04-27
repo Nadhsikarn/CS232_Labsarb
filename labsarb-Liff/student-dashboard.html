@@ -467,7 +467,7 @@
       const allStudents = JSON.parse(localStorage.getItem('labsarb_students') || '[]');
       const myData = allStudents.find(s => s.id === studentId);
       const bannerContainer = document.getElementById('invitation-banner-container');
-      
+
       if (myData && myData.status === 'pending') {
         bannerContainer.innerHTML = `
           <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
@@ -479,9 +479,9 @@
           </div>
         `;
         list.style.display = 'none';
-        return; 
+        return;
       } else {
-        if(bannerContainer) bannerContainer.innerHTML = '';
+        if (bannerContainer) bannerContainer.innerHTML = '';
         list.style.display = 'flex';
       }
       // --- ถึงตรงนี้ โดย ไบโอม ---
@@ -554,7 +554,7 @@
       const studentId = localStorage.getItem('labsarb_student');
       const allStudents = JSON.parse(localStorage.getItem('labsarb_students') || '[]');
       const myIndex = allStudents.findIndex(s => s.id === studentId);
-      
+
       if (myIndex !== -1) {
         allStudents[myIndex].status = 'accepted';
         localStorage.setItem('labsarb_students', JSON.stringify(allStudents));
