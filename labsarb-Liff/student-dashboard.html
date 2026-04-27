@@ -441,6 +441,10 @@
           <p class="page-desc">ทำงานที่ได้รับมอบหมายใน Lab ด้านล่างให้เสร็จสิ้นเพื่อแสดงความเข้าใจในเนื้อหาวิชา
             การทำงานของระบบ และการปฏิบัติการเบื้องต้น</p>
 
+          <!-- แก้ตั้งแต่ตรงนี้ โดย ไบโอม -->
+          <div id="invitation-banner-container"></div>
+          <!-- ถึงตรงนี้ โดย ไบโอม -->
+
           <div class="lab-list" id="student-lab-list">
             <!-- Labs rendered via JS -->
           </div>
@@ -458,6 +462,29 @@
       const allLabs = getLabs();
       const allSubs = getSubmissions();
       const studentId = localStorage.getItem('labsarb_student');
+
+      // --- แก้ตั้งแต่ตรงนี้ โดย ไบโอม ---
+      const allStudents = JSON.parse(localStorage.getItem('labsarb_students') || '[]');
+      const myData = allStudents.find(s => s.id === studentId);
+      const bannerContainer = document.getElementById('invitation-banner-container');
+      
+      if (myData && myData.status === 'pending') {
+        bannerContainer.innerHTML = `
+          <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h3 style="color: #1e3a8a; margin: 0 0 8px 0; font-size: 16px;">คำเชิญเข้าห้องเรียน</h3>
+              <p style="color: #1e40af; margin: 0; font-size: 14px;">อาจารย์ได้เพิ่มคุณเข้าสู่รายวิชา CS232 กรุณากดยอมรับเพื่อเข้าร่วมและดูแบบฝึกหัด</p>
+            </div>
+            <button onclick="acceptInvitation()" style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer;">ยอมรับคำเชิญ</button>
+          </div>
+        `;
+        list.style.display = 'none';
+        return; 
+      } else {
+        if(bannerContainer) bannerContainer.innerHTML = '';
+        list.style.display = 'flex';
+      }
+      // --- ถึงตรงนี้ โดย ไบโอม ---
 
       const labKeys = Object.keys(allLabs);
 
@@ -521,6 +548,20 @@
     }
 
     window.onload = loadLabs;
+
+    // --- แก้ตั้งแต่ตรงนี้ โดย ไบโอม ---
+    function acceptInvitation() {
+      const studentId = localStorage.getItem('labsarb_student');
+      const allStudents = JSON.parse(localStorage.getItem('labsarb_students') || '[]');
+      const myIndex = allStudents.findIndex(s => s.id === studentId);
+      
+      if (myIndex !== -1) {
+        allStudents[myIndex].status = 'accepted';
+        localStorage.setItem('labsarb_students', JSON.stringify(allStudents));
+        loadLabs(); // โหลดหน้าใหม่เพื่อแสดงแบบฝึกหัด
+      }
+    }
+    // --- ถึงตรงนี้ โดย ไบโอม ---
   </script>
 </body>
 
