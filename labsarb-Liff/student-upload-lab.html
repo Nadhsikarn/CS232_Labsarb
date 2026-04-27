@@ -270,6 +270,7 @@
 
 <body>
  <div class="app-container" id="app-container">
+    <!-- ===== SIDEBAR ===== -->
     <div class="sidebar">
       <div class="sidebar-logo">
         <img src="logo.png" alt="Labsarb Logo" style="height: 40px; width: auto; object-fit: contain;">
@@ -280,7 +281,8 @@
       </div>
       <nav class="sidebar-nav">
         <a class="nav-item active" href="student-dashboard.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
             <rect x="3" y="3" width="7" height="7"></rect>
             <rect x="14" y="3" width="7" height="7"></rect>
             <rect x="14" y="14" width="7" height="7"></rect>
@@ -289,14 +291,16 @@
           ส่งงาน (CS232)
         </a>
         <a class="nav-item" href="student-history.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
           </svg>
           สถานะภาพรวม
         </a>
         <a class="nav-item" href="https://courses.cs.tu.ac.th" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
             <line x1="18" y1="20" x2="18" y2="10"></line>
             <line x1="12" y1="20" x2="12" y2="4"></line>
             <line x1="6" y1="20" x2="6" y2="14"></line>
@@ -305,32 +309,39 @@
         </a>
       </nav>
     </div>
- 
+
+    <!-- ===== MAIN AREA ===== -->
     <div class="main-area">
+      <!-- Top User Menu -->
       <div class="top-user" id="profile-container">
         <div class="profile-trigger" onclick="toggleProfileCard()">
           <div class="avatar-circle">นศ</div>
           <span id="trigger-student-name">กำลังโหลด...</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" style="width:16px;height:16px;">
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </div>
+
         <div class="profile-card" id="profile-card">
+          <!-- Profile content injected by JS -->
           <div class="profile-card-header">
             <div class="avatar-circle large">นศ</div>
             <div class="profile-card-name" id="card-student-name">ชื่อ นามสกุล</div>
             <div class="profile-card-id" id="card-student-id">รหัสนักศึกษา: -</div>
           </div>
           <div class="profile-card-body">
-            <div class="info-row"><span class="info-label">อีเมล</span><span class="info-value" id="card-student-email">-</span></div>
-            <div class="info-row"><span class="info-label">คณะ/สาขา</span><span class="info-value" id="card-student-faculty">-</span></div>
+            <div class="info-row"><span class="info-label">อีเมล</span><span class="info-value"
+                id="card-student-email">-</span></div>
+            <div class="info-row"><span class="info-label">คณะ/สาขา</span><span class="info-value"
+                id="card-student-faculty">-</span></div>
           </div>
           <div class="profile-card-footer">
             <button class="btn-logout-full" onclick="doStudentLogout()">ออกจากระบบ</button>
           </div>
         </div>
       </div>
- 
+
       <div class="content-scroll">
         <div class="screen active">
           <a class="nav-back" href="student-dashboard.html">
@@ -340,7 +351,7 @@
             </svg>
             กลับไปหน้ารายการการทดลอง
           </a>
- 
+
           <div class="upload-container">
             <h1 class="page-title">อัปโหลดรูปภาพการทดลอง: <span id="upload-lab-name"></span></h1>
             <p class="page-desc">เลือกหรือลากและวางรูปภาพจากการทดลองล่าสุดของคุณเพื่อส่งงาน</p>
@@ -350,10 +361,12 @@
             </div>
 
             <div class="upload-dropzone" onclick="document.getElementById('file-upload').click()">
-              <input type="file" id="file-upload" style="display:none;" accept="image/jpeg, image/png, image/tiff" onchange="handleFileSelect(event)">
+              <input type="file" id="file-upload" style="display:none;" accept="image/jpeg, image/png, image/tiff"
+                onchange="handleFileSelect(event)">
               <img id="image-preview" src="" alt="preview">
               <div class="upload-icon-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px;height:24px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  style="width:24px;height:24px;">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                   <polyline points="17 8 12 3 7 8"></polyline>
                   <line x1="12" y1="3" x2="12" y2="15"></line>
@@ -363,25 +376,24 @@
               <p>รองรับไฟล์ JPG, PNG ขนาดไม่เกิน 10MB</p>
               <button class="btn-student-outline" style="pointer-events:none;">เลือกไฟล์</button>
             </div>
- 
+
             <div class="upload-actions">
               <button class="btn-student-primary" id="btn-submit-lab" onclick="submitLab()">ส่งรูปภาพ</button>
               <a class="btn-student-ghost" href="student-dashboard.html">ยกเลิก</a>
             </div>
-            <p class="submit-loading" id="submit-loading">⏳ กำลังประมวลผลรูปภาพ กรุณารอสักครู่...</p>
           </div>
         </div>
       </div>
     </div>
   </div>
- 
+
   <script src="student-portal.js"></script>
   <script>
     checkStudentLogin();
- 
+
     const urlParams = new URLSearchParams(window.location.search);
     const labId = urlParams.get('lab');
- 
+
     if (labId) {
       document.getElementById('upload-lab-name').textContent = labId;
 
@@ -392,33 +404,22 @@
         document.getElementById('lab-desc-box').style.display = 'block';
       }
     }
- 
+
     let selectedFile = null;
- 
+
     function handleFileSelect(e) {
       if (e.target.files.length > 0) {
         selectedFile = e.target.files[0];
         document.getElementById('upload-text').textContent = selectedFile.name;
- 
+
         const preview = document.getElementById('image-preview');
         const dropzone = document.querySelector('.upload-dropzone');
-        // แสดง preview ชั่วคราวด้วย createObjectURL (ใช้แค่แสดงผล ไม่ได้ save)
         preview.src = URL.createObjectURL(selectedFile);
         dropzone.classList.add('has-preview');
       }
     }
- 
-    // แปลงไฟล์เป็น base64 เพื่อเก็บใน localStorage ได้ถาวร
-    function toBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = e => resolve(e.target.result);
-        reader.onerror = () => reject(new Error('อ่านไฟล์ไม่สำเร็จ'));
-        reader.readAsDataURL(file);
-      });
-    }
- 
-    async function submitLab() {
+
+    function submitLab() {
       if (!labId) {
         alert('ไม่พบรหัส Lab');
         return;
@@ -427,49 +428,44 @@
         alert('กรุณาเลือกไฟล์รูปภาพก่อนครับ');
         return;
       }
- 
+
       const btn = document.getElementById('btn-submit-lab');
-      const loadingMsg = document.getElementById('submit-loading');
-      btn.textContent = 'กำลังส่ง...';
+      btn.textContent = "กำลังส่ง...";
       btn.disabled = true;
-      loadingMsg.style.display = 'block';
- 
-      try {
-        // แปลงรูปเป็น base64 ก่อน save — ทำให้รูปอยู่ถาวรใน localStorage
-        const imageBase64 = await toBase64(selectedFile);
- 
+
+      // Mock submitting delay
+      setTimeout(() => {
         const studentId = localStorage.getItem('labsarb_student');
         const subs = getSubmissions();
-        const subIndex = subs.findIndex(s => s.lab_id === labId && s.student_id === studentId);
- 
+
+        let subIndex = subs.findIndex(s => s.lab_id === labId && s.student_id === studentId);
+
+        const imageUrl = URL.createObjectURL(selectedFile);
+
         if (subIndex !== -1) {
+          // Update existing
           subs[subIndex].status = 'pending';
-          subs[subIndex].image_url = imageBase64;  // เก็บ base64 แทน blob URL
+          subs[subIndex].image_url = imageUrl;
           subs[subIndex].detected_text = '-';
           subs[subIndex].missing_point = '';
         } else {
+          // Add new if not existed (but TA usually creates pending ones)
           const info = getStudentInfo();
           subs.push({
             student_id: studentId,
-            student_name: info ? info.studentName : studentId,
+            student_name: info.studentName,
             lab_id: labId,
             status: 'pending',
             score: 0,
             detected_text: '-',
-            image_url: imageBase64  // เก็บ base64 แทน blob URL
+            image_url: imageUrl
           });
         }
- 
+
         saveSubmissions(subs);
         alert('ส่งงานสำเร็จ!');
         window.location.href = 'student-dashboard.html';
- 
-      } catch (err) {
-        alert('เกิดข้อผิดพลาด: ' + err.message);
-        btn.textContent = 'ส่งรูปภาพ';
-        btn.disabled = false;
-        loadingMsg.style.display = 'none';
-      }
+      }, 1000);
     }
   </script>
 </body>
