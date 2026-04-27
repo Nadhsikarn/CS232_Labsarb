@@ -6,7 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Labsarb TA - Submissions</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="portal-style.css">
+  
+  <link rel="stylesheet" href="ta-submissions-style.css">
 </head>
 
 <body>
@@ -69,9 +72,10 @@
       </nav>
     </div>
  
+
     <div class="main-area">
       <div class="topbar">
-        <div class="topbar-title">Labsard TA Manager</div>
+        <div class="topbar-title">Labsarb TA Manager</div>
         <div class="topbar-actions">
           <div class="profile-circle" onclick="toggleProfileDropdown()" title="โปรไฟล์">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;">
@@ -92,6 +96,7 @@
         </div>
       </div>
  
+
       <div class="content-scroll">
         <div class="screen active">
           <div class="page-header">
@@ -134,87 +139,7 @@
   </div>
 
   <script src="ta-portal.js"></script>
-  <script>
-    checkLogin();
- 
-    const urlParams = new URLSearchParams(window.location.search);
-    const currentLabName = urlParams.get('lab');
-    let activeLabFilter = currentLabName || null;
- 
-    if (currentLabName) {
-      document.getElementById('sub-list-title').textContent = currentLabName;
-    }
- 
-    function buildFilterSelect(allData) {
-      const select = document.getElementById('lab-filter-select');
-      select.innerHTML = '';
- 
-      const allOpt = document.createElement('option');
-      allOpt.value = '__all__';
-      allOpt.textContent = 'ทั้งหมด (' + allData.length + ')';
-      select.appendChild(allOpt);
- 
-      const labs = [...new Set(allData.map(d => d.lab_id))];
-      labs.forEach(labId => {
-        const count = allData.filter(d => d.lab_id === labId).length;
-        const opt = document.createElement('option');
-        opt.value = labId;
-        opt.textContent = labId + ' (' + count + ')';
-        if (labId === activeLabFilter) opt.selected = true;
-        select.appendChild(opt);
-      });
- 
-      if (!activeLabFilter) select.value = '__all__';
-    }
- 
-    function onFilterChange(value) {
-      activeLabFilter = value === '__all__' ? null : value;
-      document.getElementById('sub-list-title').textContent =
-        activeLabFilter ? activeLabFilter : 'รายการส่งงานทั้งหมด';
-      renderRows(getSubmissions());
-    }
- 
-    function renderRows(allData) {
-      const tbody = document.getElementById('submissions-tbody');
-      tbody.innerHTML = '';
- 
-      const filtered = activeLabFilter
-        ? allData.filter(d => d.lab_id === activeLabFilter)
-        : allData;
- 
-      if (filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px;">ยังไม่มีข้อมูลนักศึกษา/การส่งงานในระบบ</td></tr>';
-        return;
-      }
- 
-      filtered.forEach(d => {
-        const tr = document.createElement('tr');
-        tr.style.cursor = 'pointer';
-        tr.onclick = () => {
-          window.location.href = 'ta-submission-detail.html?lab=' + encodeURIComponent(d.lab_id) + '&student=' + encodeURIComponent(d.student_id);
-        };
- 
-        let statusHtml = '';
-        if (d.status === 'pass')      statusHtml = '<span class="status-badge pass">ผ่านเกณฑ์</span>';
-        else if (d.status === 'fail') statusHtml = '<span class="status-badge fail">ปรับปรุง</span>';
-        else                          statusHtml = '<span class="status-badge pending">รอตรวจ</span>';
- 
-        tr.innerHTML =
-          '<td style="font-weight:500;">' + d.student_id + '</td>' +
-          '<td>' + d.lab_id + '</td>' +
-          '<td>' + statusHtml + '</td>' +
-          '<td>' + (d.score !== undefined ? d.score : '-') + ' / 10</td>' +
-          '<td style="color:var(--text-muted);font-size:12px;">' + (d.detected_text || d.missing_point || '-') + '</td>';
-        tbody.appendChild(tr);
-      });
-    }
- 
-    window.onload = function () {
-      const allData = getSubmissions();
-      buildFilterSelect(allData);
-      renderRows(allData);
-    };
-  </script>
+  <script src="ta-submissions-logic.js"></script>
 </body>
 
 </html>

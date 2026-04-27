@@ -6,345 +6,8 @@
     <title>Labsarb — TA Workflow Design</title>
     <meta name="description" content="TA Workflow Design for Labsarb - ระบบตรวจงาน Lab อัตโนมัติ">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(145deg, #0a0a1a 0%, #0d0d2b 40%, #1a1a3e 100%);
-            color: #e0e0f0;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Background grid */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(100,100,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(100,100,255,0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        header {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            padding: 48px 20px 24px;
-        }
-
-        header h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #7c8aff, #c084fc, #f472b6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-        }
-
-        header p {
-            font-size: 1rem;
-            color: #8888aa;
-            font-weight: 300;
-        }
-
-        .page-wrapper {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            gap: 20px;
-        }
-
-        /* ===== FLOWCHART ===== */
-        .flowchart-area {
-            position: relative;
-            width: 1100px;
-            height: 1080px;
-            flex-shrink: 0;
-        }
-
-        .flowchart-area svg {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .arrow-line {
-            fill: none;
-            stroke: rgba(140,160,255,0.45);
-            stroke-width: 2.2;
-            stroke-linecap: round;
-        }
-
-        .arrow-animated {
-            stroke-dasharray: 8 6;
-            animation: dashFlow 1.2s linear infinite;
-        }
-
-        @keyframes dashFlow {
-            to { stroke-dashoffset: -28; }
-        }
-
-        .arrow-head {
-            fill: rgba(140,160,255,0.6);
-        }
-
-        .arrow-label {
-            font-family: 'Inter', sans-serif;
-            font-size: 12px;
-            font-weight: 600;
-            fill: #b0b8ff;
-        }
-
-        .arrow-label.yes { fill: #6ee7b7; }
-        .arrow-label.no  { fill: #fca5a5; }
-
-        /* ===== NODES ===== */
-        .node {
-            position: absolute;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.25s, box-shadow 0.25s, filter 0.25s;
-            z-index: 2;
-            font-weight: 500;
-            font-size: 13.5px;
-            user-select: none;
-        }
-
-        .node:hover {
-            transform: scale(1.08);
-            z-index: 5;
-        }
-
-        .node.active {
-            transform: scale(1.1);
-            z-index: 6;
-        }
-
-        /* --- Circle (Start / End) --- */
-        .node-circle {
-            width: 60px; height: 60px;
-            border-radius: 50%;
-            font-weight: 700;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-        }
-
-        .node-circle.start {
-            background: radial-gradient(circle, #22c55e 0%, #15803d 100%);
-            box-shadow: 0 0 20px rgba(34,197,94,0.35), inset 0 -2px 6px rgba(0,0,0,0.2);
-            color: #fff;
-        }
-
-        .node-circle.start:hover { box-shadow: 0 0 32px rgba(34,197,94,0.55); }
-
-        .node-circle.end {
-            background: radial-gradient(circle, #ef4444 0%, #991b1b 100%);
-            box-shadow: 0 0 20px rgba(239,68,68,0.35), inset 0 -2px 6px rgba(0,0,0,0.2);
-            color: #fff;
-        }
-
-        .node-circle.end:hover { box-shadow: 0 0 32px rgba(239,68,68,0.55); }
-
-        /* --- Process (Rectangle) --- */
-        .node-process {
-            height: 48px;
-            padding: 0 20px;
-            border-radius: 12px;
-            background: rgba(30,30,70,0.65);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(120,130,255,0.2);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3), 0 0 12px rgba(100,120,255,0.08);
-            color: #d0d4ff;
-        }
-
-        .node-process:hover {
-            border-color: rgba(140,160,255,0.5);
-            box-shadow: 0 4px 28px rgba(0,0,0,0.4), 0 0 24px rgba(100,120,255,0.2);
-        }
-
-        .node-process.active {
-            border-color: rgba(160,180,255,0.7);
-            box-shadow: 0 4px 28px rgba(0,0,0,0.4), 0 0 30px rgba(120,140,255,0.3);
-        }
-
-        /* --- Decision (Diamond) --- */
-        .node-decision {
-            width: 160px;
-            height: 80px;
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            font-size: 12px;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .node-decision-inner {
-            position: absolute;
-            inset: 0;
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            background: linear-gradient(135deg, rgba(245,158,11,0.35), rgba(217,119,6,0.25));
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 0 30px;
-        }
-
-        .node-decision::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            background: linear-gradient(135deg, rgba(251,191,36,0.4), rgba(245,158,11,0.2));
-            z-index: -1;
-        }
-
-        .node-decision:hover {
-            filter: brightness(1.25);
-        }
-
-        /* ===== PATH LABELS ===== */
-        .path-label {
-            position: absolute;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            z-index: 3;
-            padding: 4px 14px;
-            border-radius: 20px;
-        }
-
-        .path-label.dashboard {
-            color: #5eead4;
-            background: rgba(94,234,212,0.08);
-            border: 1px solid rgba(94,234,212,0.2);
-        }
-
-        .path-label.editor {
-            color: #c084fc;
-            background: rgba(192,132,252,0.08);
-            border: 1px solid rgba(192,132,252,0.2);
-        }
-
-        /* ===== DETAIL PANEL ===== */
-        .detail-panel {
-            position: sticky;
-            top: 100px;
-            width: 300px;
-            height: fit-content;
-            max-height: 80vh;
-            background: rgba(20,20,50,0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(120,130,255,0.15);
-            border-radius: 16px;
-            padding: 28px 24px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.4);
-            transition: opacity 0.3s, transform 0.3s;
-            flex-shrink: 0;
-        }
-
-        .detail-panel.hidden {
-            opacity: 0.4;
-        }
-
-        .detail-panel h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-            background: linear-gradient(135deg, #a5b4fc, #c084fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .detail-panel .step-type {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 14px;
-        }
-
-        .detail-panel .desc {
-            font-size: 0.88rem;
-            line-height: 1.65;
-            color: #b0b4d0;
-        }
-
-        .detail-panel .hint {
-            margin-top: 16px;
-            font-size: 0.78rem;
-            color: #666;
-            font-style: italic;
-        }
-
-        /* ===== LEGEND ===== */
-        .legend {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            flex-wrap: wrap;
-            padding: 30px 20px 50px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.82rem;
-            color: #8888aa;
-        }
-
-        .legend-icon {
-            width: 24px; height: 24px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-
-        .legend-icon.li-start { background: radial-gradient(circle, #22c55e, #15803d); }
-        .legend-icon.li-end   { background: radial-gradient(circle, #ef4444, #991b1b); }
-        .legend-icon.li-process {
-            border-radius: 6px;
-            background: rgba(30,30,70,0.65);
-            border: 1px solid rgba(120,130,255,0.3);
-        }
-        .legend-icon.li-decision {
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            background: linear-gradient(135deg, rgba(251,191,36,0.5), rgba(245,158,11,0.3));
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1500px) {
-            .page-wrapper { flex-direction: column; align-items: center; }
-            .detail-panel { position: relative; top: 0; width: 100%; max-width: 600px; }
-        }
-
-        @media (max-width: 1150px) {
-            .flowchart-area { transform: scale(0.75); transform-origin: top center; height: 810px; }
-        }
-
-        @media (max-width: 860px) {
-            .flowchart-area { transform: scale(0.55); height: 594px; }
-            header h1 { font-size: 1.5rem; }
-        }
-    </style>
+    
+    <link rel="stylesheet" href="ta-design-style.css">
 </head>
 <body>
 
@@ -354,10 +17,8 @@
 </header>
 
 <div class="page-wrapper">
-    <!-- ===== FLOWCHART ===== -->
     <div class="flowchart-area" id="flowchart">
 
-        <!-- SVG Arrows -->
         <svg viewBox="0 0 1100 1080" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
@@ -365,108 +26,52 @@
                 </marker>
             </defs>
 
-            <!-- 1. Start → Login -->
             <path d="M550,68 L550,116" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <!-- 2. Login → Select Menu -->
             <path d="M550,164 L550,218" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <!-- 3. Select Menu → Dashboard path -->
             <path d="M465,260 C350,260 260,310 260,376" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
             <text x="340" y="295" class="arrow-label">Dashboard</text>
-            <!-- 4. Select Menu → Lab Editor path -->
             <path d="M635,260 C750,260 840,310 840,358" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
             <text x="720" y="295" class="arrow-label">Lab Editor</text>
 
-            <!-- Dashboard Path -->
-            <!-- 5. Select LAB(A) → Show Dashboard -->
             <path d="M260,424 L260,471" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <!-- 6. Show Dashboard → View Detail -->
             <path d="M260,519 L260,566" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <!-- 7. View Detail → End(A) -->
             <path d="M260,614 L260,657" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
 
-            <!-- Lab Editor Path -->
-            <!-- 8. Is lab exist? → Add LAB (No) -->
             <path d="M755,400 C710,400 680,450 680,516" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
             <text x="690" y="445" class="arrow-label no">No</text>
-            <!-- 9. Is lab exist? → Select LAB(B) (Yes) -->
             <path d="M840,442 L840,621" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
             <text x="852" y="500" class="arrow-label yes">Yes</text>
-            <!-- 10. Add LAB → Select LAB(B) -->
             <path d="M680,564 L680,645 L745,645" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <!-- 11. Select LAB(B) → Add Task -->
             <path d="M840,669 L840,711" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <!-- 12. Add Task → Add Example Photo -->
             <path d="M840,759 L840,801" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <!-- 13. Add Example Photo → Is finish? -->
             <path d="M840,849 L840,888" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <!-- 14. Is finish? → End(B) (Yes) -->
             <path d="M840,972 L840,1007" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
             <text x="852" y="992" class="arrow-label yes">Yes</text>
-            <!-- 15. Is finish? → Add Task (No loop) -->
             <path d="M925,930 L975,930 L975,735 L935,735" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
             <text x="980" y="840" class="arrow-label no">No</text>
         </svg>
 
-        <!-- Path Labels -->
         <span class="path-label dashboard" style="left:175px;top:340px;">Path A</span>
         <span class="path-label editor" style="left:770px;top:340px;">Path B</span>
 
-        <!-- Nodes -->
-        <!-- Start -->
-        <div class="node node-circle start" style="left:520px;top:10px;"
-             data-id="start" onclick="showDetail(this)">Start</div>
+        <div class="node node-circle start" style="left:520px;top:10px;" data-id="start" onclick="showDetail(this)">Start</div>
+        <div class="node node-process" style="left:450px;top:116px;width:200px;" data-id="login" onclick="showDetail(this)">Login as Teacher</div>
+        <div class="node node-decision" style="left:470px;top:218px;" data-id="selectMenu" onclick="showDetail(this)"><div class="node-decision-inner">Select Menu</div></div>
 
-        <!-- Login -->
-        <div class="node node-process" style="left:450px;top:116px;width:200px;"
-             data-id="login" onclick="showDetail(this)">Login as Teacher</div>
+        <div class="node node-process" style="left:165px;top:376px;width:190px;" data-id="selectLabA" onclick="showDetail(this)">Select LAB</div>
+        <div class="node node-process" style="left:155px;top:471px;width:210px;" data-id="showDashboard" onclick="showDetail(this)">Show Dashboard</div>
+        <div class="node node-process" style="left:165px;top:566px;width:190px;" data-id="viewDetail" onclick="showDetail(this)">View Detail</div>
+        <div class="node node-circle end" style="left:232px;top:657px;" data-id="endA" onclick="showDetail(this)">End</div>
 
-        <!-- Select Menu (Decision) -->
-        <div class="node node-decision" style="left:470px;top:218px;"
-             data-id="selectMenu" onclick="showDetail(this)">
-            <div class="node-decision-inner">Select Menu</div>
-        </div>
-
-        <!-- === Dashboard Path === -->
-        <div class="node node-process" style="left:165px;top:376px;width:190px;"
-             data-id="selectLabA" onclick="showDetail(this)">Select LAB</div>
-
-        <div class="node node-process" style="left:155px;top:471px;width:210px;"
-             data-id="showDashboard" onclick="showDetail(this)">Show Dashboard</div>
-
-        <div class="node node-process" style="left:165px;top:566px;width:190px;"
-             data-id="viewDetail" onclick="showDetail(this)">View Detail</div>
-
-        <div class="node node-circle end" style="left:232px;top:657px;"
-             data-id="endA" onclick="showDetail(this)">End</div>
-
-        <!-- === Lab Editor Path === -->
-        <div class="node node-decision" style="left:755px;top:358px;"
-             data-id="isLabExist" onclick="showDetail(this)">
-            <div class="node-decision-inner">Is lab exist?</div>
-        </div>
-
-        <div class="node node-process" style="left:600px;top:516px;width:160px;"
-             data-id="addLab" onclick="showDetail(this)">Add LAB</div>
-
-        <div class="node node-process" style="left:745px;top:621px;width:190px;"
-             data-id="selectLabB" onclick="showDetail(this)">Select LAB</div>
-
-        <div class="node node-process" style="left:745px;top:711px;width:190px;"
-             data-id="addTask" onclick="showDetail(this)">Add Task</div>
-
-        <div class="node node-process" style="left:720px;top:801px;width:240px;"
-             data-id="addExamplePhoto" onclick="showDetail(this)">Add Example Photo</div>
-
-        <div class="node node-decision" style="left:755px;top:888px;"
-             data-id="isFinish" onclick="showDetail(this)">
-            <div class="node-decision-inner">Is finish?</div>
-        </div>
-
-        <div class="node node-circle end" style="left:812px;top:1007px;"
-             data-id="endB" onclick="showDetail(this)">End</div>
+        <div class="node node-decision" style="left:755px;top:358px;" data-id="isLabExist" onclick="showDetail(this)"><div class="node-decision-inner">Is lab exist?</div></div>
+        <div class="node node-process" style="left:600px;top:516px;width:160px;" data-id="addLab" onclick="showDetail(this)">Add LAB</div>
+        <div class="node node-process" style="left:745px;top:621px;width:190px;" data-id="selectLabB" onclick="showDetail(this)">Select LAB</div>
+        <div class="node node-process" style="left:745px;top:711px;width:190px;" data-id="addTask" onclick="showDetail(this)">Add Task</div>
+        <div class="node node-process" style="left:720px;top:801px;width:240px;" data-id="addExamplePhoto" onclick="showDetail(this)">Add Example Photo</div>
+        <div class="node node-decision" style="left:755px;top:888px;" data-id="isFinish" onclick="showDetail(this)"><div class="node-decision-inner">Is finish?</div></div>
+        <div class="node node-circle end" style="left:812px;top:1007px;" data-id="endB" onclick="showDetail(this)">End</div>
     </div>
 
-    <!-- ===== DETAIL PANEL ===== -->
     <div class="detail-panel hidden" id="detailPanel">
         <h3 id="detailTitle">คลิกที่ Node เพื่อดูรายละเอียด</h3>
         <div class="step-type" id="detailType">—</div>
@@ -475,7 +80,6 @@
     </div>
 </div>
 
-<!-- ===== LEGEND ===== -->
 <div class="legend">
     <div class="legend-item"><div class="legend-icon li-start"></div> Start / End</div>
     <div class="legend-item"><div class="legend-icon li-process"></div> Process</div>
@@ -484,114 +88,6 @@
     <div class="legend-item" style="color:#c084fc;">● Path B — Lab Editor</div>
 </div>
 
-<script>
-    const nodeInfo = {
-        start: {
-            title: "Start",
-            type: "Start Node",
-            desc: "จุดเริ่มต้นของ Workflow — Teacher/TA เข้าใช้งานระบบ Labsarb เพื่อจัดการ Lab และดูผลการตรวจงาน",
-            hint: ""
-        },
-        login: {
-            title: "Login as Teacher",
-            type: "Process",
-            desc: "เข้าสู่ระบบด้วยบัญชี TU (มหาวิทยาลัยธรรมศาสตร์) ผ่าน TU API พร้อมผูกกับ LINE User ID เพื่อยืนยันตัวตน",
-            hint: "🔗 เชื่อมต่อกับ labsarb-tu-auth (Python Lambda)"
-        },
-        selectMenu: {
-            title: "Select Menu",
-            type: "Decision",
-            desc: "เลือกเมนูหลัก 2 ทาง:\n\n• Dashboard — ดูผลการส่งงานของนักศึกษาทั้งหมด\n• Lab Editor — สร้าง/แก้ไข Lab และเพิ่ม Task",
-            hint: ""
-        },
-        selectLabA: {
-            title: "Select LAB (Dashboard)",
-            type: "Process — Path A",
-            desc: "เลือก Lab ที่ต้องการดูผลการส่งงานของนักศึกษา เช่น LAB_01, LAB_02 เป็นต้น",
-            hint: "📊 ข้อมูลดึงจาก DynamoDB ตาราง LabsarbResults"
-        },
-        showDashboard: {
-            title: "Show Dashboard",
-            type: "Process — Path A",
-            desc: "แสดง Dashboard สรุปผลการส่งงาน — จำนวนผ่าน/ไม่ผ่าน/รอตรวจ พร้อมแสดงสถานะของนักศึกษาแต่ละคน",
-            hint: "🔗 เรียกใช้ GET API จาก labsarb-data-api"
-        },
-        viewDetail: {
-            title: "View Detail",
-            type: "Process — Path A",
-            desc: "ดูรายละเอียดผลตรวจของนักศึกษาแต่ละคน ได้แก่:\n• detected_text — ข้อความที่ AI อ่านได้\n• status — ผ่าน/ไม่ผ่าน\n• missing_point — จุดที่ต้องแก้ไข\n• image_url — รูปภาพที่ส่ง",
-            hint: "🤖 ผลมาจาก AWS Rekognition (labsarb-ai-engine)"
-        },
-        endA: {
-            title: "End",
-            type: "End Node",
-            desc: "สิ้นสุดกระบวนการ Dashboard — Teacher/TA ดูข้อมูลเรียบร้อยแล้ว",
-            hint: ""
-        },
-        isLabExist: {
-            title: "Is lab exist?",
-            type: "Decision — Path B",
-            desc: "ตรวจสอบว่ามี Lab ที่ต้องการแก้ไขอยู่ในระบบแล้วหรือไม่:\n\n• Yes → ไปเลือก Lab ได้เลย\n• No → ต้องสร้าง Lab ใหม่ก่อน",
-            hint: ""
-        },
-        addLab: {
-            title: "Add LAB",
-            type: "Process — Path B",
-            desc: "สร้าง Lab ใหม่ในระบบ กำหนดชื่อ Lab (เช่น LAB_01) และรายละเอียดเบื้องต้น เพื่อให้พร้อมรับ Task",
-            hint: "🔗 เรียกใช้ POST API (/edit-lab) จาก labsarb-data-api"
-        },
-        selectLabB: {
-            title: "Select LAB (Editor)",
-            type: "Process — Path B",
-            desc: "เลือก Lab ที่ต้องการแก้ไข เพิ่ม Task หรือเพิ่ม Example Photo — ทั้ง Lab ใหม่ที่เพิ่งสร้างและ Lab เดิมจะมาถึงจุดนี้",
-            hint: ""
-        },
-        addTask: {
-            title: "Add Task",
-            type: "Process — Path B",
-            desc: "เพิ่มโจทย์/ข้อกำหนดใหม่ในแต่ละ Lab ที่ระบบ AI จะใช้เป็นเกณฑ์ในการตรวจสอบผลงานของนักศึกษา",
-            hint: "📝 เช่น \"เขียน Hello World ด้วย Java\" หรือ \"สร้าง Loop แบบ for\""
-        },
-        addExamplePhoto: {
-            title: "Add Example Photo",
-            type: "Process — Path B",
-            desc: "อัปโหลดภาพตัวอย่าง (ภาพเฉลย) เข้า S3 Bucket เพื่อใช้เป็น reference สำหรับ AWS Rekognition ในการเปรียบเทียบกับรูปที่นักศึกษาส่ง",
-            hint: "☁️ Upload ไปยัง AWS S3 → ใช้กับ CompareFaces / DetectText"
-        },
-        isFinish: {
-            title: "Is finish?",
-            type: "Decision — Path B",
-            desc: "ตรวจสอบว่าเพิ่ม Task และ Example Photo ครบทุก Task แล้วหรือยัง:\n\n• Yes → จบกระบวนการ\n• No → กลับไปเพิ่ม Task ต่อ (Loop)",
-            hint: "🔄 วนซ้ำได้จนกว่าจะครบ"
-        },
-        endB: {
-            title: "End",
-            type: "End Node",
-            desc: "สิ้นสุดกระบวนการ Lab Editor — Lab พร้อมใช้งานสำหรับให้นักศึกษาส่งงาน",
-            hint: ""
-        }
-    };
-
-    let activeNode = null;
-
-    function showDetail(el) {
-        const id = el.dataset.id;
-        const info = nodeInfo[id];
-        if (!info) return;
-
-        // Toggle active
-        if (activeNode) activeNode.classList.remove('active');
-        activeNode = el;
-        el.classList.add('active');
-
-        const panel = document.getElementById('detailPanel');
-        panel.classList.remove('hidden');
-        document.getElementById('detailTitle').textContent = info.title;
-        document.getElementById('detailType').textContent = info.type;
-        document.getElementById('detailDesc').innerText = info.desc;
-        document.getElementById('detailHint').textContent = info.hint;
-    }
-</script>
-
+<script src="ta-design-logic.js"></script>
 </body>
 </html>

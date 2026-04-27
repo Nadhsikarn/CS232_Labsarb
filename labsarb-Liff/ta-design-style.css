@@ -1,0 +1,157 @@
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(145deg, #0a0a1a 0%, #0d0d2b 40%, #1a1a3e 100%);
+    color: #e0e0f0;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Background grid */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(100,100,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(100,100,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 48px 20px 24px;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #7c8aff, #c084fc, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+}
+
+header p {
+    font-size: 1rem;
+    color: #8888aa;
+    font-weight: 300;
+}
+
+.page-wrapper {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* ===== FLOWCHART ===== */
+.flowchart-area {
+    position: relative;
+    width: 1100px;
+    height: 1080px;
+    flex-shrink: 0;
+}
+
+.flowchart-area svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.arrow-line {
+    fill: none;
+    stroke: rgba(140,160,255,0.45);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+}
+
+.arrow-animated {
+    stroke-dasharray: 8 6;
+    animation: dashFlow 1.2s linear infinite;
+}
+
+@keyframes dashFlow {
+    to { stroke-dashoffset: -28; }
+}
+
+.arrow-head { fill: rgba(140,160,255,0.6); }
+
+.arrow-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    fill: #b0b8ff;
+}
+
+.arrow-label.yes { fill: #6ee7b7; }
+.arrow-label.no  { fill: #fca5a5; }
+
+/* ===== NODES ===== */
+.node {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.25s, box-shadow 0.25s, filter 0.25s;
+    z-index: 2;
+    font-weight: 500;
+    font-size: 13.5px;
+    user-select: none;
+}
+
+.node:hover { transform: scale(1.08); z-index: 5; }
+.node.active { transform: scale(1.1); z-index: 6; }
+
+.node-circle { width: 60px; height: 60px; border-radius: 50%; font-weight: 700; font-size: 13px; letter-spacing: 0.5px; }
+.node-circle.start { background: radial-gradient(circle, #22c55e 0%, #15803d 100%); box-shadow: 0 0 20px rgba(34,197,94,0.35), inset 0 -2px 6px rgba(0,0,0,0.2); color: #fff; }
+.node-circle.end { background: radial-gradient(circle, #ef4444 0%, #991b1b 100%); box-shadow: 0 0 20px rgba(239,68,68,0.35), inset 0 -2px 6px rgba(0,0,0,0.2); color: #fff; }
+
+.node-process {
+    height: 48px; padding: 0 20px; border-radius: 12px;
+    background: rgba(30,30,70,0.65); backdrop-filter: blur(12px);
+    border: 1px solid rgba(120,130,255,0.2); color: #d0d4ff;
+}
+
+.node-decision { width: 160px; height: 80px; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); font-size: 12px; font-weight: 600; color: #fff; position: relative;}
+.node-decision-inner {
+    position: absolute; inset: 0;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    background: linear-gradient(135deg, rgba(245,158,11,0.35), rgba(217,119,6,0.25));
+    display: flex; align-items: center; justify-content: center; padding: 0 30px;
+}
+
+/* ===== DETAIL PANEL & LEGEND ===== */
+.detail-panel {
+    position: sticky; top: 100px; width: 300px; height: fit-content;
+    background: rgba(20,20,50,0.7); backdrop-filter: blur(16px);
+    border: 1px solid rgba(120,130,255,0.15); border-radius: 16px; padding: 28px 24px;
+}
+.detail-panel.hidden { opacity: 0.4; }
+
+.path-label { position: absolute; font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 14px; border-radius: 20px; }
+.path-label.dashboard { color: #5eead4; background: rgba(94,234,212,0.08); border: 1px solid rgba(94,234,212,0.2); }
+.path-label.editor { color: #c084fc; background: rgba(192,132,252,0.08); border: 1px solid rgba(192,132,252,0.2); }
+
+.legend { display: flex; justify-content: center; gap: 32px; padding: 30px 20px 50px; }
+.legend-item { display: flex; align-items: center; gap: 10px; font-size: 0.82rem; color: #8888aa; }
+.legend-icon { width: 24px; height: 24px; border-radius: 50%; }
+.legend-icon.li-start { background: radial-gradient(circle, #22c55e, #15803d); }
+.legend-icon.li-end   { background: radial-gradient(circle, #ef4444, #991b1b); }
+.legend-icon.li-process { border-radius: 6px; background: rgba(30,30,70,0.65); border: 1px solid rgba(120,130,255,0.3); }
+.legend-icon.li-decision { clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); background: linear-gradient(135deg, rgba(251,191,36,0.5), rgba(245,158,11,0.3)); }
+
+@media (max-width: 1500px) { .page-wrapper { flex-direction: column; align-items: center; } .detail-panel { position: relative; top: 0; width: 100%; max-width: 600px; } }
+@media (max-width: 1150px) { .flowchart-area { transform: scale(0.75); transform-origin: top center; height: 810px; } }

@@ -1,0 +1,137 @@
+/* ta-submission-detail-style.css */
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 16px;
+}
+
+.breadcrumb .active {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.icon-action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--primary);
+  transition: opacity 0.2s;
+}
+
+.icon-action:hover {
+  opacity: 0.7;
+}
+
+.icon-action svg {
+  width: 16px;
+  height: 16px;
+}
+
+.submission-detail {
+  display: flex;
+  gap: 32px;
+  margin-top: 24px;
+  align-items: flex-start;
+}
+
+.submission-image {
+  flex: 1;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px;
+  max-width: 65%;
+}
+
+.submission-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.submission-context {
+  width: 320px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  position: sticky;
+  top: 20px;
+}
+
+.submission-context h3 {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #0f172a;
+}
+
+.context-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.context-label {
+  color: #64748b;
+}
+
+.context-value {
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.system-check {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  gap: 12px;
+}
+
+.check-icon {
+  width: 36px;
+  height: 36px;
+  background: #dcfce7;
+  color: #16a34a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.check-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.check-content h4 {
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #0f172a;
+}
+
+.check-content p {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+@media (max-width: 1024px) {
+  .submission-detail {
+    flex-direction: column;
+  }
+  .submission-image {
+    max-width: 100%;
+  }
+  .submission-context {
+    width: 100%;
+    position: static;
+  }
+}

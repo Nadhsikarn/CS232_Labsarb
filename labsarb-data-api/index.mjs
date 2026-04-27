@@ -1,20 +1,17 @@
-// ==========================================================================
-// [FOR: WEB BACKEND & TA PORTAL] - หน้าที่ของคุณ:
-// 1. เขียน API สำหรับดึงผลการตรวจ (Get Result) ให้อาจารย์ดู
-// 2. เขียน API สำหรับให้อาจารย์แก้ไขผลแล็บ (Edit Lab)
-// 3. เขียน API สำหรับลบข้อมูล (Delete)
-// 4. เขียน API สำหรับ manual update score/status
-// 5. จัดการข้อมูลใน DynamoDB ตาม JSON "get_result" และ "edit_lab"
-// ==========================================================================
+import { getAllLabResults, getAllTemplates, saveOrUpdateLab, deleteLabResult, getAllUsers, saveUser, deleteUser } from './db-helper.mjs';
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-import { getAllLabResults, saveOrUpdateLab, deleteLabResult } from './db-helper.mjs';
+const s3 = new S3Client({ region: "us-east-1" });
+const BUCKET = "cs254-projects";
 
 export const handler = async (event) => {
-    // ดึงค่า Path และ Method จาก Event ของ API Gateway
-    const path = event.rawPath || event.routeKey || event.path; 
+
+    const rawPath = event.rawPath || event.path || '';
+    const path = rawPath.split(' ')[0];
     const method = event.requestContext?.http?.method || event.httpMethod;
 
-    console.log(`Request Method: ${method}, Path: ${path}`);
+    console.log(`Method: ${method}, Path: ${path}`);
 
     const headers = {
         "Content-Type": "application/json",
@@ -24,75 +21,158 @@ export const handler = async (event) => {
     };
 
     try {
-        // CORS Preflight
         if (method === 'OPTIONS') {
             return { statusCode: 200, headers, body: '' };
         }
 
-        // API ดึงข้อมูลทั้งหมด
-        if (method === 'GET') {
+        // ============================
+        // STUDENTS (Labsarb_Users)
+        // ============================
+
+        // GET /students/{id} — ดึงผลงานทั้งหมดของนักศึกษาคนหนึ่ง
+        if (method === 'GET' && path.includes('/students/')) {
+            const studentId = decodeURIComponent(path.split('/students/')[1]);
             const results = await getAllLabResults();
             return {
                 statusCode: 200,
-                headers: headers,
-                body: JSON.stringify({ message: "ส่งข้อมูลผลการตรวจของนักศึกษา", data: results })
+                headers,
+                body: JSON.stringify(results.filter(r => r.student_id === studentId))
             };
         }
 
-        // API สำหรับแก้ไข/สร้าง Lab (ใช้ได้ทั้ง lab config และ student data)
-        if (method === 'POST' && (path === '/edit-lab' || path.endsWith('/edit-lab'))) {
-            const requestBody = JSON.parse(event.body);
-            // เพิ่ม timestamp อัตโนมัติ
-            requestBody.updated_at = new Date().toISOString();
-            const result = await saveOrUpdateLab(requestBody);
-            return {
-                statusCode: 200,
-                headers: headers,
-                body: JSON.stringify(result)
-            };
+        // GET /students — รายชื่อนักศึกษาทั้งหมดจาก Labsarb_Users
+        if (method === 'GET' && path.endsWith('/students')) {
+            const users = await getAllUsers();
+            return { statusCode: 200, headers, body: JSON.stringify(users) };
         }
 
-        // API สำหรับ update score/status ของนักศึกษา (manual override จาก Dashboard)
-        if (method === 'POST' && (path === '/update-score' || path.endsWith('/update-score'))) {
-            const requestBody = JSON.parse(event.body);
-            requestBody.updated_at = new Date().toISOString();
-            const result = await saveOrUpdateLab(requestBody);
-            return {
-                statusCode: 200,
-                headers: headers,
-                body: JSON.stringify(result)
-            };
+        // POST /students — เพิ่มนักศึกษาลง Labsarb_Users
+        if (method === 'POST' && path.endsWith('/students')) {
+            const body = JSON.parse(event.body);
+            await saveUser({
+                student_id: body.student_id,
+                name: body.name || null,
+                email: body.email || null,
+                updated_at: new Date().toISOString()
+            });
+            return { statusCode: 200, headers, body: JSON.stringify({ message: "student added" }) };
         }
 
-        // API สำหรับลบข้อมูล
-        if (method === 'DELETE' || (method === 'POST' && (path === '/delete' || path.endsWith('/delete')))) {
-            const requestBody = JSON.parse(event.body);
-            if (!requestBody.student_id || !requestBody.lab_id) {
-                return {
-                    statusCode: 400,
-                    headers: headers,
-                    body: JSON.stringify({ error: "ต้องระบุ student_id และ lab_id" })
-                };
+        // DELETE /students/{id} — ลบนักศึกษาออกจาก Labsarb_Users
+        if (method === 'DELETE' && path.includes('/students/')) {
+            const studentId = decodeURIComponent(path.split('/students/')[1]);
+            await deleteUser(studentId);
+            return { statusCode: 200, headers, body: JSON.stringify({ message: "student deleted" }) };
+        }
+
+        // ============================
+        // SUBMISSIONS (LabsarbResults)
+        // ============================
+
+        // GET /submissions — ผลการส่งงาน กรองได้ด้วย student_id และ/หรือ lab_id
+        if (method === 'GET' && path.endsWith('/submissions')) {
+            const query = event.queryStringParameters || {};
+            const studentId = query.student_id;
+            const labId = query.lab_id;
+
+            let results = await getAllLabResults();
+
+            if (studentId) results = results.filter(r => r.student_id === studentId);
+            if (labId) results = results.filter(r => r.lab_id === labId);
+
+            return { statusCode: 200, headers, body: JSON.stringify(results) };
+        }
+
+        // ============================
+        // LABS (LabsarbTemplates)
+        // ============================
+
+        // GET /labs — ดึง lab ทั้งหมดจาก LabsarbTemplates
+        if (method === 'GET' && path.endsWith('/labs')) {
+            const templates = await getAllTemplates();
+            return { statusCode: 200, headers, body: JSON.stringify(templates) };
+        }
+
+        // ============================
+        // UPLOAD
+        // ============================
+
+        // POST /upload-url — ขอ presigned URL สำหรับอัปโหลดรูปใน S3
+        if (method === 'POST' && path.endsWith('/upload-url')) {
+            const body = JSON.parse(event.body);
+            const { student_id, lab_id, file_type, file_name, is_template } = body;
+
+            let key;
+            if (is_template) {
+                key = `teacher_template/${lab_id}/template/answer.png`;
+            } else {
+                // ใช้ชื่อไฟล์เดิม (sanitized) เพื่อให้ path ใน S3 ตรงกับที่เก็บใน DB
+                const safeName = file_name
+                    ? file_name.replace(/[^a-zA-Z0-9._-]/g, '_')
+                    : `submission_${Date.now()}.png`;
+                key = `student_assignment/submissions/${lab_id}/sid${student_id}/${safeName}`;
             }
-            const result = await deleteLabResult(requestBody.student_id, requestBody.lab_id);
+
+            const command = new PutObjectCommand({
+                Bucket: BUCKET,
+                Key: key,
+                ContentType: file_type
+            });
+
+            const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 60 });
+            const fileUrl = `https://${BUCKET}.s3.amazonaws.com/${key}`;
+
             return {
                 statusCode: 200,
-                headers: headers,
-                body: JSON.stringify(result)
+                headers,
+                body: JSON.stringify({ uploadUrl, fileUrl })
             };
         }
 
-        return {
-            statusCode: 404,
-            headers: headers,
-            body: JSON.stringify({ error: "Route not found" })
-        };
+        // ============================
+        // EDIT / SCORE
+        // ============================
+
+        // POST /edit-lab — บันทึก/อัปเดตผลการส่งงานหรือ template
+        if (method === 'POST' && path.endsWith('/edit-lab')) {
+            const body = JSON.parse(event.body);
+            body.updated_at = new Date().toISOString();
+
+            let result;
+            if (body.student_id === "TEMPLATE_DATA") {
+                result = await saveOrUpdateLab(body, "LabsarbTemplates");
+            } else {
+                result = await saveOrUpdateLab(body);
+            }
+
+            return { statusCode: 200, headers, body: JSON.stringify(result) };
+        }
+
+        // POST /update-score — อัปเดตคะแนนและผล rekognition
+        if (method === 'POST' && path.endsWith('/update-score')) {
+            const body = JSON.parse(event.body);
+            body.updated_at = new Date().toISOString();
+            const result = await saveOrUpdateLab(body);
+            return { statusCode: 200, headers, body: JSON.stringify(result) };
+        }
+
+        // DELETE /delete — ลบ submission
+        if (method === 'DELETE' || (method === 'POST' && path.endsWith('/delete'))) {
+            const body = JSON.parse(event.body);
+            if (!body.student_id || !body.lab_id) {
+                return { statusCode: 400, headers, body: JSON.stringify({ error: "ต้องระบุ student_id และ lab_id" }) };
+            }
+            const result = await deleteLabResult(body.student_id, body.lab_id);
+            return { statusCode: 200, headers, body: JSON.stringify(result) };
+        }
+
+        return { statusCode: 404, headers, body: JSON.stringify({ error: "Route not found" }) };
 
     } catch (error) {
         console.error("API Error:", error);
         return {
             statusCode: 500,
-            headers: headers,
+            headers,
             body: JSON.stringify({ error: "Internal Server Error", details: error.message })
         };
     }

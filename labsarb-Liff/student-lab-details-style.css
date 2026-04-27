@@ -1,0 +1,89 @@
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: var(--primary-student);
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 24px;
+  align-items: start;
+}
+
+.detail-main-card, .detail-side-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.detail-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.feedback-box {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 4px solid #cbd5e1;
+}
+
+.feedback-box label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.feedback-box p {
+  margin: 0;
+  color: #334155;
+  line-height: 1.6;
+}
+
+.image-preview-container {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #f1f5f9;
+  background: #f8fafc;
+}
+
+.image-preview-container img {
+  width: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+/* Badge States */
+.badge.pass { background: #dcfce7; color: #16a34a; }
+.badge.fail { background: #fef2f2; color: #ef4444; }
+
+@media (max-width: 1024px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
