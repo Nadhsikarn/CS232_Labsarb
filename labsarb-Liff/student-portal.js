@@ -87,3 +87,49 @@ function getSubmissions() {
 function saveSubmissions(subs) {
   localStorage.setItem('labsarb_submissions', JSON.stringify(subs));
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  checkStudentLogin();
+  fetchLabResults();
+});
+
+const API_URL = "https://efmsyxbc9j.execute-api.us-east-1.amazonaws.com";
+
+async function fetchLabResults() {
+  try {
+    const student = getStudentInfo();
+    if (!student) return;
+
+    const res = await fetch(
+      API_URL + "/submissions?student_id=" + student.studentId
+    );
+
+    const data = await res.json();
+
+    console.log("My lab results:", data);
+
+    renderLabs(data);
+
+  } catch (err) {
+    console.error("API error:", err);
+  }
+}
+
+function renderLabs(labs) {
+  const container = document.getElementById("labs-container");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  labs.forEach(lab => {
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <p><b>Lab:</b> ${lab.lab_id}</p>
+      <p><b>Score:</b> ${lab.score}</p>
+      <p><b>Status:</b> ${lab.status}</p>
+      <hr/>
+    `;
+    container.appendChild(div);
+  });
+}
+

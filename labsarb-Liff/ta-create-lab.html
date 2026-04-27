@@ -144,8 +144,14 @@
               <div class="upload-prompt-content" id="upload-prompt"
                 onclick="document.getElementById('config-file').click()"
                 style="width:100%; height:100%; cursor:pointer;">
-                <input type="file" id="config-file" accept="image/png, image/jpeg" multiple
-                  onchange="handleFilesSelected(this.files)">
+                <input 
+                  type="file" 
+                  id="config-file" 
+                  accept="image/png, image/jpeg" 
+                  multiple
+                  onchange="handleFilesSelected(this.files)"
+                  style="display:none;"
+                >
                 <div class="upload-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round">
@@ -187,8 +193,6 @@
   <script src="ta-portal.js"></script>
   <script>
     checkLogin();
-
-
 
     let uploadedGroundTruthFiles = [];
 
@@ -238,51 +242,60 @@
         prompt.style.display = 'flex';
       }
     }
+    const API_URL = "https://efmsyxbc9j.execute-api.us-east-1.amazonaws.com";
 
-    function initLab() {
-      const name = document.getElementById('config-lab-name').value.trim();
-      const desc = document.getElementById('config-desc').value.trim();
+    async function initLab() {
+        const name = document.getElementById('config-lab-name').value.trim();
+        const desc = document.getElementById('config-desc').value.trim();
+        const deadlineDate = document.getElementById('config-deadline-date').value;
+        const deadlineTime = document.getElementById('config-deadline-time').value;
 
-      if (!name) {
-        alert('กรุณาตั้งชื่อการทดลอง');
-        return;
-      }
+        if (!name) {
+            alert('กรุณาตั้งชื่อ Lab');
+            return;
+        }
 
-      const labs = getLabs();
-      if (labs[name]) {
-        alert('ชื่อการทดลองนี้มีอยู่แล้ว');
-        return;
-      }
+        if (uploadedGroundTruthFiles.length === 0) {
+            alert('กรุณาอัพโหลดภาพเฉลยอย่างน้อย 1 ภาพ');
+            return;
+        }
 
-      const enrolledStudents = getEnrolledStudents();
+        try {
+            // ใช้ FormData เพื่อส่งทั้งข้อความและไฟล์
+            const formData = new FormData();
+            formData.append("student_id", "CONFIG");
+            formData.append("lab_id", name);
+            formData.append("lab_name", name);
+            formData.append("lab_data", desc);
+            formData.append("deadline", `${deadlineDate} ${deadlineTime}`);
+            formData.append("status", "config");
 
-      labs[name] = {
-        pass: 0,
-        fail: 0,
-        pending: enrolledStudents.length,
-        desc: desc || 'ไม่มีคำอธิบาย'
-      };
-      saveLabs(labs);
+            // เพิ่มไฟล์ทั้งหมดเข้าไปใน FormData
+            uploadedGroundTruthFiles.forEach((file, index) => {
+                formData.append(`file_${index}`, file);
+            });
 
-      // Generate submissions for enrolled students
-      let subs = getSubmissions();
-      enrolledStudents.forEach(s => {
-        subs.push({
-          student_id: s.id,
-          student_name: s.name,
-          lab_id: name,
-          status: 'pending',
-          score: 0,
-          detected_text: '-',
-          image_url: 'https://via.placeholder.com/800x600.png?text=Pending+Submission'
-        });
-      });
-      saveSubmissions(subs);
+            const res = await fetch(API_URL + "/edit-lab", {
+                method: "POST",
+                // หมายเหตุ: ห้ามใส่ headers Content-Type เมื่อใช้ FormData 
+                // Browser จะจัดการ boundary ให้เอง
+                body: formData 
+            });
 
-      alert('สร้างแลปใหม่เรียบร้อยแล้ว');
-      window.location.href = 'ta-dashboard.html';
+            if (res.ok) {
+                alert("สร้าง Lab และอัพโหลดรูปภาพสำเร็จ!");
+                window.location.href = 'ta-dashboard.html';
+            } else {
+                const errorData = await res.json();
+                alert("เกิดข้อผิดพลาด: " + (errorData.message || "ไม่สามารถอัพโหลดได้"));
+            }
+
+        } catch (err) {
+            console.error(err);
+            alert("เชื่อมต่อ API ไม่สำเร็จ");
+        }
     }
-  </script>
+      </script>
 </body>
 
 </html>

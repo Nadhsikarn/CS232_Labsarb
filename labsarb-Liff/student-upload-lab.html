@@ -494,53 +494,70 @@
       }
     }
 
-    function submitLab() {
-      if (!labId) {
-        alert('ไม่พบรหัส Lab');
+    const API_URL = "https://efmsyxbc9j.execute-api.us-east-1.amazonaws.com";
+
+    async function submitLab() {
+      console.log("CLICKED");
+
+      if (!labId || !selectedFile) {
+        alert("กรุณาเลือกไฟล์ก่อน");
         return;
       }
-      if (!selectedFile) {
-        alert('กรุณาเลือกไฟล์รูปภาพก่อนครับ');
-        return;
-      }
 
-      const btn = document.getElementById('btn-submit-lab');
-      btn.textContent = "กำลังส่ง...";
-      btn.disabled = true;
+      const studentId = localStorage.getItem('labsarb_student');
 
-      // Mock submitting delay
-      setTimeout(() => {
-        const studentId = localStorage.getItem('labsarb_student');
-        const subs = getSubmissions();
+      try {
+        console.log("Request upload URL...");
 
-        let subIndex = subs.findIndex(s => s.lab_id === labId && s.student_id === studentId);
-
-        const imageUrl = URL.createObjectURL(selectedFile);
-
-        if (subIndex !== -1) {
-          // Update existing
-          subs[subIndex].status = 'pending';
-          subs[subIndex].image_url = imageUrl;
-          subs[subIndex].detected_text = '-';
-          subs[subIndex].missing_point = '';
-        } else {
-          // Add new if not existed (but TA usually creates pending ones)
-          const info = getStudentInfo();
-          subs.push({
+        const res = await fetch(API_URL + "/upload-url", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
             student_id: studentId,
-            student_name: info.studentName,
             lab_id: labId,
-            status: 'pending',
-            score: 0,
-            detected_text: '-',
-            image_url: imageUrl
-          });
-        }
+            file_type: selectedFile.type
+          })
+        });
 
-        saveSubmissions(subs);
-        alert('ส่งงานสำเร็จ!');
-        window.location.href = 'student-dashboard.html';
-      }, 1000);
+        const data = await res.json();
+        console.log("Upload URL:", data);
+
+        const { uploadUrl, fileUrl } = data;
+
+        console.log("Uploading file...");
+
+        await fetch(uploadUrl, {
+          method: "PUT",
+          body: selectedFile,
+          headers: {
+            "Content-Type": selectedFile.type
+          }
+        });
+
+        console.log("Saving to DB...");
+
+        await fetch(API_URL + "/edit-lab", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            student_id: studentId,
+            lab_id: labId,
+            status: "pending",
+            image_url: fileUrl
+          })
+        });
+
+        alert("อัปโหลดสำเร็จ!");
+        window.location.href = "student-dashboard.html";
+
+      } catch (err) {
+        console.error("UPLOAD ERROR:", err);
+        alert("Upload ล้มเหลว");
+      }
     }
   </script>
 </body>

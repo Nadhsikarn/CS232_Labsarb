@@ -128,46 +128,66 @@
   <script>
     checkLogin();
 
-    function loadDashboard() {
+    const API_URL = "https://efmsyxbc9j.execute-api.us-east-1.amazonaws.com";
+
+    async function loadDashboard() {
       const grid = document.getElementById('dashboard-grid');
       grid.innerHTML = '';
 
-      const courseLabs = getLabs();
+      try {
+        const res = await fetch(API_URL + "/submissions")
+        if (!res.ok) {
+          throw new Error("API error");
+        }
+        const json = await res.json();
+        const data = json.data || [];
 
-      Object.entries(courseLabs).forEach(([labName, stats]) => {
-        const total = stats.pass + stats.fail + stats.pending;
-        const passPct = total === 0 ? 0 : (stats.pass / total) * 100;
-        const failPct = total === 0 ? 0 : (stats.fail / total) * 100;
+        const labs = {};
 
-        const card = document.createElement('div');
-        card.className = 'lab-card';
-        card.onclick = () => {
-          window.location.href = `ta-submissions.html?lab=${encodeURIComponent(labName)}`;
-        };
+        data.forEach(item => {
+          const lab = item.lab_id;
 
-        card.innerHTML = `
-          <button class="btn-delete-card" onclick="deleteLab('${labName}', event)" title="ลบการทดลอง">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;">
-              <polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-            </svg>
-          </button>
-          <h3>${labName}</h3>
-          <p>${stats.desc}</p>
-          <div class="lab-stats">
-            <div class="stat-item"><span class="stat-num pass">${stats.pass}</span><span class="stat-label">ผ่าน</span></div>
-            <div class="stat-item"><span class="stat-num fail">${stats.fail < 10 ? '0' + stats.fail : stats.fail}</span><span class="stat-label">ไม่ผ่าน</span></div>
-            <div class="stat-item"><span class="stat-num pending">${stats.pending}</span><span class="stat-label">ยังไม่ส่ง</span></div>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-pass" style="width: ${passPct}%"></div>
-            <div class="progress-fail" style="width: ${failPct}%"></div>
-            <div class="progress-pending" style="width: ${100 - passPct - failPct}%"></div>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
+          if (!labs[lab]) {
+            labs[lab] = {
+              pass: 0,
+              fail: 0,
+              pending: 0,
+              desc: item.lab_name || "ไม่มีคำอธิบาย"
+            };
+          }
+
+          if (item.status === 'pass') labs[lab].pass++;
+          else if (item.status === 'fail') labs[lab].fail++;
+          else labs[lab].pending++;
+        });
+
+        Object.entries(labs).forEach(([labName, stats]) => {
+          const total = stats.pass + stats.fail + stats.pending;
+          const passPct = total === 0 ? 0 : (stats.pass / total) * 100;
+          const failPct = total === 0 ? 0 : (stats.fail / total) * 100;
+
+          const card = document.createElement('div');
+          card.className = 'lab-card';
+
+          card.innerHTML = `
+            <h3>${labName}</h3>
+            <p>${stats.desc}</p>
+            <div class="lab-stats">
+              <div>ผ่าน: ${stats.pass}</div>
+              <div>ไม่ผ่าน: ${stats.fail}</div>
+              <div>ยังไม่ส่ง: ${stats.pending}</div>
+            </div>
+          `;
+
+          grid.appendChild(card);
+        });
+
+      } catch (err) {
+        console.error(err);
+      }
     }
 
+    /*
     function deleteLab(labName, event) {
       event.stopPropagation();
       if (confirm(`คุณต้องการลบการทดลอง ${labName} ใช่หรือไม่?`)) {
@@ -175,7 +195,6 @@
         delete labs[labName];
         saveLabs(labs);
 
-        // Also remove submissions for this lab
         let subs = getSubmissions();
         subs = subs.filter(s => s.lab_id !== labName);
         saveSubmissions(subs);
@@ -183,6 +202,7 @@
         loadDashboard();
       }
     }
+    */
 
     window.onload = loadDashboard;
   </script>

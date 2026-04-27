@@ -172,47 +172,27 @@
       window.location.href = `ta-submissions.html?lab=${encodeURIComponent(labId)}`;
     };
 
-    function loadDetail() {
-      if (!labId || !studentId) {
-        document.getElementById('error-msg').style.display = 'block';
-        return;
-      }
+    async function loadDetail() {
+      if (!labId || !studentId) return;
 
-      const submissions = getSubmissions();
-      const data = submissions.find(s => s.lab_id === labId && s.student_id === studentId);
+      try {
+        const res = await fetch(API_URL + "/submissions");
+        const data = await res.json();
 
-      if (!data) {
-        document.getElementById('error-msg').style.display = 'block';
-        return;
-      }
+        const item = data.find(
+          d => d.lab_id === labId && d.student_id === studentId
+        );
 
-      document.getElementById('submission-detail-container').style.display = 'flex';
-      document.getElementById('detail-lab-name').textContent = `Lab: ${data.lab_id}`;
-      document.getElementById('detail-student-name').textContent = `ส่งโดยนักศึกษารหัส: ${data.student_id}`;
-      document.getElementById('detail-img').src = data.image_url || 'https://via.placeholder.com/800x600.png?text=No+Image';
+        if (!item) {
+          document.getElementById('error-msg').style.display = 'block';
+          return;
+        }
 
-      const checkBox = document.getElementById('detail-system-check');
-      const title = document.getElementById('detail-status-title');
-      const desc = document.getElementById('detail-status-desc');
+        document.getElementById('submission-detail-container').style.display = 'flex';
+        document.getElementById('detail-img').src = item.image_url;
 
-      if (data.status === 'pass') {
-        checkBox.className = 'system-check';
-        checkBox.querySelector('.check-icon').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
-        title.textContent = 'ตรวจสอบระบบ: ผ่าน';
-        desc.textContent = `ข้อความที่อ่านได้: ${data.detected_text} - ตรงกับเกณฑ์ที่กำหนด`;
-      } else if (data.status === 'fail') {
-        checkBox.className = 'system-check fail';
-        checkBox.querySelector('.check-icon').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
-        title.textContent = 'ตรวจสอบระบบ: ไม่ผ่านเกณฑ์';
-        desc.textContent = `จุดที่ขาดหาย: ${data.missing_point}`;
-      } else {
-        checkBox.className = 'system-check';
-        checkBox.style.background = '#f8fafc';
-        checkBox.style.borderColor = '#e2e8f0';
-        checkBox.querySelector('.check-icon').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#94a3b8;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
-        title.textContent = 'สถานะ: รอตรวจ';
-        title.style.color = '#475569';
-        desc.textContent = `ยังไม่มีการประเมินจากระบบ`;
+      } catch (err) {
+        console.error(err);
       }
     }
 

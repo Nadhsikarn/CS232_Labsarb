@@ -151,41 +151,54 @@
       document.getElementById('sub-list-title').textContent = currentLabName;
     }
 
-    function loadSubmissions() {
+    async function loadSubmissions() {
       const tbody = document.getElementById('submissions-tbody');
       tbody.innerHTML = '';
 
-      let filteredData = getSubmissions();
+      try {
+        let url = API_URL + "/submissions";
 
-      if (currentLabName) {
-        filteredData = filteredData.filter(d => d.lab_id === currentLabName);
+        if (currentLabName) {
+          url += "?lab_id=" + currentLabName;
+        }
+
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error("API error");
+        }
+        const data = await res.json();
+
+        if (data.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5">ไม่มีข้อมูล</td></tr>`;
+          return;
+        }
+
+        data.forEach(d => {
+          const tr = document.createElement('tr');
+
+          let statusText = 'รอ';
+          if (d.status === 'pass') statusText = 'ผ่าน';
+          if (d.status === 'fail') statusText = 'ไม่ผ่าน';
+
+          tr.onclick = () => {
+            window.location.href =
+              `ta-submission-detail.html?lab=${d.lab_id}&student=${d.student_id}`;
+          };
+
+          tr.innerHTML = `
+            <td>${d.student_id}</td>
+            <td>${d.lab_id}</td>
+            <td>${statusText}</td>
+            <td>${d.score ?? '-'}</td>
+            <td>${d.detected_text || '-'}</td>
+          `;
+
+          tbody.appendChild(tr);
+        });
+
+      } catch (err) {
+        console.error(err);
       }
-
-      if (filteredData.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px;">ยังไม่มีข้อมูลนักศึกษา/การส่งงานในระบบ</td></tr>`;
-        return;
-      }
-
-      filteredData.forEach((d, i) => {
-        const tr = document.createElement('tr');
-        tr.onclick = () => {
-          window.location.href = `ta-submission-detail.html?lab=${encodeURIComponent(d.lab_id)}&student=${encodeURIComponent(d.student_id)}`;
-        };
-
-        let statusHtml = '';
-        if (d.status === 'pass') statusHtml = `<span class="status-badge pass">ผ่านเกณฑ์</span>`;
-        else if (d.status === 'fail') statusHtml = `<span class="status-badge fail">ปรับปรุง</span>`;
-        else statusHtml = `<span class="status-badge pending">รอตรวจ</span>`;
-
-        tr.innerHTML = `
-          <td style="font-weight:500;">${d.student_id}</td>
-          <td>${d.lab_id}</td>
-          <td>${statusHtml}</td>
-          <td>${d.score !== undefined ? d.score : '-'} / 10</td>
-          <td style="color:var(--text-muted);font-size:12px;">${d.detected_text || d.missing_point || '-'}</td>
-        `;
-        tbody.appendChild(tr);
-      });
     }
 
     window.onload = loadSubmissions;

@@ -173,54 +173,40 @@
     const urlParams = new URLSearchParams(window.location.search);
     const labId = urlParams.get('lab');
 
-    function loadDetail() {
-      if (!labId) {
-        document.getElementById('lab-detail-title').textContent = 'ไม่พบรหัส Lab';
-        return;
-      }
-      
-      document.getElementById('lab-detail-title').textContent = labId;
-
-      const labs = getLabs();
-      const labInfo = labs[labId];
-      if (labInfo && labInfo.desc && labInfo.desc !== 'ไม่มีคำอธิบาย') {
-        document.getElementById('lab-desc-text').textContent = labInfo.desc;
-        document.getElementById('lab-desc-box').style.display = 'block';
-      }
+    async function loadDetail() {
+      if (!labId) return;
 
       const studentId = localStorage.getItem('labsarb_student');
-      const subs = getSubmissions();
-      const mySub = subs.find(s => s.lab_id === labId && s.student_id === studentId);
+
+      const res = await fetch(
+        API_URL + "/submissions?student_id=" + studentId + "&lab_id=" + labId
+      );
+
+      if (!res.ok) {
+        throw new Error("API error");
+      }
+
+      const data = await res.json();
+      const mySub = data.find(d => d.lab_id === labId);
+      document.getElementById('lab-detail-image').src = mySub.image_url;
 
       const statusBadge = document.getElementById('lab-detail-status');
       const feedbackP = document.getElementById('lab-detail-feedback');
-      const feedbackBox = document.getElementById('feedback-box');
-      const img = document.getElementById('lab-detail-image');
 
       if (!mySub) {
-        statusBadge.textContent = 'ไม่พบข้อมูลการส่งงาน';
-        statusBadge.className = 'badge pending';
-        feedbackP.textContent = '-';
+        statusBadge.textContent = 'ไม่พบข้อมูล';
         return;
       }
 
-      img.src = mySub.image_url || 'https://via.placeholder.com/800x600.png?text=No+Image';
-
       if (mySub.status === 'pass') {
-        statusBadge.textContent = 'ผ่านเกณฑ์';
-        statusBadge.className = 'badge passed';
-        feedbackBox.className = 'feedback-box';
-        feedbackP.textContent = `เยี่ยมมาก! ระบบอ่านข้อความได้ว่า: "${mySub.detected_text}" ซึ่งตรงกับเฉลยต้นแบบ`;
+        statusBadge.textContent = 'ผ่าน';
+        feedbackP.textContent = "ผ่านแล้ว";
       } else if (mySub.status === 'fail') {
-        statusBadge.textContent = 'ต้องปรับปรุง';
-        statusBadge.className = 'badge failed';
-        feedbackBox.className = 'feedback-box fail';
-        feedbackP.textContent = `ระบบตรวจสอบพบข้อผิดพลาด/จุดที่ขาดหายไป: ${mySub.missing_point}`;
+        statusBadge.textContent = 'ไม่ผ่าน';
+        feedbackP.textContent = "ต้องแก้ไข";
       } else {
-        statusBadge.textContent = 'รอการตรวจ';
-        statusBadge.className = 'badge submitted';
-        feedbackBox.className = 'feedback-box';
-        feedbackP.textContent = `ผลงานของคุณถูกส่งเข้าระบบแล้ว รอการประมวลผลหรือรอให้ผู้สอนทำการตรวจให้คะแนน`;
+        statusBadge.textContent = 'รอ';
+        feedbackP.textContent = "กำลังตรวจ";
       }
     }
 
