@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labsarb - รายการแบบฝึกหัด</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="portal-style.css">
+  <style>
+    :root {
+      --primary-student: #3A6192;
+      --primary-student-light: #e8edf4;
+    }
+
+    body {
+      background-color: #fbfbfc;
+    }
+
+    .sidebar {
+      background-color: #f8f9fa;
+      border-right: none;
+      width: 240px;
+    }
+
+    .sidebar-logo {
+      padding: 32px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-logo h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: -0.5px;
+    }
+
+    .sidebar-logo span {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .sidebar-nav {
+      padding: 0 16px;
+      gap: 8px;
+    }
+
+    .nav-item {
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #64748b;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .nav-item svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .nav-item.active {
+      background-color: #ffffff;
+      color: var(--primary-student);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+    }
+
+    .nav-item.active svg {
+      color: var(--primary-student);
+    }
+
+    .main-area {
+      background-color: #ffffff;
+      border-radius: 24px 0 0 24px;
+      box-shadow: -5px 0 20px rgba(0, 0, 0, 0.02);
+      margin-left: 0;
+    }
+
+    .top-user {
+      position: absolute;
+      top: 30px;
+      right: 60px;
+      z-index: 50;
+    }
+
+    .profile-trigger {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 20px;
+      transition: background 0.2s;
+    }
+
+    .profile-trigger:hover {
+      background: #f1f5f9;
+    }
+
+    .avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary-student-light);
+      color: var(--primary-student);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .avatar-circle.large {
+      width: 56px;
+      height: 56px;
+      font-size: 20px;
+      margin: 0 auto 12px auto;
+    }
+
+    #trigger-student-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #1a1a1a;
+    }
+
+    .profile-card {
+      position: absolute;
+      top: 50px;
+      right: 0;
+      width: 280px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      z-index: 100;
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .profile-card.active {
+      display: block;
+    }
+
+    .profile-card-header {
+      padding: 24px 20px 16px 20px;
+      text-align: center;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .profile-card-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+
+    .profile-card-id {
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .profile-card-body {
+      padding: 16px 20px;
+    }
+
+    .info-row {
+      margin-bottom: 12px;
+    }
+
+    .info-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-label {
+      display: block;
+      font-size: 11px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .info-value {
+      font-size: 13px;
+      color: #334155;
+      font-weight: 500;
+    }
+
+    .profile-card-footer {
+      padding: 16px 20px;
+      background: #f8fafc;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .btn-logout-full {
+      width: 100%;
+      padding: 10px;
+      background: #fee2e2;
+      color: #ef4444;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-logout-full:hover {
+      background: #fecaca;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Course Details specifics */
+    .page-title {
+      font-size: 32px;
+      font-weight: 300;
+      color: #1a1a1a;
+      margin-bottom: 16px;
+    }
+
+    .page-desc {
+      font-size: 14px;
+      color: #64748b;
+      max-width: 600px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    .lab-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .lab-item {
+      background: #fbfcfd;
+      border: 1px solid #edf2f7;
+      border-radius: 8px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .lab-item-left {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .lab-item-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lab-item-title h3 {
+      font-size: 18px;
+      font-weight: 400;
+      color: #1a1a1a;
+      margin: 0;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge.submitted {
+      background: #eef2ff;
+      color: #4f46e5;
+    }
+
+    .badge.pending {
+      background: #f1f5f9;
+      color: #64748b;
+    }
+
+    .badge.passed {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+
+    .badge.failed {
+      background: #fef2f2;
+      color: #ef4444;
+    }
+
+    .lab-item-desc {
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .btn-student-primary {
+      background: var(--primary-student);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-student-outline {
+      background: white;
+      color: #1a1a1a;
+      border: 1px solid #cbd5e1;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #64748b;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-container" id="app-container">
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <img src="logo.png" alt="Labsarb Logo" style="height: 40px; width: auto; object-fit: contain;">
+        <div class="sidebar-logo-text">
+          <h2 style="margin:0;">Labsarb</h2>
+          <span>Student Portal</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-item active" href="student-dashboard.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          ส่งงาน (CS232)
+        </a>
+        <a class="nav-item" href="student-history.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          สถานะภาพรวม
+        </a>
+        <a class="nav-item" href="https://courses.cs.tu.ac.th" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          เว็บไซต์รายวิชา
+        </a>
+      </nav>
+    </div>
+
+    <!-- ===== MAIN AREA ===== -->
+    <div class="main-area">
+      <!-- Top User Menu -->
+      <div class="top-user" id="profile-container">
+        <div class="profile-trigger" onclick="toggleProfileCard()">
+          <div class="avatar-circle">นศ</div>
+          <span id="trigger-student-name">กำลังโหลด...</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" style="width:16px;height:16px;">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
+
+        <div class="profile-card" id="profile-card">
+          <div class="profile-card-header">
+            <div class="avatar-circle large">นศ</div>
+            <div class="profile-card-name" id="card-student-name">ชื่อ นามสกุล</div>
+            <div class="profile-card-id" id="card-student-id">รหัสนักศึกษา: -</div>
+          </div>
+          <div class="profile-card-body">
+            <div class="info-row">
+              <span class="info-label">อีเมล</span>
+              <span class="info-value" id="card-student-email">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">คณะ/สาขา</span>
+              <span class="info-value" id="card-student-faculty">-</span>
+            </div>
+          </div>
+          <div class="profile-card-footer">
+            <button class="btn-logout-full" onclick="doStudentLogout()">ออกจากระบบ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENT SCROLL AREA -->
+      <div class="content-scroll">
+        <div class="screen active">
+          <h1 class="page-title" id="detail-course-title">CS232: Cloud computing</h1>
+          <p class="page-desc">ทำงานที่ได้รับมอบหมายใน Lab ด้านล่างให้เสร็จสิ้นเพื่อแสดงความเข้าใจในเนื้อหาวิชา
+            การทำงานของระบบ และการปฏิบัติการเบื้องต้น</p>
+
+          <div class="lab-list" id="student-lab-list">
+            <!-- Labs rendered via JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="student-portal.js"></script>
+  <script>
+    checkStudentLogin();
+
+    function loadLabs() {
+      const list = document.getElementById('student-lab-list');
+      const allLabs = getLabs();
+      const allSubs = getSubmissions();
+      const studentId = localStorage.getItem('labsarb_student');
+
+      const labKeys = Object.keys(allLabs);
+
+      if (labKeys.length === 0) {
+        list.innerHTML = '<div class="empty-state">ยังไม่มีการทดลองถูกสร้างขึ้นในระบบ</div>';
+        return;
+      }
+
+      list.innerHTML = '';
+
+      labKeys.forEach(labId => {
+        const labData = allLabs[labId];
+        // Find if this student has a submission for this lab
+        const mySub = allSubs.find(s => s.lab_id === labId && s.student_id === studentId);
+
+        let badgeClass = 'pending';
+        let badgeIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
+        let statusText = 'ยังไม่ส่งงาน';
+
+        if (mySub) {
+          if (mySub.status === 'pass') {
+            badgeClass = 'passed';
+            statusText = 'ผ่านเกณฑ์';
+            badgeIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+          } else if (mySub.status === 'fail') {
+            badgeClass = 'failed';
+            statusText = 'ต้องปรับปรุง';
+            badgeIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
+          } else if (mySub.status === 'pending' && mySub.image_url && mySub.image_url !== 'https://via.placeholder.com/800x600.png?text=Pending+Submission') {
+            badgeClass = 'submitted';
+            statusText = 'รอตรวจ';
+            badgeIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+          } else if (mySub.status === 'pending') {
+            // Default pending
+          }
+        }
+
+        let actionBtn = '';
+        if (statusText === 'ยังไม่ส่งงาน' || statusText === 'ต้องปรับปรุง') {
+          actionBtn = `<a href="student-upload-lab.html?lab=${encodeURIComponent(labId)}" class="btn-student-primary">เริ่มการทดลอง / อัปโหลด</a>`;
+        } else {
+          actionBtn = `<a href="student-lab-details.html?lab=${encodeURIComponent(labId)}" class="btn-student-outline">ดูผลการตรวจ</a>`;
+        }
+
+        const item = document.createElement('div');
+        item.className = 'lab-item';
+        item.innerHTML = `
+          <div class="lab-item-left">
+            <div class="lab-item-title">
+              <h3>${labId}</h3>
+              <div class="badge ${badgeClass}">${badgeIcon} ${statusText}</div>
+            </div>
+            <div class="lab-item-desc">${labData.desc || 'ไม่มีคำอธิบาย'}</div>
+          </div>
+          <div class="lab-item-action">
+            ${actionBtn}
+          </div>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    window.onload = loadLabs;
+  </script>
+</body>
+
+</html>
