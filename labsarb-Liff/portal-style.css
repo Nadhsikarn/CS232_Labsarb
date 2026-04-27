@@ -1077,3 +1077,53 @@ input::placeholder, textarea::placeholder {
   font-size: 12px;
   color: var(--text-light);
 }
+
+/* Filter Chips */
+   .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .filter-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted, #6b7280);
+      white-space: nowrap;
+    }
+    .filter-dropdown-wrap {
+      position: relative;
+    }
+    .filter-select {
+      appearance: none;
+      -webkit-appearance: none;
+      padding: 7px 36px 7px 14px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border-color, #e5e7eb);
+      background: #fff;
+      color: var(--text-secondary, #374151);
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.15s;
+      min-width: 200px;
+    }
+    .filter-select:hover,
+    .filter-select:focus {
+      border-color: var(--primary, #6366f1);
+    }
+    .filter-dropdown-wrap::after {
+      content: '';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--text-muted, #6b7280);
+      pointer-events: none;
+    }

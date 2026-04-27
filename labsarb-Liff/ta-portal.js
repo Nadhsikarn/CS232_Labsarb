@@ -1,8 +1,8 @@
 // ta-portal.js
-
+ 
 const COURSE_CODE = 'CS232';
-
-// Initialize data in localStorage if not exists
+ 
+// Initialize labs if not exists
 if (!localStorage.getItem('labsarb_labs')) {
   const initialLabs = {
     'Lab 1: C Refresher': { pass: 42, fail: 5, pending: 13, desc: 'พื้นฐานการจัดการหน่วยความจำและพอยน์เตอร์' },
@@ -10,39 +10,37 @@ if (!localStorage.getItem('labsarb_labs')) {
   };
   localStorage.setItem('labsarb_labs', JSON.stringify(initialLabs));
 }
-
-if (!localStorage.getItem('labsarb_submissions')) {
-  localStorage.setItem('labsarb_submissions', JSON.stringify([]));
-}
-
+ 
+// ลบ block นี้ออก — ไม่ตั้งค่า submissions เป็น [] อีกต่อไป
+// เพราะถ้า key ยังไม่มี getSubmissions() จะ return [] อยู่แล้ว
+// และถ้า set เป็น [] ทิ้งไว้ นักศึกษา submit มา data จะถูก overwrite ทุกครั้งที่โหลดหน้า TA
+ 
 function getLabs() {
   return JSON.parse(localStorage.getItem('labsarb_labs')) || {};
 }
-
+ 
 function saveLabs(labs) {
   localStorage.setItem('labsarb_labs', JSON.stringify(labs));
 }
-
+ 
 function getSubmissions() {
   const data = localStorage.getItem('labsarb_submissions');
   return data ? JSON.parse(data) : [];
 }
-
+ 
 function saveSubmissions(subs) {
   localStorage.setItem('labsarb_submissions', JSON.stringify(subs));
 }
-
-// Student Enrollment logic
+ 
 function getEnrolledStudents() {
   const data = localStorage.getItem('labsarb_students');
   return data ? JSON.parse(data) : [];
 }
-
+ 
 function saveEnrolledStudents(students) {
   localStorage.setItem('labsarb_students', JSON.stringify(students));
 }
-
-// Check Login State
+ 
 function checkLogin() {
   const storedUser = localStorage.getItem('labsarb_admin');
   if (!storedUser) {
@@ -52,22 +50,27 @@ function checkLogin() {
     if (el) el.textContent = 'Admin';
   }
 }
-
+ 
 function doLogout() {
   localStorage.removeItem('labsarb_admin');
   window.location.href = 'login.html';
 }
-
+ 
 function toggleProfileDropdown() {
   const dropdown = document.getElementById('profile-dropdown');
   if (dropdown) dropdown.classList.toggle('active');
 }
-
-// Close dropdown when clicking outside
+ 
 document.addEventListener('click', (e) => {
   const dropdown = document.getElementById('profile-dropdown');
   const circle = document.querySelector('.profile-circle');
-  if (dropdown && dropdown.classList.contains('active') && !dropdown.contains(e.target) && (!circle || !circle.contains(e.target))) {
+  if (
+    dropdown &&
+    dropdown.classList.contains('active') &&
+    !dropdown.contains(e.target) &&
+    (!circle || !circle.contains(e.target))
+  ) {
     dropdown.classList.remove('active');
   }
 });
+ 

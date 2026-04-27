@@ -14,30 +14,24 @@
       --primary-student: #3A6192;
       --primary-student-light: #e8edf4;
     }
-
-    body {
-      background-color: #fbfbfc;
-    }
-
-    /* We can link to a separate CSS if we had one, but we are keeping it simple. We'll copy the layout CSS. */
+ 
+    body { background-color: #fbfbfc; }
+ 
     .sidebar {
       background-color: #f8f9fa;
       border-right: none;
       width: 240px;
     }
-
+ 
     .sidebar-logo {
       padding: 32px 24px;
       display: flex;
       align-items: center;
       gap: 12px;
     }
-
-    .sidebar-logo-text {
-      display: flex;
-      flex-direction: column;
-    }
-
+ 
+    .sidebar-logo-text { display: flex; flex-direction: column; }
+ 
     .sidebar-logo h2 {
       font-size: 20px;
       font-weight: 700;
@@ -45,20 +39,15 @@
       letter-spacing: -0.5px;
       margin: 0;
     }
-
+ 
     .sidebar-logo span {
       font-size: 11px;
       color: #64748b;
       font-weight: 500;
-      letter-spacing: 0;
-      text-transform: none;
     }
-
-    .sidebar-nav {
-      padding: 0 16px;
-      gap: 8px;
-    }
-
+ 
+    .sidebar-nav { padding: 0 16px; gap: 8px; }
+ 
     .nav-item {
       padding: 12px 16px;
       border-radius: 8px;
@@ -70,33 +59,24 @@
       gap: 12px;
       margin-bottom: 4px;
     }
-
-    .nav-item svg {
-      width: 18px;
-      height: 18px;
-    }
-
+ 
+    .nav-item svg { width: 18px; height: 18px; }
+ 
     .nav-item.active {
       background-color: #ffffff;
       color: var(--primary-student);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
     }
-
+ 
     .main-area {
       background-color: #ffffff;
       border-radius: 24px 0 0 24px;
-      box-shadow: -5px 0 20px rgba(0, 0, 0, 0.02);
+      box-shadow: -5px 0 20px rgba(0,0,0,0.02);
       margin-left: 0;
     }
-
-    /* Top user menu */
-    .top-user {
-      position: absolute;
-      top: 30px;
-      right: 60px;
-      z-index: 50;
-    }
-
+ 
+    .top-user { position: absolute; top: 30px; right: 60px; z-index: 50; }
+ 
     .profile-trigger {
       display: flex;
       align-items: center;
@@ -106,11 +86,9 @@
       border-radius: 20px;
       transition: background 0.2s;
     }
-
-    .profile-trigger:hover {
-      background: #f1f5f9;
-    }
-
+ 
+    .profile-trigger:hover { background: #f1f5f9; }
+ 
     .avatar-circle {
       width: 32px;
       height: 32px;
@@ -123,20 +101,16 @@
       font-weight: 600;
       font-size: 13px;
     }
-
+ 
     .avatar-circle.large {
       width: 56px;
       height: 56px;
       font-size: 20px;
       margin: 0 auto 12px auto;
     }
-
-    #trigger-student-name {
-      font-size: 14px;
-      font-weight: 500;
-      color: #1a1a1a;
-    }
-
+ 
+    #trigger-student-name { font-size: 14px; font-weight: 500; color: #1a1a1a; }
+ 
     .profile-card {
       position: absolute;
       top: 50px;
@@ -145,41 +119,24 @@
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
       z-index: 100;
       display: none;
     }
-
-    .profile-card.active {
-      display: block;
-    }
-
+ 
+    .profile-card.active { display: block; }
+ 
     .profile-card-header {
       padding: 24px 20px 16px 20px;
       text-align: center;
       border-bottom: 1px solid #f1f5f9;
     }
-
-    .profile-card-name {
-      font-size: 16px;
-      font-weight: 600;
-      color: #1a1a1a;
-      margin-bottom: 4px;
-    }
-
-    .profile-card-id {
-      font-size: 13px;
-      color: #64748b;
-    }
-
-    .profile-card-body {
-      padding: 16px 20px;
-    }
-
-    .info-row {
-      margin-bottom: 12px;
-    }
-
+ 
+    .profile-card-name { font-size: 16px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+    .profile-card-id { font-size: 13px; color: #64748b; }
+    .profile-card-body { padding: 16px 20px; }
+    .info-row { margin-bottom: 12px; }
+ 
     .info-label {
       display: block;
       font-size: 11px;
@@ -187,19 +144,15 @@
       text-transform: uppercase;
       margin-bottom: 4px;
     }
-
-    .info-value {
-      font-size: 13px;
-      color: #334155;
-      font-weight: 500;
-    }
-
+ 
+    .info-value { font-size: 13px; color: #334155; font-weight: 500; }
+ 
     .profile-card-footer {
       padding: 16px 20px;
       background: #f8fafc;
       border-top: 1px solid #f1f5f9;
     }
-
+ 
     .btn-logout-full {
       width: 100%;
       padding: 10px;
@@ -211,15 +164,9 @@
       font-size: 13px;
       cursor: pointer;
     }
-
-    /* Upload Specifics */
-    .page-title {
-      font-size: 32px;
-      font-weight: 300;
-      color: #1a1a1a;
-      margin-bottom: 16px;
-    }
-
+ 
+    .page-title { font-size: 32px; font-weight: 300; color: #1a1a1a; margin-bottom: 16px; }
+ 
     .page-desc {
       font-size: 14px;
       color: #64748b;
@@ -227,11 +174,9 @@
       line-height: 1.6;
       margin-bottom: 40px;
     }
-
-    .upload-container {
-      max-width: 600px;
-    }
-
+ 
+    .upload-container { max-width: 600px; }
+ 
     .upload-dropzone {
       border: 1px dashed #cbd5e1;
       border-radius: 8px;
@@ -243,16 +188,10 @@
       margin-top: 24px;
       margin-bottom: 24px;
     }
-
-    .upload-dropzone:hover {
-      background: #f1f5f9;
-      border-color: var(--primary-student);
-    }
-
-    .upload-dropzone.has-preview {
-      padding: 16px;
-    }
-
+ 
+    .upload-dropzone:hover { background: #f1f5f9; border-color: var(--primary-student); }
+    .upload-dropzone.has-preview { padding: 16px; }
+ 
     #image-preview {
       display: none;
       width: 100%;
@@ -261,15 +200,10 @@
       border-radius: 6px;
       margin-bottom: 12px;
     }
-
-    .upload-dropzone.has-preview #image-preview {
-      display: block;
-    }
-
-    .upload-dropzone.has-preview .upload-icon-box {
-      display: none;
-    }
-
+ 
+    .upload-dropzone.has-preview #image-preview { display: block; }
+    .upload-dropzone.has-preview .upload-icon-box { display: none; }
+ 
     .upload-icon-box {
       width: 48px;
       height: 48px;
@@ -281,24 +215,12 @@
       justify-content: center;
       margin-bottom: 16px;
     }
-
-    .upload-dropzone h3 {
-      font-size: 18px;
-      font-weight: 400;
-      margin-bottom: 8px;
-    }
-
-    .upload-dropzone p {
-      font-size: 13px;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
-
-    .upload-actions {
-      display: flex;
-      gap: 16px;
-    }
-
+ 
+    .upload-dropzone h3 { font-size: 18px; font-weight: 400; margin-bottom: 8px; }
+    .upload-dropzone p { font-size: 13px; color: #64748b; margin-bottom: 16px; }
+ 
+    .upload-actions { display: flex; gap: 16px; }
+ 
     .btn-student-primary {
       background: var(--primary-student);
       color: white;
@@ -310,12 +232,9 @@
       cursor: pointer;
       text-decoration: none;
     }
-
-    .btn-student-primary:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-
+ 
+    .btn-student-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+ 
     .btn-student-ghost {
       background: transparent;
       color: #64748b;
@@ -325,7 +244,7 @@
       cursor: pointer;
       text-decoration: none;
     }
-
+ 
     .nav-back {
       font-size: 13px;
       color: #64748b;
@@ -336,16 +255,21 @@
       text-decoration: none;
       margin-bottom: 20px;
     }
-
-    .nav-back:hover {
-      color: #1a1a1a;
+ 
+    .nav-back:hover { color: #1a1a1a; }
+ 
+    /* Loading overlay */
+    .submit-loading {
+      display: none;
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 12px;
     }
   </style>
 </head>
 
 <body>
-  <div class="app-container" id="app-container">
-    <!-- ===== SIDEBAR ===== -->
+ <div class="app-container" id="app-container">
     <div class="sidebar">
       <div class="sidebar-logo">
         <img src="logo.png" alt="Labsarb Logo" style="height: 40px; width: auto; object-fit: contain;">
@@ -356,8 +280,7 @@
       </div>
       <nav class="sidebar-nav">
         <a class="nav-item active" href="student-dashboard.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="7" height="7"></rect>
             <rect x="14" y="3" width="7" height="7"></rect>
             <rect x="14" y="14" width="7" height="7"></rect>
@@ -366,16 +289,14 @@
           ส่งงาน (CS232)
         </a>
         <a class="nav-item" href="student-history.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
           </svg>
           สถานะภาพรวม
         </a>
         <a class="nav-item" href="https://courses.cs.tu.ac.th" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="20" x2="18" y2="10"></line>
             <line x1="12" y1="20" x2="12" y2="4"></line>
             <line x1="6" y1="20" x2="6" y2="14"></line>
@@ -384,39 +305,32 @@
         </a>
       </nav>
     </div>
-
-    <!-- ===== MAIN AREA ===== -->
+ 
     <div class="main-area">
-      <!-- Top User Menu -->
       <div class="top-user" id="profile-container">
         <div class="profile-trigger" onclick="toggleProfileCard()">
           <div class="avatar-circle">นศ</div>
           <span id="trigger-student-name">กำลังโหลด...</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round" style="width:16px;height:16px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;">
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </div>
-
         <div class="profile-card" id="profile-card">
-          <!-- Profile content injected by JS -->
           <div class="profile-card-header">
             <div class="avatar-circle large">นศ</div>
             <div class="profile-card-name" id="card-student-name">ชื่อ นามสกุล</div>
             <div class="profile-card-id" id="card-student-id">รหัสนักศึกษา: -</div>
           </div>
           <div class="profile-card-body">
-            <div class="info-row"><span class="info-label">อีเมล</span><span class="info-value"
-                id="card-student-email">-</span></div>
-            <div class="info-row"><span class="info-label">คณะ/สาขา</span><span class="info-value"
-                id="card-student-faculty">-</span></div>
+            <div class="info-row"><span class="info-label">อีเมล</span><span class="info-value" id="card-student-email">-</span></div>
+            <div class="info-row"><span class="info-label">คณะ/สาขา</span><span class="info-value" id="card-student-faculty">-</span></div>
           </div>
           <div class="profile-card-footer">
             <button class="btn-logout-full" onclick="doStudentLogout()">ออกจากระบบ</button>
           </div>
         </div>
       </div>
-
+ 
       <div class="content-scroll">
         <div class="screen active">
           <a class="nav-back" href="student-dashboard.html">
@@ -426,18 +340,16 @@
             </svg>
             กลับไปหน้ารายการการทดลอง
           </a>
-
+ 
           <div class="upload-container">
             <h1 class="page-title">อัปโหลดรูปภาพการทดลอง: <span id="upload-lab-name"></span></h1>
             <p class="page-desc">เลือกหรือลากและวางรูปภาพจากการทดลองล่าสุดของคุณเพื่อส่งงาน</p>
-
+ 
             <div class="upload-dropzone" onclick="document.getElementById('file-upload').click()">
-              <input type="file" id="file-upload" style="display:none;" accept="image/jpeg, image/png, image/tiff"
-                onchange="handleFileSelect(event)">
+              <input type="file" id="file-upload" style="display:none;" accept="image/jpeg, image/png, image/tiff" onchange="handleFileSelect(event)">
               <img id="image-preview" src="" alt="preview">
               <div class="upload-icon-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  style="width:24px;height:24px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px;height:24px;">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                   <polyline points="17 8 12 3 7 8"></polyline>
                   <line x1="12" y1="3" x2="12" y2="15"></line>
@@ -447,43 +359,55 @@
               <p>รองรับไฟล์ JPG, PNG ขนาดไม่เกิน 10MB</p>
               <button class="btn-student-outline" style="pointer-events:none;">เลือกไฟล์</button>
             </div>
-
+ 
             <div class="upload-actions">
               <button class="btn-student-primary" id="btn-submit-lab" onclick="submitLab()">ส่งรูปภาพ</button>
               <a class="btn-student-ghost" href="student-dashboard.html">ยกเลิก</a>
             </div>
+            <p class="submit-loading" id="submit-loading">⏳ กำลังประมวลผลรูปภาพ กรุณารอสักครู่...</p>
           </div>
         </div>
       </div>
     </div>
   </div>
-
+ 
   <script src="student-portal.js"></script>
   <script>
     checkStudentLogin();
-
+ 
     const urlParams = new URLSearchParams(window.location.search);
     const labId = urlParams.get('lab');
-
+ 
     if (labId) {
       document.getElementById('upload-lab-name').textContent = labId;
     }
-
+ 
     let selectedFile = null;
-
+ 
     function handleFileSelect(e) {
       if (e.target.files.length > 0) {
         selectedFile = e.target.files[0];
         document.getElementById('upload-text').textContent = selectedFile.name;
-
+ 
         const preview = document.getElementById('image-preview');
         const dropzone = document.querySelector('.upload-dropzone');
+        // แสดง preview ชั่วคราวด้วย createObjectURL (ใช้แค่แสดงผล ไม่ได้ save)
         preview.src = URL.createObjectURL(selectedFile);
         dropzone.classList.add('has-preview');
       }
     }
-
-    function submitLab() {
+ 
+    // แปลงไฟล์เป็น base64 เพื่อเก็บใน localStorage ได้ถาวร
+    function toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.onerror = () => reject(new Error('อ่านไฟล์ไม่สำเร็จ'));
+        reader.readAsDataURL(file);
+      });
+    }
+ 
+    async function submitLab() {
       if (!labId) {
         alert('ไม่พบรหัส Lab');
         return;
@@ -492,44 +416,49 @@
         alert('กรุณาเลือกไฟล์รูปภาพก่อนครับ');
         return;
       }
-
+ 
       const btn = document.getElementById('btn-submit-lab');
-      btn.textContent = "กำลังส่ง...";
+      const loadingMsg = document.getElementById('submit-loading');
+      btn.textContent = 'กำลังส่ง...';
       btn.disabled = true;
-
-      // Mock submitting delay
-      setTimeout(() => {
+      loadingMsg.style.display = 'block';
+ 
+      try {
+        // แปลงรูปเป็น base64 ก่อน save — ทำให้รูปอยู่ถาวรใน localStorage
+        const imageBase64 = await toBase64(selectedFile);
+ 
         const studentId = localStorage.getItem('labsarb_student');
         const subs = getSubmissions();
-
-        let subIndex = subs.findIndex(s => s.lab_id === labId && s.student_id === studentId);
-
-        const imageUrl = URL.createObjectURL(selectedFile);
-
+        const subIndex = subs.findIndex(s => s.lab_id === labId && s.student_id === studentId);
+ 
         if (subIndex !== -1) {
-          // Update existing
           subs[subIndex].status = 'pending';
-          subs[subIndex].image_url = imageUrl;
+          subs[subIndex].image_url = imageBase64;  // เก็บ base64 แทน blob URL
           subs[subIndex].detected_text = '-';
           subs[subIndex].missing_point = '';
         } else {
-          // Add new if not existed (but TA usually creates pending ones)
           const info = getStudentInfo();
           subs.push({
             student_id: studentId,
-            student_name: info.studentName,
+            student_name: info ? info.studentName : studentId,
             lab_id: labId,
             status: 'pending',
             score: 0,
             detected_text: '-',
-            image_url: imageUrl
+            image_url: imageBase64  // เก็บ base64 แทน blob URL
           });
         }
-
+ 
         saveSubmissions(subs);
         alert('ส่งงานสำเร็จ!');
         window.location.href = 'student-dashboard.html';
-      }, 1000);
+ 
+      } catch (err) {
+        alert('เกิดข้อผิดพลาด: ' + err.message);
+        btn.textContent = 'ส่งรูปภาพ';
+        btn.disabled = false;
+        loadingMsg.style.display = 'none';
+      }
     }
   </script>
 </body>
