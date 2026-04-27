@@ -344,7 +344,11 @@
           <div class="upload-container">
             <h1 class="page-title">อัปโหลดรูปภาพการทดลอง: <span id="upload-lab-name"></span></h1>
             <p class="page-desc">เลือกหรือลากและวางรูปภาพจากการทดลองล่าสุดของคุณเพื่อส่งงาน</p>
- 
+            <div id="lab-desc-box" style="display:none; background:#f8faff; border-radius:8px; padding:16px 20px; margin-bottom:24px;">
+              <p style="font-size:11px; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; margin:0 0 8px 0;">คำอธิบาย / เกณฑ์การประเมิน</p>
+              <p id="lab-desc-text" style="font-size:14px; color:#334155; line-height:1.6; margin:0;"></p>
+            </div>
+
             <div class="upload-dropzone" onclick="document.getElementById('file-upload').click()">
               <input type="file" id="file-upload" style="display:none;" accept="image/jpeg, image/png, image/tiff" onchange="handleFileSelect(event)">
               <img id="image-preview" src="" alt="preview">
@@ -380,6 +384,13 @@
  
     if (labId) {
       document.getElementById('upload-lab-name').textContent = labId;
+
+      const labs = getLabs();
+      const labInfo = labs[labId];
+      if (labInfo && labInfo.desc && labInfo.desc !== 'ไม่มีคำอธิบาย') {
+        document.getElementById('lab-desc-text').textContent = labInfo.desc;
+        document.getElementById('lab-desc-box').style.display = 'block';
+      }
     }
  
     let selectedFile = null;

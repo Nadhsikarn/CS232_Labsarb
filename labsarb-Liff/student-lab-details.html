@@ -147,14 +147,19 @@
           </div>
           <p class="lab-meta">ส่งเมื่อเร็วๆ นี้ (ประเมินโดยระบบ Labsarb)</p>
 
-          <div class="feedback-box" id="feedback-box">
-            <h4 id="feedback-title">ข้อเสนอแนะ/ผลการตรวจ</h4>
-            <p id="lab-detail-feedback">กำลังโหลดข้อมูล...</p>
+          <div id="lab-desc-box" class="feedback-box" style="display:none;">
+            <h4>คำอธิบาย / เกณฑ์การประเมิน</h4>
+            <p id="lab-desc-text"></p>
           </div>
 
           <div class="artifacts-section">
             <h3>ผลงานที่ส่ง</h3>
             <img id="lab-detail-image" src="" alt="Artifact" class="artifact-img">
+          </div>
+
+          <div class="feedback-box" id="feedback-box" style="margin-top:24px;">
+            <h4 id="feedback-title">ข้อเสนอแนะ/ผลการตรวจ</h4>
+            <p id="lab-detail-feedback">กำลังโหลดข้อมูล...</p>
           </div>
         </div>
       </div>
@@ -175,6 +180,13 @@
       }
       
       document.getElementById('lab-detail-title').textContent = labId;
+
+      const labs = getLabs();
+      const labInfo = labs[labId];
+      if (labInfo && labInfo.desc && labInfo.desc !== 'ไม่มีคำอธิบาย') {
+        document.getElementById('lab-desc-text').textContent = labInfo.desc;
+        document.getElementById('lab-desc-box').style.display = 'block';
+      }
 
       const studentId = localStorage.getItem('labsarb_student');
       const subs = getSubmissions();
