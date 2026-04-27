@@ -260,15 +260,22 @@
       }
 
       students.forEach((s, index) => {
+        // --- แก้ตั้งแต่ตรงนี้ โดย ไบโอม ---
+        const isPending = s.status === 'pending';
+        const displayName = isPending ? '<span style="color:#fbbf24; font-style:italic;">รอการตอบรับจากนักศึกษา</span>' : s.name;
+        const displayEmail = isPending ? '<span style="color:#fbbf24; font-style:italic;">รอการตอบรับ</span>' : (s.email || '-');
+        const badge = isPending ? '<span style="background:#fef3c7; color:#d97706; padding:2px 8px; border-radius:12px; font-size:10px; margin-left:8px;">Pending</span>' : '<span style="background:#dcfce7; color:#16a34a; padding:2px 8px; border-radius:12px; font-size:10px; margin-left:8px;">Enrolled</span>';
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td style="font-weight:500;">${s.id}</td>
-          <td>${s.name}</td>
-          <td style="color:#64748b;">${s.email || '-'}</td>
+          <td style="font-weight:500;">${s.id} ${badge}</td>
+          <td>${displayName}</td>
+          <td style="color:#64748b;">${displayEmail}</td>
           <td style="text-align:right;">
             <button class="btn-danger" onclick="removeStudent(${index})">ลบ</button>
           </td>
         `;
+        // --- ถึงตรงนี้ โดย ไบโอม ---
         tbody.appendChild(tr);
       });
     }
@@ -312,11 +319,14 @@
 
         if (result.success && result.data) {
           const studentData = result.data;
+          // --- แก้ตั้งแต่ตรงนี้ โดย ไบโอม ---
           const newStudent = {
             id: studentId,
             name: studentData.name || studentData.displayname_th || 'ไม่ทราบชื่อ',
-            email: studentData.email || (studentId + '@dome.tu.ac.th')
+            email: studentData.email || (studentId + '@dome.tu.ac.th'),
+            status: 'pending' // กำหนดสถานะเป็น pending ตอนแรกเพิ่ม
           };
+          // --- ถึงตรงนี้ โดย ไบโอม ---
 
           students.push(newStudent);
           saveEnrolledStudents(students);
