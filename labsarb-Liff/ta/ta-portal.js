@@ -19,8 +19,10 @@ window.onload = () => {
   if (storedUser) {
     document.getElementById('app-container').style.display = 'flex';
     document.getElementById('dropdown-username').textContent = storedUser;
-    updateCourseDropdown();
-    goTo('courses');
+    if (document.getElementById('screen-courses')) {
+      updateCourseDropdown();
+      goTo('courses');
+    }
   } else {
     window.location.href = '../login.html';
   }
