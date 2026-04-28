@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="th">
 
 <head>
@@ -167,7 +167,7 @@
 
   <div class="login-wrapper">
     <div class="login-logo">
-      <img src="logo.png" alt="Labsarb Logo">
+      <img src="assets/logo.png" alt="Labsarb Logo">
     </div>
     <div class="login-header">
       <h2>ยินดีต้อนรับเข้าสู่ Labsarb</h2>
@@ -235,7 +235,7 @@
       // Mock Authentication
       if (user === 'admin' && pass === 'password' || (user.length > 0 && pass.length > 0)) {
         localStorage.setItem('labsarb_admin', 'true');
-        window.location.href = 'ta-dashboard.html';
+        window.location.href = 'ta/ta-dashboard.html';
       } else {
         status.textContent = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
         status.style.display = 'block';
@@ -285,7 +285,7 @@
           if (result.data) {
             localStorage.setItem('labsarb_student_info', JSON.stringify(result.data));
           }
-          window.location.href = 'student-dashboard.html';
+          window.location.href = 'student/student-dashboard.html';
         } else {
           alert('เกิดข้อผิดพลาด: ' + result.message);
           status.innerText = 'ข้อมูลไม่ถูกต้อง กรุณาลองใหม่';
@@ -302,7 +302,7 @@
 
     // Check if we are already logged in as TA and bypass
     if (localStorage.getItem('labsarb_admin')) {
-      // window.location.href = 'ta-dashboard.html';
+      // window.location.href = 'ta/ta-dashboard.html';
     }
   </script>
 </body>

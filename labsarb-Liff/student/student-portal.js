@@ -1,4 +1,4 @@
-// student-portal.js
+﻿// student-portal.js
 
 function getStudentInfo() {
   const studentId = localStorage.getItem('labsarb_student');
@@ -33,7 +33,7 @@ function getStudentInfo() {
 function checkStudentLogin() {
   const info = getStudentInfo();
   if (!info) {
-    window.location.href = 'login.html';
+    window.location.href = '../login.html';
     return;
   }
   
@@ -71,7 +71,7 @@ document.addEventListener('click', (e) => {
 function doStudentLogout() {
   localStorage.removeItem('labsarb_student');
   localStorage.removeItem('labsarb_student_info');
-  window.location.href = 'login.html';
+  window.location.href = '../login.html';
 }
 
 function getLabs() {

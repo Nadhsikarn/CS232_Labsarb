@@ -1,13 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="th">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Labsarb TA - Create Lab</title>
+  <title>Labsarb TA - Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="portal-style.css">
-  <link rel="stylesheet" href="ta-create-lab-style.css">
+  
+  <link rel="stylesheet" href="../portal-style.css">
+  <link rel="stylesheet" href="ta-dashboard-style.css">
 </head>
 
 <body>
@@ -31,7 +32,7 @@
         </button>
       </div>
       <nav class="sidebar-nav">
-        <a class="nav-item" href="ta-dashboard.html">
+        <a class="nav-item active" href="ta-dashboard.html">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round">
             <rect x="3" y="3" width="7" height="7"></rect>
@@ -102,68 +103,22 @@
 
       <div class="content-scroll">
         <div class="screen active">
-          <div class="page-header">
-            <h1>กำหนดการทดลองใหม่ (Configure New Lab)</h1>
-            <p>กำหนดพารามิเตอร์และอัปโหลดภาพเฉลยต้นแบบสำหรับการตรวจให้คะแนนอัตโนมัติ</p>
-          </div>
-
-          <div class="config-layout">
-            <div class="config-form">
-              <div class="form-group">
-                <label>ชื่อการทดลอง (Lab Nomenclature)</label>
-                <input type="text" id="config-lab-name"
-                  placeholder="เช่น การทดลองที่ 4: โครงสร้างต้นไม้ทวิภาค (Binary Trees)">
-              </div>
-              <div class="form-group" style="display:flex;gap:16px;">
-                <div style="flex:1">
-                  <label>กำหนดส่ง (Submission Deadline)</label>
-                  <input type="date" id="config-deadline-date">
-                </div>
-                <div style="flex:1">
-                  <label>เวลา (Time)</label>
-                  <input type="time" id="config-deadline-time">
-                </div>
-              </div>
-              <div class="form-group">
-                <label>เกณฑ์การประเมินและคำอธิบาย (Evaluation Parameters & Description)</label>
-                <textarea id="config-desc"
-                  placeholder="ระบุบริบทหรือเกณฑ์การให้คะแนนเฉพาะสำหรับการทดลองนี้..."></textarea>
-              </div>
-            </div>
-
-            <div class="config-upload">
-              <div class="upload-prompt-content" id="upload-prompt"
-                onclick="document.getElementById('config-file').click()"
-                style="width:100%; height:100%; cursor:pointer;">
-                <input type="file" id="config-file" accept="image/png, image/jpeg" onchange="handleFileSelect(event)" style="display:none;">
-                <div class="upload-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="17 8 12 3 7 8"></polyline>
-                    <line x1="12" y1="3" x2="12" y2="15"></line>
-                  </svg>
-                </div>
-                <h3>ภาพเฉลยต้นแบบ<br>Ground Truth Template</h3>
-                <p style="margin-top:8px; margin-bottom:16px;">ลากและวางภาพผลลัพธ์ต้นแบบที่ระบบ AWS จะใช้สำหรับตรวจให้คะแนนอัตโนมัติ หรือคลิกเพื่อค้นหาไฟล์</p>
-                <button class="btn-outline" style="pointer-events:none;">เลือกไฟล์ (Select File)</button>
-                <div style="margin-top:12px; font-size:12px; color:var(--text-light);">รองรับ: PNG, JPEG (ขนาดไม่เกิน 10MB)</div>
-              </div>
-
-              <img id="image-preview">
+          <div class="page-header-action">
+            <div class="page-header" style="margin-bottom:0;">
+              <div class="page-header-small" id="dashboard-course-code">CS232</div>
+              <h1 id="dashboard-course-name">ภาพรวมรายวิชา</h1>
+              <p>ติดตามความคืบหน้าการส่งงานของนักศึกษาในแต่ละการทดลอง (Lab) ที่เปิดอยู่</p>
             </div>
           </div>
-
-          <div class="form-actions">
-            <button class="btn-ghost" onclick="window.location.href='ta-dashboard.html'">Cancel</button>
-            <button class="btn-primary" onclick="initLab()">Create Lab</button>
-          </div>
+          <div class="dashboard-grid" id="dashboard-grid">
+            </div>
+          <p class="dashboard-note">ข้อมูลถูกอัปเดตอัตโนมัติจากการตรวจให้คะแนน</p>
         </div>
       </div>
     </div>
   </div>
 
   <script src="ta-portal.js"></script>
-  <script src="ta-create-lab-logic.js"></script>
+  <script src="ta-dashboard-logic.js"></script>
 </body>
 </html>

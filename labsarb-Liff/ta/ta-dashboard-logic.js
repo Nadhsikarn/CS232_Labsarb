@@ -1,9 +1,9 @@
-/* ta-dashboard-logic.js */
+﻿/* ta-dashboard-logic.js */
 
 window.onload = async () => {
     const storedUser = localStorage.getItem('labsarb_admin');
     if (!storedUser) {
-        window.location.href = 'login.html';
+        window.location.href = '../login.html';
         return;
     }
     const userEl = document.getElementById('dropdown-username');

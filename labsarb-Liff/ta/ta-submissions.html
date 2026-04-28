@@ -1,16 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="th">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Labsarb TA - Submission Detail</title>
-  
+  <title>Labsarb TA - Submissions</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="portal-style.css">
+  <link rel="stylesheet" href="../portal-style.css">
   
-  <link rel="stylesheet" href="ta-submission-detail-style.css">
+  <link rel="stylesheet" href="ta-submissions-style.css">
 </head>
 
 <body>
@@ -25,8 +24,7 @@
       </div>
       <div class="sidebar-action">
         <button class="btn-primary" onclick="window.location.href='ta-create-lab.html'">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
@@ -35,8 +33,7 @@
       </div>
       <nav class="sidebar-nav">
         <a class="nav-item" href="ta-dashboard.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="7" height="7"></rect>
             <rect x="14" y="3" width="7" height="7"></rect>
             <rect x="14" y="14" width="7" height="7"></rect>
@@ -45,8 +42,7 @@
           ภาพรวม (Dashboard)
         </a>
         <a class="nav-item active" href="ta-submissions.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="8" y1="6" x2="21" y2="6"></line>
             <line x1="8" y1="12" x2="21" y2="12"></line>
             <line x1="8" y1="18" x2="21" y2="18"></line>
@@ -57,8 +53,7 @@
           การส่งงาน
         </a>
         <a class="nav-item" href="ta-students.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
             <circle cx="9" cy="7" r="4"></circle>
             <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -67,8 +62,7 @@
           รายชื่อนักศึกษา
         </a>
         <a class="nav-item" href="https://courses.cs.tu.ac.th/" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
             <polyline points="15 3 21 3 21 9"></polyline>
             <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -77,14 +71,14 @@
         </a>
       </nav>
     </div>
+ 
 
     <div class="main-area">
       <div class="topbar">
         <div class="topbar-title">Labsarb TA Manager</div>
         <div class="topbar-actions">
           <div class="profile-circle" onclick="toggleProfileDropdown()" title="โปรไฟล์">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" style="width:16px;height:16px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
@@ -97,69 +91,55 @@
                 <p>Teacher Assistant</p>
               </div>
             </div>
-            <button class="btn-outline" onclick="doLogout()"
-              style="width:100%; justify-content:center;">ออกจากระบบ</button>
+            <button class="btn-outline" onclick="doLogout()" style="width:100%; justify-content:center;">ออกจากระบบ</button>
           </div>
         </div>
       </div>
+ 
 
       <div class="content-scroll">
         <div class="screen active">
           <div class="page-header">
             <div class="breadcrumb">
-              <span class="icon-action" id="btn-back">
+              <span class="icon-action" onclick="window.location.href='ta-dashboard.html'">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <line x1="19" y1="12" x2="5" y2="12"></line>
                   <polyline points="12 19 5 12 12 5"></polyline>
                 </svg>
-                <span>กลับหน้ารายการส่งงาน</span>
+                <span>ย้อนกลับไปหน้าแดชบอร์ด</span>
               </span>
-              <span style="margin:0 4px">/</span> <span id="bread-course">CS232</span> <span
-                style="margin:0 4px">/</span> <span class="active">รายละเอียดการส่งงาน</span>
             </div>
-            <h1 id="detail-lab-name">Lab: -</h1>
-            <p id="detail-student-name">ส่งโดยนักศึกษารหัส: -</p>
+            <h1 id="sub-list-title">รายการส่งงานทั้งหมด</h1>
+            <p>ตรวจสอบสถานะและรายละเอียดผลการตรวจของนักศึกษาแต่ละคน</p>
           </div>
-          
-          <div class="submission-detail" id="submission-detail-container" style="display:none;">
-            <div class="submission-image">
-              <img id="detail-img" src="" alt="ภาพผลงานที่ส่ง">
-            </div>
-            <div class="submission-context">
-              <h3>บริบทการวิเคราะห์</h3>
-              <div class="context-row">
-                <span class="context-label">เวลาที่ส่ง</span>
-                <span class="context-value">ไม่ระบุ</span>
-              </div>
-              <div class="context-row">
-                <span class="context-label">รูปแบบไฟล์</span>
-                <span class="context-value">ไม่ระบุ</span>
-              </div>
-              <div class="system-check" id="detail-system-check">
-                <div class="check-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                  </svg>
-                </div>
-                <div class="check-content">
-                  <h4 id="detail-status-title">ตรวจสอบระบบ</h4>
-                  <p id="detail-status-desc">-</p>
-                </div>
-              </div>
+ 
+          <div class="filter-bar">
+            <span class="filter-label">กรองตาม Lab:</span>
+            <div class="filter-dropdown-wrap">
+              <select class="filter-select" id="lab-filter-select" onchange="onFilterChange(this.value)">
+              </select>
             </div>
           </div>
-          
-          <div id="error-msg" style="text-align:center; padding: 40px; color:var(--text-muted); display:none;">
-            ไม่พบข้อมูลการส่งงาน
-          </div>
+ 
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>รหัสนักศึกษา</th>
+                <th>รหัสการทดลอง (Lab)</th>
+                <th>สถานะ</th>
+                <th>คะแนน</th>
+                <th>ข้อความที่ระบบตรวจพบ</th>
+              </tr>
+            </thead>
+            <tbody id="submissions-tbody"></tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
 
   <script src="ta-portal.js"></script>
-  <script src="ta-submission-detail-logic.js"></script>
+  <script src="ta-submissions-logic.js"></script>
 </body>
+
 </html>

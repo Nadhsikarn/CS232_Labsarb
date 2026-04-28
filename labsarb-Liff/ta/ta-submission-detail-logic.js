@@ -1,4 +1,4 @@
-/* ta-submission-detail-logic.js */
+﻿/* ta-submission-detail-logic.js */
 
 // ตรวจสอบสถานะการเข้าสู่ระบบ
 if (typeof checkLogin === 'function') {

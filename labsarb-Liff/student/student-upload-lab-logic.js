@@ -1,4 +1,4 @@
-let selectedFile = null;
+﻿let selectedFile = null;
 let _uploadLabId = null;
 
 document.addEventListener('DOMContentLoaded', async () => {

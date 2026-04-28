@@ -1,4 +1,4 @@
-/* ta-submissions-logic.js */
+﻿/* ta-submissions-logic.js */
 
 const urlParams = new URLSearchParams(window.location.search);
 currentLabName = urlParams.get('lab'); // ใช้ตัวแปร let จาก ta-portal.js
@@ -95,7 +95,7 @@ async function loadSubmissions() {
 window.onload = async () => {
     const storedUser = localStorage.getItem('labsarb_admin');
     if (!storedUser) {
-        window.location.href = 'login.html';
+        window.location.href = '../login.html';
         return;
     }
     const userEl = document.getElementById('dropdown-username');

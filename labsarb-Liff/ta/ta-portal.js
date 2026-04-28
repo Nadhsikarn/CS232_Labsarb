@@ -1,4 +1,4 @@
-const API_URL = "https://efmsyxbc9j.execute-api.us-east-1.amazonaws.com";
+﻿const API_URL = "https://efmsyxbc9j.execute-api.us-east-1.amazonaws.com";
 
 // ================= STATE =================
 let coursesList = [
@@ -22,13 +22,13 @@ window.onload = () => {
     updateCourseDropdown();
     goTo('courses');
   } else {
-    window.location.href = 'login.html';
+    window.location.href = '../login.html';
   }
 };
 
 function doLogout() {
   localStorage.removeItem('labsarb_admin');
-  window.location.href = 'login.html';
+  window.location.href = '../login.html';
 }
 
 function toggleProfileDropdown() {
