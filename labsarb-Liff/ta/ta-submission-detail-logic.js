@@ -99,6 +99,16 @@ async function loadDetail() {
         });
     }
 
+    // แสดง system log จาก DynamoDB
+    const logsBox = document.getElementById('cloudwatch-logs-box');
+    const logsList = document.getElementById('cloudwatch-logs-list');
+    if (logsBox && logsList && item.system_log) {
+        logsBox.style.display = 'block';
+        const div = document.createElement('div');
+        div.textContent = item.system_log;
+        logsList.appendChild(div);
+    }
+
   } catch (err) {
     console.error("Submission Detail Error:", err);
     document.getElementById('error-msg').style.display = 'block';

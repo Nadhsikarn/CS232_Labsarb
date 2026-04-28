@@ -1,6 +1,7 @@
 import boto3
 import json
 from decimal import Decimal
+from datetime import datetime, timezone
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('LabsarbResults')
@@ -29,7 +30,8 @@ def lambda_handler(event, context):
         image_url = f"https://{bucket}.s3.amazonaws.com/{student_path}"
 
         check_db = table.get_item(Key={'student_id': s_id, 'lab_id': l_id})
-        if 'Item' in check_db:
+        existing = check_db.get('Item', {})
+        if existing and existing.get('status') in ('pass', 'fail', 'rejected'):
             print(f"StudentId:{s_id} Had already submitted Assignment:{l_id}.")
             return {
                 'statusCode': 200,
@@ -73,15 +75,28 @@ def lambda_handler(event, context):
                 found_name = True
                 break
 
+        now = datetime.now(timezone.utc).isoformat()
+
         if not found_name:
             print(f">>> REJECTED: Name mismatch '{student_name}'")
+            table.put_item(
+                Item={
+                    'student_id': s_id,
+                    'lab_id': l_id,
+                    'status': 'rejected',
+                    'score': Decimal('0'),
+                    'image_url': image_url,
+                    'updated_at': now,
+                    'system_log': f"StudentId:{s_id} | Lab:{l_id} | REJECTED: ชื่อไม่ตรงกับภาพที่ส่ง"
+                }
+            )
             return {
-                'statusCode': 200, 
+                'statusCode': 200,
                 'body': json.dumps({'result': 'rejected', 'reason': 'Identity mismatch'})
             }
 
         student_words_lower = set([w.lower() for w in student_words])
-        
+
         matches = template_words.intersection(student_words_lower)
         missing = template_words.difference(student_words_lower)
         extra = student_words_lower.difference(template_words)
@@ -93,17 +108,22 @@ def lambda_handler(event, context):
         print(f"-------------------------------------------")
 
         score = (len(matches) / len(template_words)) * 100 if template_words else 0
-        
+
         status = "pass" if score >= 85 else "fail"
-        if status == "pass":
-            table.put_item(
-                Item={
-                    'student_id': s_id,
-                    'lab_id': l_id,
-                    'status': status,
-                    'score': Decimal(str(round(score, 2)))
-                }
-            )
+        missing_list = sorted(list(missing))[:5]
+        system_log = f"StudentId:{s_id} | Lab:{l_id} | Score:{score:.2f}% | Status:{status} | Missing:{missing_list}"
+
+        table.put_item(
+            Item={
+                'student_id': s_id,
+                'lab_id': l_id,
+                'status': status,
+                'score': Decimal(str(round(score, 2))),
+                'image_url': image_url,
+                'updated_at': now,
+                'system_log': system_log
+            }
+        )
 
         print(f"ID:{s_id} | Score:{score:.2f}% | Status:{status}")
         

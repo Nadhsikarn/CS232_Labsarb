@@ -112,6 +112,14 @@ async function loadDetail() {
             });
         }
 
+        // แสดง system log จากระบบ
+        const logBox = document.getElementById('system-log-box');
+        const logContent = document.getElementById('system-log-content');
+        if (logBox && logContent && mySub.system_log) {
+            logBox.style.display = 'block';
+            logContent.textContent = mySub.system_log;
+        }
+
     } catch (error) {
         console.error("Error loading detail:", error);
         const feedbackP = document.getElementById('lab-detail-feedback');
