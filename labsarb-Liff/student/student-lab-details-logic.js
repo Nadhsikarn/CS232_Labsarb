@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Script สำหรับหน้ารายละเอียดผลงาน (Lab Details)
  */
 
@@ -94,6 +94,22 @@ async function loadDetail() {
                 submitBtn.textContent = 'ส่งงานใหม่';
                 submitBtn.style.display = 'inline-block';
             }
+        }
+
+        // แสดงผลการวิเคราะห์แบบ Bullet Points
+        const analysisBox = document.getElementById('analysis-results-box');
+        const analysisList = document.getElementById('analysis-list');
+        if (analysisBox && analysisList && mySub.analysis_results) {
+            analysisBox.style.display = 'block';
+            analysisList.innerHTML = '';
+            const results = mySub.analysis_results.split('\n');
+            results.forEach(text => {
+                if (text.trim()) {
+                    const li = document.createElement('li');
+                    li.textContent = text;
+                    analysisList.appendChild(li);
+                }
+            });
         }
 
     } catch (error) {

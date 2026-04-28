@@ -1,4 +1,4 @@
-﻿function handleFileSelect(e) {
+function handleFileSelect(e) {
     const file = e.target.files[0];
     if (!file) return;
 

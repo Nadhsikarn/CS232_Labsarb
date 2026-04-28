@@ -1,8 +1,8 @@
-﻿/* ta-submission-detail-logic.js */
+/* ta-submission-detail-logic.js */
 
 // ตรวจสอบสถานะการเข้าสู่ระบบ
 if (typeof checkLogin === 'function') {
-    checkLogin();
+  checkLogin();
 }
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -12,9 +12,9 @@ const studentId = urlParams.get('student');
 // ตั้งค่าปุ่มย้อนกลับ
 const btnBack = document.getElementById('btn-back');
 if (btnBack) {
-    btnBack.onclick = () => {
-      window.location.href = `ta-submissions.html?lab=${encodeURIComponent(labId)}`;
-    };
+  btnBack.onclick = () => {
+    window.location.href = `ta-submissions.html?lab=${encodeURIComponent(labId)}`;
+  };
 }
 
 /**
@@ -22,8 +22,8 @@ if (btnBack) {
  */
 async function loadDetail() {
   if (!labId || !studentId) {
-      document.getElementById('error-msg').style.display = 'block';
-      return;
+    document.getElementById('error-msg').style.display = 'block';
+    return;
   }
 
   // อัปเดตหัวข้อเบื้องต้น
@@ -49,21 +49,54 @@ async function loadDetail() {
     // แสดงข้อมูลใน UI
     document.getElementById('submission-detail-container').style.display = 'flex';
     document.getElementById('error-msg').style.display = 'none';
-    
+
     // ตั้งค่ารูปภาพ
     const detailImg = document.getElementById('detail-img');
     if (detailImg) detailImg.src = item.image_url;
 
-    // อัปเดตสถานะระบบ
+    // อัปเดตข้อมูลบริบท
+    const timeEl = document.getElementById('detail-time');
+    if (timeEl && item.updated_at) {
+      const date = new Date(item.updated_at);
+      timeEl.textContent = date.toLocaleString('th-TH');
+    }
+
+    const formatEl = document.getElementById('detail-format');
+    if (formatEl && item.image_url) {
+      const ext = item.image_url.split('.').pop().toUpperCase();
+      formatEl.textContent = `${ext} Image`;
+    }
+
+    // อัปเดตสถานะและบทวิเคราะห์
     const statusDesc = document.getElementById('detail-status-desc');
+    const statusTitle = document.getElementById('detail-status-title');
     if (statusDesc) {
-        if (item.status === 'pass') {
-            statusDesc.textContent = "ระบบตรวจสอบแล้ว: ผ่านเกณฑ์การให้คะแนนอัตโนมัติ";
-        } else if (item.status === 'fail') {
-            statusDesc.textContent = "ระบบตรวจสอบแล้ว: ไม่ผ่านเกณฑ์ (กรุณาตรวจสอบข้อเสนอแนะ)";
-        } else {
-            statusDesc.textContent = "สถานะ: รอการตรวจสอบจากระบบหรือผู้สอน";
-        }
+      if (item.status === 'pass') {
+        if (statusTitle) statusTitle.textContent = "ตรวจสอบระบบ: ผ่านเกณฑ์";
+        statusDesc.textContent = item.feedback || "ระบบตรวจสอบแล้ว: ผ่านเกณฑ์การให้คะแนนอัตโนมัติ";
+      } else if (item.status === 'fail') {
+        if (statusTitle) statusTitle.textContent = "ตรวจสอบระบบ: ไม่ผ่านเกณฑ์";
+        statusDesc.textContent = item.feedback || "ระบบตรวจสอบแล้ว: ไม่ผ่านเกณฑ์ (กรุณาตรวจสอบข้อเสนอแนะ)";
+      } else {
+        if (statusTitle) statusTitle.textContent = "ตรวจสอบระบบ: กำลังดำเนินการ";
+        statusDesc.textContent = item.feedback || "สถานะ: รอการตรวจสอบจากระบบหรือผู้สอน";
+      }
+    }
+
+    // แสดงผลการวิเคราะห์แบบ Bullet Points
+    const analysisBox = document.getElementById('analysis-results-box');
+    const analysisList = document.getElementById('analysis-list');
+    if (analysisBox && analysisList && item.analysis_results) {
+        analysisBox.style.display = 'block';
+        analysisList.innerHTML = '';
+        const results = item.analysis_results.split('\n');
+        results.forEach(text => {
+            if (text.trim()) {
+                const li = document.createElement('li');
+                li.textContent = text;
+                analysisList.appendChild(li);
+            }
+        });
     }
 
   } catch (err) {
