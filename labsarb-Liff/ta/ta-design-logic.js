@@ -12,7 +12,7 @@ const nodeInfo = {
         title: "Login as Teacher",
         type: "Process",
         desc: "เข้าสู่ระบบด้วยบัญชี TU ผ่าน TU API พร้อมผูกกับ LINE User ID เพื่อยืนยันตัวตน",
-        hint: "🔗 เชื่อมต่อกับ labsarb-tu-auth (Python Lambda)"
+        hint: "เชื่อมต่อกับ labsarb-tu-auth (Python Lambda)"
     },
     selectMenu: {
         title: "Select Menu",
@@ -24,19 +24,19 @@ const nodeInfo = {
         title: "Select LAB (Dashboard)",
         type: "Process — Path A",
         desc: "เลือก Lab ที่ต้องการดูผลการส่งงานของนักศึกษา เช่น LAB_01, LAB_02 เป็นต้น",
-        hint: "📊 ข้อมูลดึงจาก DynamoDB ตาราง LabsarbResults"
+        hint: "ข้อมูลดึงจาก DynamoDB ตาราง LabsarbResults"
     },
     showDashboard: {
         title: "Show Dashboard",
         type: "Process — Path A",
         desc: "แสดง Dashboard สรุปผลการส่งงาน — จำนวนผ่าน/ไม่ผ่าน/รอตรวจ พร้อมแสดงสถานะของนักศึกษาแต่ละคน",
-        hint: "🔗 เรียกใช้ GET API จาก labsarb-data-api"
+        hint: "เรียกใช้ GET API จาก labsarb-data-api"
     },
     viewDetail: {
         title: "View Detail",
         type: "Process — Path A",
         desc: "ดูรายละเอียดผลตรวจของนักศึกษาแต่ละคน: detected_text, status, missing_point, image_url",
-        hint: "🤖 ผลมาจาก AWS Rekognition (labsarb-ai-engine)"
+        hint: "ผลมาจาก AWS Rekognition (labsarb-ai-engine)"
     },
     endA: {
         title: "End",
@@ -54,7 +54,7 @@ const nodeInfo = {
         title: "Add LAB",
         type: "Process — Path B",
         desc: "สร้าง Lab ใหม่ในระบบ กำหนดชื่อ Lab และรายละเอียดเบื้องต้น",
-        hint: "🔗 เรียกใช้ POST API (/edit-lab) จาก labsarb-data-api"
+        hint: "เรียกใช้ POST API (/edit-lab) จาก labsarb-data-api"
     },
     selectLabB: {
         title: "Select LAB (Editor)",
@@ -66,19 +66,19 @@ const nodeInfo = {
         title: "Add Task",
         type: "Process — Path B",
         desc: "เพิ่มโจทย์/ข้อกำหนดใหม่ในแต่ละ Lab ที่ระบบ AI จะใช้เป็นเกณฑ์ในการตรวจสอบ",
-        hint: "📝 เช่น \"เขียน Hello World ด้วย Java\""
+        hint: "เช่น \"เขียน Hello World ด้วย Java\""
     },
     addExamplePhoto: {
         title: "Add Example Photo",
         type: "Process — Path B",
         desc: "อัปโหลดภาพตัวอย่าง (ภาพเฉลย) เข้า S3 Bucket เพื่อใช้เป็น reference สำหรับ AWS Rekognition",
-        hint: "☁️ Upload ไปยัง AWS S3"
+        hint: "Upload ไปยัง AWS S3"
     },
     isFinish: {
         title: "Is finish?",
         type: "Decision — Path B",
         desc: "ตรวจสอบว่าเพิ่ม Task และ Example Photo ครบทุก Task แล้วหรือยัง",
-        hint: "🔄 วนซ้ำได้จนกว่าจะครบ"
+        hint: "วนซ้ำได้จนกว่าจะครบ"
     },
     endB: {
         title: "End",

@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Labsarb TA - Submission Detail</title>
-  
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+
   <link rel="stylesheet" href="../portal-style.css">
-  
+
   <link rel="stylesheet" href="ta-submission-detail-style.css">
 </head>
 
@@ -120,16 +120,17 @@
             <h1 id="detail-lab-name">Lab: -</h1>
             <p id="detail-student-name">ส่งโดยนักศึกษารหัส: -</p>
           </div>
-          
+
           <div class="submission-detail" id="submission-detail-container" style="display:none;">
             <div class="submission-image">
               <img id="detail-img" src="" alt="ภาพผลงานที่ส่ง">
             </div>
             <div class="submission-context">
               <h3>บริบทการวิเคราะห์</h3>
-              <div class="context-row">
-                <span class="context-label">เวลาที่ส่ง</span>
-                <span class="context-value" id="detail-time">ไม่ระบุ</span>
+
+              <div id="detail-score-section" style="display:none; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid #f1f5f9;">
+                <label style="font-size:11px; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:4px;">คะแนนที่ได้</label>
+                <p id="detail-score" style="font-size:32px; font-weight:800; color:#0ea5e9; margin:0;">-</p>
               </div>
               <div class="context-row">
                 <span class="context-label">รูปแบบไฟล์</span>
@@ -149,18 +150,20 @@
                 </div>
               </div>
               <div class="analysis-results-box" id="analysis-results-box" style="margin-top: 16px; display: none;">
-                <h4 style="margin-bottom: 8px; font-size: 14px; color: #1e293b;">📋 ผลการวิเคราะห์ (Analysis Results)</h4>
-                <ul id="analysis-list" style="margin: 0; padding-left: 20px; font-size: 13px; color: #475569; line-height: 1.6;">
+                <h4 style="margin-bottom: 8px; font-size: 14px; color: #1e293b;">ผลการวิเคราะห์ (Analysis Results)</h4>
+                <ul id="analysis-list"
+                  style="margin: 0; padding-left: 20px; font-size: 13px; color: #475569; line-height: 1.6;">
                 </ul>
               </div>
               <div id="cloudwatch-logs-box" style="margin-top: 16px; display: none;">
                 <h4 style="margin-bottom: 8px; font-size: 14px; color: #1e293b;">ประวัติ Log จากระบบ</h4>
-                <div id="cloudwatch-logs-list" style="font-size: 12px; color: #475569; font-family: monospace; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; line-height: 1.7; word-break: break-all;">
+                <div id="cloudwatch-logs-list"
+                  style="font-size: 12px; color: #475569; font-family: monospace; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; line-height: 1.7; word-break: break-all;">
                 </div>
               </div>
             </div>
           </div>
-          
+
           <div id="error-msg" style="text-align:center; padding: 40px; color:var(--text-muted); display:none;">
             ไม่พบข้อมูลการส่งงาน
           </div>
@@ -172,4 +175,5 @@
   <script src="ta-portal.js"></script>
   <script src="ta-submission-detail-logic.js"></script>
 </body>
+
 </html>

@@ -1,93 +1,121 @@
 ﻿<!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Labsarb — TA Workflow Design</title>
     <meta name="description" content="TA Workflow Design for Labsarb - ระบบตรวจงาน Lab อัตโนมัติ">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="ta-design-style.css">
 </head>
+
 <body>
 
-<header>
-    <h1>Labsarb — TA Workflow Design</h1>
-    <p>ระบบตรวจงาน Lab อัตโนมัติผ่าน LINE OA + AWS Rekognition</p>
-</header>
+    <header>
+        <h1>Labsarb — TA Workflow Design</h1>
+        <p>ระบบตรวจงาน Lab อัตโนมัติ</p>
+    </header>
 
-<div class="page-wrapper">
-    <div class="flowchart-area" id="flowchart">
+    <div class="page-wrapper">
+        <div class="flowchart-area" id="flowchart">
 
-        <svg viewBox="0 0 1100 1080" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-                    <path d="M0,0 L8,4 L0,8 Z" class="arrow-head"/>
-                </marker>
-            </defs>
+            <svg viewBox="0 0 1100 1080" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                        <path d="M0,0 L8,4 L0,8 Z" class="arrow-head" />
+                    </marker>
+                </defs>
 
-            <path d="M550,68 L550,116" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <path d="M550,164 L550,218" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <path d="M465,260 C350,260 260,310 260,376" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <text x="340" y="295" class="arrow-label">Dashboard</text>
-            <path d="M635,260 C750,260 840,310 840,358" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <text x="720" y="295" class="arrow-label">Lab Editor</text>
+                <path d="M550,68 L550,116" class="arrow-line arrow-animated" marker-end="url(#ah)" />
+                <path d="M550,164 L550,218" class="arrow-line arrow-animated" marker-end="url(#ah)" />
+                <path d="M465,260 C350,260 260,310 260,376" class="arrow-line arrow-animated" marker-end="url(#ah)" />
+                <text x="340" y="295" class="arrow-label">Dashboard</text>
+                <path d="M635,260 C750,260 840,310 840,358" class="arrow-line arrow-animated" marker-end="url(#ah)" />
+                <text x="720" y="295" class="arrow-label">Lab Editor</text>
 
-            <path d="M260,424 L260,471" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <path d="M260,519 L260,566" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <path d="M260,614 L260,657" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
+                <path d="M260,424 L260,471" class="arrow-line arrow-animated" marker-end="url(#ah)" />
+                <path d="M260,519 L260,566" class="arrow-line arrow-animated" marker-end="url(#ah)" />
+                <path d="M260,614 L260,657" class="arrow-line arrow-animated" marker-end="url(#ah)" />
 
-            <path d="M755,400 C710,400 680,450 680,516" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <text x="690" y="445" class="arrow-label no">No</text>
-            <path d="M840,442 L840,621" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <text x="852" y="500" class="arrow-label yes">Yes</text>
-            <path d="M680,564 L680,645 L745,645" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <path d="M840,669 L840,711" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <path d="M840,759 L840,801" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <path d="M840,849 L840,888" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <path d="M840,972 L840,1007" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <text x="852" y="992" class="arrow-label yes">Yes</text>
-            <path d="M925,930 L975,930 L975,735 L935,735" class="arrow-line arrow-animated" marker-end="url(#ah)"/>
-            <text x="980" y="840" class="arrow-label no">No</text>
-        </svg>
+                <path d="M755,400 C710,400 680,450 680,516" class="arrow-line arrow-animated" marker-end="url(#ah)" />
+                <text x="690" y="445" class="arrow-label no">No</text>
+                <path d="M840,442 L840,621" class="arrow-line arrow-animated" marker-end="url(#ah)" />
+                <text x="852" y="500" class="arrow-label yes">Yes</text>
+                <path d="M680,564 L680,645 L745,645" class="arrow-line arrow-animated" marker-end="url(#ah)" />
+                <path d="M840,669 L840,711" class="arrow-line arrow-animated" marker-end="url(#ah)" />
+                <path d="M840,759 L840,801" class="arrow-line arrow-animated" marker-end="url(#ah)" />
+                <path d="M840,849 L840,888" class="arrow-line arrow-animated" marker-end="url(#ah)" />
+                <path d="M840,972 L840,1007" class="arrow-line arrow-animated" marker-end="url(#ah)" />
+                <text x="852" y="992" class="arrow-label yes">Yes</text>
+                <path d="M925,930 L975,930 L975,735 L935,735" class="arrow-line arrow-animated" marker-end="url(#ah)" />
+                <text x="980" y="840" class="arrow-label no">No</text>
+            </svg>
 
-        <span class="path-label dashboard" style="left:175px;top:340px;">Path A</span>
-        <span class="path-label editor" style="left:770px;top:340px;">Path B</span>
+            <span class="path-label dashboard" style="left:175px;top:340px;">Path A</span>
+            <span class="path-label editor" style="left:770px;top:340px;">Path B</span>
 
-        <div class="node node-circle start" style="left:520px;top:10px;" data-id="start" onclick="showDetail(this)">Start</div>
-        <div class="node node-process" style="left:450px;top:116px;width:200px;" data-id="login" onclick="showDetail(this)">Login as Teacher</div>
-        <div class="node node-decision" style="left:470px;top:218px;" data-id="selectMenu" onclick="showDetail(this)"><div class="node-decision-inner">Select Menu</div></div>
+            <div class="node node-circle start" style="left:520px;top:10px;" data-id="start" onclick="showDetail(this)">
+                Start</div>
+            <div class="node node-process" style="left:450px;top:116px;width:200px;" data-id="login"
+                onclick="showDetail(this)">Login as Teacher</div>
+            <div class="node node-decision" style="left:470px;top:218px;" data-id="selectMenu"
+                onclick="showDetail(this)">
+                <div class="node-decision-inner">Select Menu</div>
+            </div>
 
-        <div class="node node-process" style="left:165px;top:376px;width:190px;" data-id="selectLabA" onclick="showDetail(this)">Select LAB</div>
-        <div class="node node-process" style="left:155px;top:471px;width:210px;" data-id="showDashboard" onclick="showDetail(this)">Show Dashboard</div>
-        <div class="node node-process" style="left:165px;top:566px;width:190px;" data-id="viewDetail" onclick="showDetail(this)">View Detail</div>
-        <div class="node node-circle end" style="left:232px;top:657px;" data-id="endA" onclick="showDetail(this)">End</div>
+            <div class="node node-process" style="left:165px;top:376px;width:190px;" data-id="selectLabA"
+                onclick="showDetail(this)">Select LAB</div>
+            <div class="node node-process" style="left:155px;top:471px;width:210px;" data-id="showDashboard"
+                onclick="showDetail(this)">Show Dashboard</div>
+            <div class="node node-process" style="left:165px;top:566px;width:190px;" data-id="viewDetail"
+                onclick="showDetail(this)">View Detail</div>
+            <div class="node node-circle end" style="left:232px;top:657px;" data-id="endA" onclick="showDetail(this)">
+                End</div>
 
-        <div class="node node-decision" style="left:755px;top:358px;" data-id="isLabExist" onclick="showDetail(this)"><div class="node-decision-inner">Is lab exist?</div></div>
-        <div class="node node-process" style="left:600px;top:516px;width:160px;" data-id="addLab" onclick="showDetail(this)">Add LAB</div>
-        <div class="node node-process" style="left:745px;top:621px;width:190px;" data-id="selectLabB" onclick="showDetail(this)">Select LAB</div>
-        <div class="node node-process" style="left:745px;top:711px;width:190px;" data-id="addTask" onclick="showDetail(this)">Add Task</div>
-        <div class="node node-process" style="left:720px;top:801px;width:240px;" data-id="addExamplePhoto" onclick="showDetail(this)">Add Example Photo</div>
-        <div class="node node-decision" style="left:755px;top:888px;" data-id="isFinish" onclick="showDetail(this)"><div class="node-decision-inner">Is finish?</div></div>
-        <div class="node node-circle end" style="left:812px;top:1007px;" data-id="endB" onclick="showDetail(this)">End</div>
+            <div class="node node-decision" style="left:755px;top:358px;" data-id="isLabExist"
+                onclick="showDetail(this)">
+                <div class="node-decision-inner">Is lab exist?</div>
+            </div>
+            <div class="node node-process" style="left:600px;top:516px;width:160px;" data-id="addLab"
+                onclick="showDetail(this)">Add LAB</div>
+            <div class="node node-process" style="left:745px;top:621px;width:190px;" data-id="selectLabB"
+                onclick="showDetail(this)">Select LAB</div>
+            <div class="node node-process" style="left:745px;top:711px;width:190px;" data-id="addTask"
+                onclick="showDetail(this)">Add Task</div>
+            <div class="node node-process" style="left:720px;top:801px;width:240px;" data-id="addExamplePhoto"
+                onclick="showDetail(this)">Add Example Photo</div>
+            <div class="node node-decision" style="left:755px;top:888px;" data-id="isFinish" onclick="showDetail(this)">
+                <div class="node-decision-inner">Is finish?</div>
+            </div>
+            <div class="node node-circle end" style="left:812px;top:1007px;" data-id="endB" onclick="showDetail(this)">
+                End</div>
+        </div>
+
+        <div class="detail-panel hidden" id="detailPanel">
+            <h3 id="detailTitle">คลิกที่ Node เพื่อดูรายละเอียด</h3>
+            <div class="step-type" id="detailType">—</div>
+            <p class="desc" id="detailDesc">เลือก node ใดก็ได้บน flowchart เพื่อดูคำอธิบายของขั้นตอนนั้น</p>
+            <p class="hint" id="detailHint"></p>
+        </div>
     </div>
 
-    <div class="detail-panel hidden" id="detailPanel">
-        <h3 id="detailTitle">คลิกที่ Node เพื่อดูรายละเอียด</h3>
-        <div class="step-type" id="detailType">—</div>
-        <p class="desc" id="detailDesc">เลือก node ใดก็ได้บน flowchart เพื่อดูคำอธิบายของขั้นตอนนั้น</p>
-        <p class="hint" id="detailHint"></p>
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-icon li-start"></div> Start / End
+        </div>
+        <div class="legend-item">
+            <div class="legend-icon li-process"></div> Process
+        </div>
+        <div class="legend-item">
+            <div class="legend-icon li-decision"></div> Decision
+        </div>
+        <div class="legend-item" style="color:#5eead4;">● Path A — Dashboard</div>
+        <div class="legend-item" style="color:#c084fc;">● Path B — Lab Editor</div>
     </div>
-</div>
 
-<div class="legend">
-    <div class="legend-item"><div class="legend-icon li-start"></div> Start / End</div>
-    <div class="legend-item"><div class="legend-icon li-process"></div> Process</div>
-    <div class="legend-item"><div class="legend-icon li-decision"></div> Decision</div>
-    <div class="legend-item" style="color:#5eead4;">● Path A — Dashboard</div>
-    <div class="legend-item" style="color:#c084fc;">● Path B — Lab Editor</div>
-</div>
-
-<script src="ta-design-logic.js"></script>
+    <script src="ta-design-logic.js"></script>
 </body>
+
 </html>

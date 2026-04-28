@@ -67,7 +67,7 @@ async function addStudent() {
     btn.textContent = 'กำลังตรวจสอบ...';
     statusMsg.style.display = 'block';
     statusMsg.style.color = '#64748b';
-    statusMsg.textContent = '🔄 กำลังดึงข้อมูลจากระบบมหาวิทยาลัย...';
+    statusMsg.textContent = 'กำลังดึงข้อมูลจากระบบมหาวิทยาลัย...';
 
     try {
         // Step 1: ดึงชื่อจาก TU API
@@ -99,7 +99,7 @@ async function addStudent() {
         if (!res.ok) throw new Error("API error");
 
         statusMsg.style.color = '#059669';
-        statusMsg.textContent = `✅ เพิ่มนักศึกษา ${studentId}${name ? ' (' + name + ')' : ''} สำเร็จ!`;
+        statusMsg.textContent = `เพิ่มนักศึกษา ${studentId}${name ? ' (' + name + ')' : ''} สำเร็จ!`;
         idInput.value = '';
         await loadStudents();
         setTimeout(() => { statusMsg.style.display = 'none'; }, 3000);
@@ -107,7 +107,7 @@ async function addStudent() {
     } catch (err) {
         console.error(err);
         statusMsg.style.color = '#dc2626';
-        statusMsg.textContent = '⚠️ เกิดข้อผิดพลาดในการเพิ่มนักศึกษา';
+        statusMsg.textContent = 'เกิดข้อผิดพลาดในการเพิ่มนักศึกษา';
     } finally {
         btn.disabled = false;
         btn.textContent = 'ตรวจสอบและเพิ่ม';

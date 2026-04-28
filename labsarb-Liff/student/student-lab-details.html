@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Labsarb - รายละเอียดผลงาน</title>
-  
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+
   <link rel="stylesheet" href="../portal-style.css">
   <link rel="stylesheet" href="student-dashboard-style.css">
-  
+
   <link rel="stylesheet" href="student-lab-details-style.css">
 </head>
+
 <body>
   <div class="app-container" id="app-container">
     <div class="sidebar">
@@ -24,7 +26,8 @@
       </div>
       <nav class="sidebar-nav">
         <a class="nav-item" href="student-dashboard.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
             <rect x="3" y="3" width="7" height="7"></rect>
             <rect x="14" y="3" width="7" height="7"></rect>
             <rect x="14" y="14" width="7" height="7"></rect>
@@ -33,14 +36,16 @@
           ส่งงาน (CS232)
         </a>
         <a class="nav-item" href="student-history.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
           </svg>
           สถานะภาพรวม
         </a>
         <a class="nav-item" href="https://courses.cs.tu.ac.th" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
             <line x1="18" y1="20" x2="18" y2="10"></line>
             <line x1="12" y1="20" x2="12" y2="4"></line>
             <line x1="6" y1="20" x2="6" y2="14"></line>
@@ -55,7 +60,8 @@
         <div class="profile-trigger" onclick="toggleProfileCard()">
           <div class="avatar-circle">นศ</div>
           <span id="trigger-student-name">กำลังโหลด...</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" style="width:16px;height:16px;">
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </div>
@@ -66,8 +72,10 @@
             <div class="profile-card-id" id="card-student-id">รหัสนักศึกษา: -</div>
           </div>
           <div class="profile-card-body">
-            <div class="info-row"><span class="info-label">อีเมล</span><span class="info-value" id="card-student-email">-</span></div>
-            <div class="info-row"><span class="info-label">คณะ/สาขา</span><span class="info-value" id="card-student-faculty">-</span></div>
+            <div class="info-row"><span class="info-label">อีเมล</span><span class="info-value"
+                id="card-student-email">-</span></div>
+            <div class="info-row"><span class="info-label">คณะ/สาขา</span><span class="info-value"
+                id="card-student-faculty">-</span></div>
           </div>
           <div class="profile-card-footer">
             <button class="btn-logout-full" onclick="doStudentLogout()">ออกจากระบบ</button>
@@ -79,15 +87,17 @@
         <div class="screen active">
           <div style="margin-bottom: 24px;">
             <a href="student-history.html" class="back-link">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;">
-                <line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" style="width:16px;height:16px;">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
               </svg>
               กลับไปหน้าประวัติ
             </a>
           </div>
 
           <h1 class="page-title">รายละเอียดการส่งงาน</h1>
-          
+
           <div class="detail-grid">
             <div class="detail-main-card">
               <div class="detail-header">
@@ -95,29 +105,42 @@
                 <span class="badge" id="lab-detail-status">กำลังโหลด...</span>
               </div>
               <div class="detail-body">
-                <div id="lab-desc-section" style="display:none; margin-bottom:20px; padding:14px 16px; background:#f8faff; border-radius:8px;">
-                  <label style="font-size:11px; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:6px;">คำอธิบาย / เกณฑ์การประเมิน</label>
+                <div id="lab-desc-section"
+                  style="display:none; margin-bottom:20px; padding:14px 16px; background:#f8faff; border-radius:8px;">
+                  <label
+                    style="font-size:11px; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:6px;">คำอธิบาย
+                    / เกณฑ์การประเมิน</label>
                   <p id="lab-detail-desc" style="font-size:14px; color:#334155; line-height:1.6; margin:0;"></p>
                 </div>
                 <div id="lab-score-section" style="display:none; margin-bottom:20px;">
-                  <label style="font-size:11px; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:4px;">คะแนนที่ได้</label>
+                  <label
+                    style="font-size:11px; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:4px;">คะแนนที่ได้</label>
                   <p id="lab-detail-score" style="font-size:28px; font-weight:700; color:#0ea5e9; margin:0;"></p>
                 </div>
                 <div class="feedback-box">
                   <label>ข้อเสนอแนะจากระบบ/อาจารย์</label>
                   <p id="lab-detail-feedback">ไม่มีข้อเสนอแนะ</p>
                 </div>
-                <div id="analysis-results-box" style="margin-top:20px; display:none; padding:16px; background:#f0f9ff; border-radius:12px; border:1px solid #e0f2fe;">
-                  <label style="font-size:12px; font-weight:700; color:#0369a1; display:block; margin-bottom:8px;">📋 ผลการวิเคราะห์ (Analysis Results)</label>
-                  <ul id="analysis-list" style="margin:0; padding-left:20px; font-size:13px; color:#0c4a6e; line-height:1.6;">
+                <div id="analysis-results-box"
+                  style="margin-top:20px; display:none; padding:16px; background:#f0f9ff; border-radius:12px; border:1px solid #e0f2fe;">
+                  <label
+                    style="font-size:12px; font-weight:700; color:#0369a1; display:block; margin-bottom:8px;">ผลการวิเคราะห์
+                    (Analysis Results)</label>
+                  <ul id="analysis-list"
+                    style="margin:0; padding-left:20px; font-size:13px; color:#0c4a6e; line-height:1.6;">
                   </ul>
                 </div>
-                <div id="system-log-box" style="margin-top:20px; display:none; padding:16px; background:#f8fafc; border-radius:12px; border:1px solid #e2e8f0;">
-                  <label style="font-size:12px; font-weight:700; color:#475569; display:block; margin-bottom:8px;">🪵 บันทึกจากระบบ</label>
-                  <div id="system-log-content" style="font-size:12px; color:#64748b; font-family:monospace; line-height:1.7; word-break:break-all;"></div>
+                <div id="system-log-box"
+                  style="margin-top:20px; display:none; padding:16px; background:#f8fafc; border-radius:12px; border:1px solid #e2e8f0;">
+                  <label
+                    style="font-size:12px; font-weight:700; color:#475569; display:block; margin-bottom:8px;">บันทึกจากระบบ</label>
+                  <div id="system-log-content"
+                    style="font-size:12px; color:#64748b; font-family:monospace; line-height:1.7; word-break:break-all;">
+                  </div>
                 </div>
                 <div style="margin-top:20px;">
-                  <a id="btn-submit-lab" href="#" style="display:none; padding:10px 24px; background:#0ea5e9; color:#fff; border-radius:8px; text-decoration:none; font-weight:600; font-size:14px;">ส่งงาน</a>
+                  <a id="btn-submit-lab" href="#"
+                    style="display:none; padding:10px 24px; background:#0ea5e9; color:#fff; border-radius:8px; text-decoration:none; font-weight:600; font-size:14px;">ส่งงาน</a>
                 </div>
               </div>
             </div>
@@ -126,7 +149,9 @@
               <label class="info-label" style="margin-bottom:12px; display:block;">หลักฐานการส่งงาน (Screenshot)</label>
               <div class="image-preview-container">
                 <img id="lab-detail-image" alt="หลักฐานการส่งงาน" style="display:none;">
-                <div id="lab-detail-no-image" style="padding:48px 24px; text-align:center; color:#94a3b8; font-size:13px;">ยังไม่มีหลักฐานการส่งงาน</div>
+                <div id="lab-detail-no-image"
+                  style="padding:48px 24px; text-align:center; color:#94a3b8; font-size:13px;">ยังไม่มีหลักฐานการส่งงาน
+                </div>
               </div>
             </div>
           </div>
@@ -138,4 +163,5 @@
   <script src="student-portal.js"></script>
   <script src="student-lab-details-logic.js"></script>
 </body>
+
 </html>

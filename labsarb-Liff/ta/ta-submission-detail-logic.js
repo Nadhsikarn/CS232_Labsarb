@@ -54,17 +54,19 @@ async function loadDetail() {
     const detailImg = document.getElementById('detail-img');
     if (detailImg) detailImg.src = item.image_url;
 
-    // อัปเดตข้อมูลบริบท
-    const timeEl = document.getElementById('detail-time');
-    if (timeEl && item.updated_at) {
-      const date = new Date(item.updated_at);
-      timeEl.textContent = date.toLocaleString('th-TH');
-    }
-
     const formatEl = document.getElementById('detail-format');
     if (formatEl && item.image_url) {
       const ext = item.image_url.split('.').pop().toUpperCase();
       formatEl.textContent = `${ext} Image`;
+    }
+
+    // แสดงคะแนนแบบตัวใหญ่
+    const scoreSection = document.getElementById('detail-score-section');
+    const scoreEl = document.getElementById('detail-score');
+    if (scoreSection && scoreEl && item.score !== undefined) {
+      scoreSection.style.display = 'block';
+      scoreEl.textContent = `${parseFloat(item.score).toFixed(2)} คะแนน`;
+      scoreEl.style.color = item.status === 'pass' ? '#10b981' : '#ef4444';
     }
 
     // อัปเดตสถานะและบทวิเคราะห์
@@ -87,26 +89,26 @@ async function loadDetail() {
     const analysisBox = document.getElementById('analysis-results-box');
     const analysisList = document.getElementById('analysis-list');
     if (analysisBox && analysisList && item.analysis_results) {
-        analysisBox.style.display = 'block';
-        analysisList.innerHTML = '';
-        const results = item.analysis_results.split('\n');
-        results.forEach(text => {
-            if (text.trim()) {
-                const li = document.createElement('li');
-                li.textContent = text;
-                analysisList.appendChild(li);
-            }
-        });
+      analysisBox.style.display = 'block';
+      analysisList.innerHTML = '';
+      const results = item.analysis_results.split('\n');
+      results.forEach(text => {
+        if (text.trim()) {
+          const li = document.createElement('li');
+          li.textContent = text;
+          analysisList.appendChild(li);
+        }
+      });
     }
 
     // แสดง system log จาก DynamoDB
     const logsBox = document.getElementById('cloudwatch-logs-box');
     const logsList = document.getElementById('cloudwatch-logs-list');
     if (logsBox && logsList && item.system_log) {
-        logsBox.style.display = 'block';
-        const div = document.createElement('div');
-        div.textContent = item.system_log;
-        logsList.appendChild(div);
+      logsBox.style.display = 'block';
+      const div = document.createElement('div');
+      div.textContent = item.system_log;
+      logsList.appendChild(div);
     }
 
   } catch (err) {
