@@ -68,7 +68,7 @@ function renderRows(data) {
             `<td style="font-weight:500;">${d.student_id}</td>` +
             `<td>${d.lab_id}</td>` +
             `<td>${statusHtml}</td>` +
-            `<td>${d.score !== undefined ? d.score : '-'} / 10</td>` +
+            `<td>${d.score !== undefined ? d.score : '-'} / 100</td>` +
             `<td style="color:#64748b;font-size:12px;">${d.detected_text || '-'}</td>`;
         tbody.appendChild(tr);
     });
