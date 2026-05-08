@@ -112,12 +112,14 @@ async function loadDetail() {
             });
         }
 
-        // แสดง system log จากระบบ
+        
         const logBox = document.getElementById('system-log-box');
         const logContent = document.getElementById('system-log-content');
-        if (logBox && logContent && mySub.system_log) {
+        const localLog = localStorage.getItem(`lab_log_${labId}`);
+
+        if (logBox && logContent && localLog) {
             logBox.style.display = 'block';
-            logContent.textContent = mySub.system_log;
+            logContent.textContent = localLog;
         }
 
     } catch (error) {
