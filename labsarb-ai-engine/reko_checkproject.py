@@ -171,15 +171,27 @@ def lambda_handler(event, context):
         print(f"[INFO] student_id={s_id}, name={student_name}, lab_id={l_id}")
         image_url = f"https://{bucket}.s3.amazonaws.com/{student_path}"
 
-        # --- 2. ตรวจสอบ student_id ใน DB ---
-        if not verify_student_id(s_id):
+        # --- 2. ตรวจสอบ student_id และชื่อใน DB ---
+        try:
+            db_item = users_table.get_item(Key={'student_id': s_id}).get('Item')
+        except Exception as e:
+            print(f"[ERROR] เชื่อมต่อ Labsarb_Users ไม่ได้ — {e}")
+            raise RuntimeError(f"ไม่สามารถเชื่อมต่อฐานข้อมูล Labsarb_Users ได้: {e}")
+
+        if not db_item:
             print(f"[REJECTED] ไม่พบ student_id '{s_id}' ใน Labsarb_Users")
             return {
                 'statusCode': 403,
-                'body': json.dumps({
-                    'result': 'rejected',
-                    'reason': f"student_id '{s_id}' not found in system"
-                })
+                'body': json.dumps({'result': 'rejected', 'reason': f"student_id '{s_id}' not found in system"})
+            }
+
+        db_name_en = db_item.get('name_en', '')
+        db_first_name = db_name_en.split()[0].lower() if db_name_en else ''
+        if db_first_name and student_name.lower() != db_first_name:
+            print(f"[REJECTED] ชื่อในชื่อไฟล์ '{student_name}' ไม่ตรงกับ DB '{db_first_name}'")
+            return {
+                'statusCode': 403,
+                'body': json.dumps({'result': 'rejected', 'reason': 'Name does not match student_id in system'})
             }
 
         # --- 3. เช็คส่งซ้ำ (บล็อกเฉพาะ pass) ---
@@ -274,7 +286,7 @@ def lambda_handler(event, context):
             f'[RESULT] status = {status}'
         ])
 
-        save_result(s_id, l_id, status, score, system_log=log)
+        save_result(s_id, l_id, status, score, image_url, system_log=log)
 
         print(f"[RESULT] student={s_id} | score={score:.2f}% | status={status}")
 

@@ -1,7 +1,7 @@
 // db-helper.mjs
 
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand, ScanCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand, ScanCommand, DeleteCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 const docClient = DynamoDBDocumentClient.from(client);
@@ -72,6 +72,16 @@ export const deleteUser = async (studentId) => {
 
 export const getAllLabResults = async () => {
     const command = new ScanCommand({ TableName: RESULTS_TABLE });
+    const response = await docClient.send(command);
+    return response.Items;
+};
+
+export const getLabResultsByStudent = async (studentId) => {
+    const command = new QueryCommand({
+        TableName: RESULTS_TABLE,
+        KeyConditionExpression: "student_id = :sid",
+        ExpressionAttributeValues: { ":sid": studentId }
+    });
     const response = await docClient.send(command);
     return response.Items;
 };

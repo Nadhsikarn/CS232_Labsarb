@@ -102,6 +102,7 @@ def lambda_handler(event, context):
             student_info = {
                 'student_id': username,
                 'name': result.get('displayname_th', ''),
+                'name_en': result.get('displayname_en', ''),
                 'email': result.get('email', ''),
                 'faculty': result.get('faculty', ''),
                 'last_login': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')

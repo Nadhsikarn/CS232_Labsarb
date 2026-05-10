@@ -43,8 +43,11 @@ async function loadLabs() {
             } else if (mySub?.status === 'fail') {
                 statusText = 'ไม่ผ่าน';
                 statusClass = 'failed';
+            } else if (mySub?.status === 'rejected') {
+                statusText = 'ถูกปฏิเสธ';
+                statusClass = 'failed';
             } else if (mySub) {
-                statusText = 'รอตรวจ';
+                statusText = 'ถูกปฏิเสธ_2';
                 statusClass = 'submitted';
             }
 

@@ -1,4 +1,4 @@
-import { getAllLabResults, getAllTemplates, saveOrUpdateLab, deleteLabResult, getAllUsers, saveUser, deleteUser } from './db-helper.mjs';
+import { getAllLabResults, getLabResultsByStudent, getAllTemplates, saveOrUpdateLab, deleteLabResult, getAllUsers, saveUser, deleteUser } from './db-helper.mjs';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
@@ -32,12 +32,8 @@ export const handler = async (event) => {
         // GET /students/{id} — ดึงผลงานทั้งหมดของนักศึกษาคนหนึ่ง
         if (method === 'GET' && path.includes('/students/')) {
             const studentId = decodeURIComponent(path.split('/students/')[1]);
-            const results = await getAllLabResults();
-            return {
-                statusCode: 200,
-                headers,
-                body: JSON.stringify(results.filter(r => r.student_id === studentId))
-            };
+            const results = await getLabResultsByStudent(studentId);
+            return { statusCode: 200, headers, body: JSON.stringify(results) };
         }
 
         // GET /students — รายชื่อนักศึกษาทั้งหมดจาก Labsarb_Users

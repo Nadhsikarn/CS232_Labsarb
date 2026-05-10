@@ -64,12 +64,7 @@ async function submitLab() {
 
         const { uploadUrl, fileUrl } = await res.json();
 
-        await fetch(uploadUrl, {
-            method: "PUT",
-            body: selectedFile,
-            headers: { "Content-Type": selectedFile.type }
-        });
-
+        // save pending ก่อน upload เพื่อป้องกัน reko เขียนทับ
         await fetch(API_URL + "/edit-lab", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -80,6 +75,12 @@ async function submitLab() {
                 image_url: fileUrl,
                 updated_at: new Date().toISOString()
             })
+        });
+
+        await fetch(uploadUrl, {
+            method: "PUT",
+            body: selectedFile,
+            headers: { "Content-Type": selectedFile.type }
         });
 
         alert("อัปโหลดสำเร็จ!");

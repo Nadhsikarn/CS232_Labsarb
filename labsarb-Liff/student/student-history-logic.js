@@ -43,6 +43,9 @@ async function loadHistory() {
             } else if (sub.status === 'fail') {
                 statusBadge = '<span class="badge fail">ไม่ผ่าน</span>';
                 failCount++;
+            } else if (sub.status === 'rejected') {
+                statusBadge = '<span class="badge fail">ถูกปฏิเสธ</span>';
+                failCount++;
             } else {
                 statusBadge = '<span class="badge pending">รอตรวจ</span>';
                 pendingCount++;

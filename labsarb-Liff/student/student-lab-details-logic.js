@@ -86,14 +86,23 @@ async function loadDetail() {
                 submitBtn.textContent = 'ส่งงานใหม่';
                 submitBtn.style.display = 'inline-block';
             }
-        } else {
-            if (statusBadge) { statusBadge.textContent = 'รอการตรวจ'; statusBadge.className = 'badge'; }
-            if (feedbackP) feedbackP.textContent = mySub.feedback || "งานของคุณถูกส่งเข้าสู่ระบบแล้ว กรุณารออาจารย์หรือระบบอัตโนมัติทำการประเมิน";
+        } else if (mySub.status === 'rejected') {
+            if (statusBadge) { statusBadge.textContent = 'ถูกปฏิเสธ'; statusBadge.className = 'badge fail'; }
+            if (feedbackP) feedbackP.textContent = mySub.reason || "งานของคุณไม่ผ่านการตรวจสอบ กรุณาตรวจสอบว่าเอกสารมีชื่อของคุณถูกต้องและส่งใหม่";
             if (submitBtn) {
                 submitBtn.href = `student-upload-lab.html?lab=${encodeURIComponent(labId)}`;
                 submitBtn.textContent = 'ส่งงานใหม่';
                 submitBtn.style.display = 'inline-block';
             }
+        } else {
+            if (statusBadge) { statusBadge.textContent = 'ถูกปฏิเสธ_2'; statusBadge.className = 'badge'; }
+            if (feedbackP) feedbackP.textContent = mySub.feedback || "รหัสนักศึกษา อาจจะไม่ถูกต้อง";
+            if (submitBtn) {
+                submitBtn.href = `student-upload-lab.html?lab=${encodeURIComponent(labId)}`;
+                submitBtn.textContent = 'ส่งงานใหม่';
+                submitBtn.style.display = 'inline-block';
+            }
+            startPolling(labId, studentId);
         }
 
         // แสดงผลการวิเคราะห์แบบ Bullet Points
@@ -127,4 +136,27 @@ async function loadDetail() {
         const feedbackP = document.getElementById('lab-detail-feedback');
         if (feedbackP) feedbackP.textContent = "เกิดข้อผิดพลาดในการโหลดข้อมูล กรุณาลองใหม่อีกครั้ง";
     }
+}
+
+// polling ทุก 3 วินาที สูงสุด 10 ครั้ง (30 วินาที) ถ้าสถานะยัง pending
+let _pollInterval = null;
+function startPolling(labId, studentId) {
+    if (_pollInterval) return;
+    let attempts = 0;
+    _pollInterval = setInterval(async () => {
+        attempts++;
+        if (attempts > 10) {
+            clearInterval(_pollInterval);
+            return;
+        }
+        try {
+            const res = await fetch(API_URL + "/submissions?student_id=" + studentId + "&lab_id=" + encodeURIComponent(labId));
+            const subs = await res.json();
+            const mySub = Array.isArray(subs) ? subs.find(s => s.lab_id === labId) : null;
+            if (mySub && mySub.status !== 'pending') {
+                clearInterval(_pollInterval);
+                await loadDetail();
+            }
+        } catch (_) {}
+    }, 3000);
 }
