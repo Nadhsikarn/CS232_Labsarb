@@ -1,4 +1,4 @@
-﻿/* ta-submissions-logic.js */
+/* ta-submissions-logic.js */
 
 const urlParams = new URLSearchParams(window.location.search);
 currentLabName = urlParams.get('lab'); // ใช้ตัวแปร let จาก ta-portal.js
@@ -62,14 +62,17 @@ function renderRows(data) {
 
         let statusHtml = '<span class="status-badge pending">รอตรวจ</span>';
         if (d.status === 'pass') statusHtml = '<span class="status-badge pass">ผ่านเกณฑ์</span>';
-        else if (d.status === 'fail') statusHtml = '<span class="status-badge fail">ปรับปรุง</span>';
+        else if (d.status === 'fail' || d.status === 'error' || d.status === 'rejected') statusHtml = '<span class="status-badge fail">ไม่ผ่าน</span>';
+
+        let logText = String(d.system_log || d.detected_text || '-');
+        let safeLogText = logText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
         tr.innerHTML =
             `<td style="font-weight:500;">${d.student_id}</td>` +
             `<td>${d.lab_id}</td>` +
             `<td>${statusHtml}</td>` +
             `<td>${d.score !== undefined ? d.score : '-'} / 100</td>` +
-            `<td style="color:#64748b;font-size:12px;">${d.detected_text || '-'}</td>`;
+            `<td style="color:#64748b; font-size:12px; max-width:250px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${safeLogText}">${safeLogText}</td>`;
         tbody.appendChild(tr);
     });
 }

@@ -1,4 +1,4 @@
-﻿/* ta-dashboard-logic.js */
+/* ta-dashboard-logic.js */
 
 window.onload = async () => {
     const storedUser = localStorage.getItem('labsarb_admin');
@@ -40,14 +40,14 @@ async function loadDashboard() {
         submissions.forEach(sub => {
             if (!stats[sub.lab_id]) return;
             if (sub.status === 'pass') stats[sub.lab_id].pass++;
-            else if (sub.status === 'fail') stats[sub.lab_id].fail++;
+            else if (sub.status === 'fail' || sub.status === 'rejected' || sub.status === 'error') stats[sub.lab_id].fail++; // ไบโอมเขียนตรงนี้
             else stats[sub.lab_id].pending++;
         });
 
         grid.innerHTML = '';
 
         if (Object.keys(stats).length === 0) {
-            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px;">ยังไม่มีการทดลอง กด "สร้าง LAB ใหม่" เพื่อเริ่มต้น</div>';
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px;">ยังไม่มี Lab กด "สร้าง LAB ใหม่" เพื่อเริ่มต้น</div>';
             return;
         }
 

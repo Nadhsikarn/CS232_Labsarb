@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Script สำหรับหน้าประวัติการส่งงาน (History Page)
  */
 
@@ -40,7 +40,7 @@ async function loadHistory() {
             if (sub.status === 'pass') {
                 statusBadge = '<span class="badge pass">ผ่าน</span>';
                 passCount++;
-            } else if (sub.status === 'fail') {
+            } else if (sub.status === 'fail' || sub.status === 'error' || sub.status === 'rejected') {
                 statusBadge = '<span class="badge fail">ไม่ผ่าน</span>';
                 failCount++;
             } else {

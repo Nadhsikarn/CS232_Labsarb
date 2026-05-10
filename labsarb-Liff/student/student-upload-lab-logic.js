@@ -1,4 +1,4 @@
-﻿let selectedFile = null;
+let selectedFile = null;
 let _uploadLabId = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 descBox.style.display = 'block';
             }
         }
-    } catch (_) {}
+    } catch (_) { }
 });
 
 function handleFileSelect(e) {

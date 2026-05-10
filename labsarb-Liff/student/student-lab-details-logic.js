@@ -78,9 +78,9 @@ async function loadDetail() {
         if (mySub.status === 'pass') {
             if (statusBadge) { statusBadge.textContent = 'ผ่านการประเมิน'; statusBadge.className = 'badge pass'; }
             if (feedbackP) feedbackP.textContent = mySub.feedback || "ยินดีด้วย! งานของคุณผ่านการตรวจสอบเรียบร้อยแล้ว";
-        } else if (mySub.status === 'fail') {
+        } else if (mySub.status === 'fail' || mySub.status === 'error' || mySub.status === 'rejected') {
             if (statusBadge) { statusBadge.textContent = 'ไม่ผ่าน / ต้องแก้ไข'; statusBadge.className = 'badge fail'; }
-            if (feedbackP) feedbackP.textContent = mySub.feedback || "งานของคุณยังไม่ผ่านเกณฑ์ กรุณาตรวจสอบข้อผิดพลาดและส่งใหม่อีกครั้ง";
+            if (feedbackP) feedbackP.textContent = mySub.reason || mySub.feedback || "งานของคุณยังไม่ผ่านเกณฑ์ กรุณาตรวจสอบข้อผิดพลาดและส่งใหม่อีกครั้ง";
             if (submitBtn) {
                 submitBtn.href = `student-upload-lab.html?lab=${encodeURIComponent(labId)}`;
                 submitBtn.textContent = 'ส่งงานใหม่';
@@ -112,14 +112,15 @@ async function loadDetail() {
             });
         }
 
-        
+
         const logBox = document.getElementById('system-log-box');
         const logContent = document.getElementById('system-log-content');
         const localLog = localStorage.getItem(`lab_log_${labId}`);
+        const finalLog = mySub.system_log || localLog; // ดึง log จาก AWS DynamoDB ก่อน (ถ้ามี)
 
-        if (logBox && logContent && localLog) {
+        if (logBox && logContent && finalLog) {
             logBox.style.display = 'block';
-            logContent.textContent = localLog;
+            logContent.textContent = finalLog;
         }
 
     } catch (error) {

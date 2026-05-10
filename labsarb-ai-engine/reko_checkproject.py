@@ -158,22 +158,51 @@ def lambda_handler(event, context):
         bucket = record['s3']['bucket']['name']
         student_path = record['s3']['object']['key']
 
+        # ไบโอมเขียนตรงนี้: ดึงรหัสที่แท้จริงจาก Path เผื่อกรณีชื่อไฟล์ตั้งมาผิด
+        real_l_id, real_s_id = None, None
+        parts = student_path.split('/')
+        if len(parts) >= 5 and parts[0] == 'student_assignment' and parts[1] == 'submissions':
+            real_l_id = parts[2]
+            real_s_id = parts[3].replace('sid', '')
+            
+        image_url = f"https://{bucket}.s3.amazonaws.com/{student_path}"
+
         # --- 1. Parse ชื่อไฟล์ ---
         try:
             s_id, student_name, l_id = parse_filename(student_path)
         except ValueError as ve:
+            # โค้ดเพื่อน
+            # print(f"[ERROR] {ve}")
+            # return {
+            #     'statusCode': 400,
+            #     'body': json.dumps({'result': 'error', 'reason': str(ve)})
+            # }
+
+            # ไบโอมเขียนตรงนี้
             print(f"[ERROR] {ve}")
+            if real_s_id and real_l_id:
+                log = build_log([
+                    f"[ERROR] {ve}",
+                    "ระบบไม่สามารถตรวจงานได้เนื่องจากชื่อไฟล์ไม่ตรงรูปแบบที่กำหนด"
+                ])
+                save_result(real_s_id, real_l_id, 'error', 0.0, image_url, str(ve), log)
             return {
                 'statusCode': 400,
                 'body': json.dumps({'result': 'error', 'reason': str(ve)})
             }
 
         print(f"[INFO] student_id={s_id}, name={student_name}, lab_id={l_id}")
-        image_url = f"https://{bucket}.s3.amazonaws.com/{student_path}"
 
         # --- 2. ตรวจสอบ student_id ใน DB ---
         if not verify_student_id(s_id):
             print(f"[REJECTED] ไม่พบ student_id '{s_id}' ใน Labsarb_Users")
+            # ไบโอมเขียนตรงนี้
+            if real_s_id and real_l_id:
+                log = build_log([
+                    f"[ERROR] ไม่พบ student_id '{s_id}' ในระบบ",
+                    "ระบบไม่สามารถตรวจงานได้เนื่องจากรหัสนักศึกษาในชื่อไฟล์ไม่ถูกต้อง"
+                ])
+                save_result(real_s_id, real_l_id, 'error', 0.0, image_url, f"Invalid student ID in filename: {s_id}", log)
             return {
                 'statusCode': 403,
                 'body': json.dumps({
@@ -195,6 +224,13 @@ def lambda_handler(event, context):
             template = get_template(l_id)
         except ValueError as ve:
             print(f"[ERROR] {ve}")
+            # ไบโอมเขียนตรงนี้
+            if real_s_id and real_l_id:
+                log = build_log([
+                    f"[ERROR] {ve}",
+                    "ระบบไม่สามารถตรวจงานได้เนื่องจากรหัส Lab ในชื่อไฟล์ไม่ถูกต้อง"
+                ])
+                save_result(real_s_id, real_l_id, 'error', 0.0, image_url, str(ve), log)
             return {
                 'statusCode': 400,
                 'body': json.dumps({'result': 'error', 'reason': str(ve)})
@@ -208,6 +244,13 @@ def lambda_handler(event, context):
             student_words, student_lines = extract_text(textract, bucket, student_path)
         except ValueError as ve:
             print(f"[ERROR] Textract: {ve}")
+            # ไบโอมเขียนตรงนี้
+            if real_s_id and real_l_id:
+                log = build_log([
+                    f"[ERROR] Textract: {ve}",
+                    "ระบบไม่สามารถอ่านข้อความจากไฟล์ภาพได้ หรือไฟล์ไม่ถูกต้อง"
+                ])
+                save_result(real_s_id, real_l_id, 'error', 0.0, image_url, str(ve), log)
             return {
                 'statusCode': 400,
                 'body': json.dumps({'result': 'error', 'reason': str(ve)})
