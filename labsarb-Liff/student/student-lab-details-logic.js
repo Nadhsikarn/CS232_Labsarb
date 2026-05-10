@@ -96,7 +96,7 @@ async function loadDetail() {
             }
         } else {
             if (statusBadge) { statusBadge.textContent = 'ถูกปฏิเสธ_2'; statusBadge.className = 'badge'; }
-            if (feedbackP) feedbackP.textContent = mySub.feedback || "รหัสนักศึกษา อาจจะไม่ถูกต้อง";
+            if (feedbackP) feedbackP.textContent = mySub.feedback || "รหัสนักศึกษา อาจจะไม่ถูกต้อง/ชื่อlab อาจไม่ถูกต้อง";
             if (submitBtn) {
                 submitBtn.href = `student-upload-lab.html?lab=${encodeURIComponent(labId)}`;
                 submitBtn.textContent = 'ส่งงานใหม่';

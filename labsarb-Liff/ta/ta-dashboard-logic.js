@@ -32,7 +32,7 @@ async function loadDashboard() {
         labs.forEach(lab => {
             stats[lab.lab_id] = {
                 pass: 0, fail: 0, pending: 0,
-                desc: lab.lab_data || ''
+                desc: lab.lab_description || ''
             };
         });
 

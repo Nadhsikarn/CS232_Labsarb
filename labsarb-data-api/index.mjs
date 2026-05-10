@@ -48,7 +48,9 @@ export const handler = async (event) => {
             await saveUser({
                 student_id: body.student_id,
                 name: body.name || null,
+                name_en: body.name_en || null,
                 email: body.email || null,
+                faculty: body.faculty || null,
                 updated_at: new Date().toISOString()
             });
             return { statusCode: 200, headers, body: JSON.stringify({ message: "student added" }) };

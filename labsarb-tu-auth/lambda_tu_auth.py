@@ -86,28 +86,31 @@ def lambda_handler(event, context):
                 'body': json.dumps({'message': 'กรุณากรอก username และ password', 'success': False})
             }
 
-        # เช็คว่า login แล้วหรือยัง
-        existing = table.get_item(Key={'student_id': username})
-        if 'Item' in existing:
-            return {
-                'statusCode': 200,
-                'headers': headers,
-                'body': json.dumps({'message': 'Already verified', 'success': True, 'data': existing['Item']})
-            }
-
         # เรียก TU API
         result = verify_tu_account(username, password)
 
         if result.get('status') == True:
+            now = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
             student_info = {
                 'student_id': username,
                 'name': result.get('displayname_th', ''),
                 'name_en': result.get('displayname_en', ''),
                 'email': result.get('email', ''),
                 'faculty': result.get('faculty', ''),
-                'last_login': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+                'last_login': now
             }
-            table.put_item(Item=student_info)
+            table.update_item(
+                Key={'student_id': username},
+                UpdateExpression="set #nm = :n, name_en = :ne, email = :e, faculty = :f, last_login = :ll",
+                ExpressionAttributeNames={'#nm': 'name'},
+                ExpressionAttributeValues={
+                    ':n': student_info['name'],
+                    ':ne': student_info['name_en'],
+                    ':e': student_info['email'],
+                    ':f': student_info['faculty'],
+                    ':ll': now
+                }
+            )
             return {
                 'statusCode': 200,
                 'headers': headers,

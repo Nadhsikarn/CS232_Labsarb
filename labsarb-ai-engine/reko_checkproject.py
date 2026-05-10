@@ -189,8 +189,14 @@ def lambda_handler(event, context):
         db_first_name = db_name_en.split()[0].lower() if db_name_en else ''
         if db_first_name and student_name.lower() != db_first_name:
             print(f"[REJECTED] ชื่อในชื่อไฟล์ '{student_name}' ไม่ตรงกับ DB '{db_first_name}'")
+            log = build_log([
+                f'student_id: {s_id}',
+                f'lab_id: {l_id}',
+                f"[REJECTED] ชื่อในชื่อไฟล์ '{student_name}' ไม่ตรงกับ DB '{db_first_name}'"
+            ])
+            save_result(s_id, l_id, 'rejected', 0.0, image_url, 'ชื่อของนักศึกษาอาจไม่ตรง/ไม่ถูกต้อง', system_log=log)
             return {
-                'statusCode': 403,
+                'statusCode': 200,
                 'body': json.dumps({'result': 'rejected', 'reason': 'Name does not match student_id in system'})
             }
 

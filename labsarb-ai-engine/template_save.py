@@ -91,12 +91,13 @@ def lambda_handler(event, context):
         print(f"[INFO] count_image = {count_image}")
 
         # --- 3. บันทึกลง DynamoDB ---
-        table.put_item(
-            Item={
-                'lab_id': l_id,
-                'template_words': words,
-                'image_url': image_url,
-                'count_image': count_image
+        table.update_item(
+            Key={'lab_id': l_id},
+            UpdateExpression="set template_words = :tw, image_url = :img, count_image = :ci",
+            ExpressionAttributeValues={
+                ':tw': words,
+                ':img': image_url,
+                ':ci': count_image
             }
         )
 

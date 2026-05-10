@@ -30,6 +30,14 @@ export const saveUser = async (data) => {
         expressionValues[":nm"] = data.name;
         expressionNames["#nm"] = "name";
     }
+    if (data.name_en) {
+        expressionParts.push("name_en = :ne");
+        expressionValues[":ne"] = data.name_en;
+    }
+    if (data.faculty) {
+        expressionParts.push("faculty = :fc");
+        expressionValues[":fc"] = data.faculty;
+    }
     if (data.email) {
         expressionParts.push("email = :em");
         expressionValues[":em"] = data.email;

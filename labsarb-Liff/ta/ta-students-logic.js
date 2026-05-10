@@ -72,7 +72,9 @@ async function addStudent() {
     try {
         // Step 1: ดึงชื่อจาก TU API
         let name = null;
+        let name_en = null;
         let email = null;
+        let faculty = null;
         try {
             const tuRes = await fetch('https://ya67mrcre1.execute-api.us-east-1.amazonaws.com/prod_tuapi/login', {
                 method: 'POST',
@@ -82,8 +84,10 @@ async function addStudent() {
             const tuResult = await tuRes.json();
             if (tuResult.success && tuResult.data) {
                 const info = tuResult.data.data || tuResult.data;
-                name = info.name || info.displayname_th || null;
+                name = info.displayname_th || null;
+                name_en = info.displayname_en || null;
                 email = info.email || (studentId + '@dome.tu.ac.th');
+                faculty = info.faculty || null;
             }
         } catch (_) {
             // TU API ล้มเหลว — เพิ่มด้วย ID เปล่าก็ได้
@@ -93,7 +97,7 @@ async function addStudent() {
         const res = await fetch(API_URL + "/students", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ student_id: studentId, name, email })
+            body: JSON.stringify({ student_id: studentId, name, name_en, email, faculty })
         });
 
         if (!res.ok) throw new Error("API error");
